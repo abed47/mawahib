@@ -32,7 +32,7 @@ let db:Sequelize = sequelize;
 const connect: () => void = async () => {
 
     try{
-        await sequelize.sync({force: false});
+        await sequelize.sync({force: false, alter: true});
 
     }catch(err){
         console.log(err.message || err);

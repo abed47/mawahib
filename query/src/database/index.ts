@@ -23,7 +23,8 @@ const sequelize = new Sequelize( DB_NAME, DB_USER, DB_PASS,
             acquire: 30000,
             idle: 10000
         },
-        logging: false
+        logging: false,
+        
     }
 )
 
@@ -34,7 +35,7 @@ const connect: () => void = async () => {
 
     try{
 
-        await sequelize.sync({force: false});
+        await sequelize.sync({force: false, alter: true});
 
     }catch(err){
         console.log(err.message || err);

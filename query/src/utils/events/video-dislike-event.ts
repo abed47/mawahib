@@ -15,6 +15,7 @@ export class VideoDislikeListener extends Listener<VideoDislikeEvent>{
 
     async onMessage(data: any, msg: Message){        
         try{
+            console.log(data)
             await Like.destroy({where:{id:data.id}});
             msg.ack();
         }catch(err){

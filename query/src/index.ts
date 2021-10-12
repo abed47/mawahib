@@ -8,6 +8,7 @@ import AuthRoutes from './routes/v1/auth.routes';
 import UserRoutes from './routes/v1/users.routes';
 import ChannelRoutes from './routes/v1/channel.routes';
 import SubscriptionRoutes from './routes/v1/subscriptions.routes';
+import VideoRoutes from './routes/v1/video.routes';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as upload from 'express-fileupload';
@@ -91,6 +92,7 @@ app.use('/api/v1/q/user', UserRoutes);
 app.use('/api/v1/q', SubscriptionRoutes);
 app.use('/api/v1/q/channel', ChannelRoutes);
 app.use('/api/v1/q/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/api/v1/q/videos', VideoRoutes);
 // app.use('/public', express.static)
 
 app.listen(process.env.PORT, () => {
