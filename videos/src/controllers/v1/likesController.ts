@@ -53,7 +53,6 @@ export const filter = async (req: Request, res: Response) => {
     let likeCount = null;
     let filters = [];
 
-    console.log('fields', fields, req.body)
     if(!fields || !Object.keys(fields).length) return returnErrResponse(res, 'some fields are required', 400);
 
     try{

@@ -4,5 +4,6 @@ let route = Router();
 
 route.post('/upload', videoController.create);
 route.post('/search', videoController.filter);
+route.post('/view', videoController.view);
 
 export default route;

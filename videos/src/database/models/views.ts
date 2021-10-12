@@ -8,7 +8,7 @@ const View = db.define('view', {
     },
     user_id:{
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     }
 }, {
     timestamps: true
