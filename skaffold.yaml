@@ -1,0 +1,28 @@
+apiVersion: skaffold/v2alpha3
+kind: config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    # - image: abed47/mawahib-client
+    #   context: client
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: 'src/**/*.js'
+    #         dest: .
+    - image: abed47/mawahib-users
+      context: users
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'app/**/*.js'
+            dest: .
+          - src: 'app/**/*.ts'
+            dest: .

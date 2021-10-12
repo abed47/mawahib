@@ -1,0 +1,37 @@
+{
+  "name": "videos-srv",
+  "version": "1.0.0",
+  "description": "videos micro service for mawahib",
+  "main": "app/index.js",
+  "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/express-fileupload": "^1.1.7",
+    "@types/faker": "^5.5.8",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/validator": "^13.6.3",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "faker": "^5.5.3",
+    "jsonwebtoken": "^8.5.1",
+    "node-nats-streaming": "^0.3.2",
+    "nodemon": "^2.0.12",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "psql": "0.0.1",
+    "secure-pin": "^1.0.14",
+    "sequelize": "^6.6.5",
+    "validator": "^13.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Abdull-rahman",
+  "license": "ISC"
+}

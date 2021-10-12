@@ -1,0 +1,16 @@
+{
+  "name": "mawahib-common-modules",
+  "version": "1.0.8",
+  "description": "code sharing base for mawahib infrastructure",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -r ./build/*",
+    "build": "npm run clean && tsc"
+  },
+  "author": "abdull-rahman",
+  "license": "MIT",
+  "dependencies": {
+    "node-nats-streaming": "^0.3.2"
+  }
+}

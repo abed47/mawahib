@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-psql-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-psql
+  template:
+    metadata:
+      labels:
+        app: users-psql
+    spec:
+      containers:
+        - name: users-psql
+          image: postgres
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: POSTGRES_PASSWORD
+              value: 'root'
+            - name: PGUSER
+              value: 'postgres'
+            - name: PGDATABASE
+              value: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-psql-srv
+spec:
+  selector:
+    app: users-psql
+  ports:
+    - name: db
+      protocol: TCP
+      port: 5432
+      targetPort: 5432

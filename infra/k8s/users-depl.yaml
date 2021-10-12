@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-depl
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mawahib-users
+  template:
+    metadata:
+      labels:
+        app: mawahib-users
+    spec:
+      containers:
+        - name: mawahib-users
+          image: abed47/mawahib-users
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-srv
+spec:
+  selector:
+    app: mawahib-users
+  ports:
+  - name: users
+    protocol: TCP
+    port: 4001
+    targetPort: 4001
