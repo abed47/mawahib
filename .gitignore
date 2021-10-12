@@ -4,3 +4,8 @@ node_modules
 */app
 */build
 */dist
+*/**/*.mp4
+*/**/*.mov
+*/**/*.png
+*/**/*.jpg
+*/**/*.jpeg
