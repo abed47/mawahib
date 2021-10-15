@@ -18,6 +18,8 @@ export class VideoViewListener extends Listener<VideoViewEvent>{
             await View.create(data);
             msg.ack();
         }catch(err){
+            console.log('error starts here', err, 'error end here -=======================================================')
+            msg.ack();
             throw new Error(err);
         }
     }

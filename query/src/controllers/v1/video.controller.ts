@@ -71,6 +71,31 @@ export const filter = async (req: Request, res: Response) => {
     }
 }
 
+
+const getTagFilters: (s: string) => any[] = s => {
+    let splitted: any[] = s.split(',-,');
+
+    let arr = [];
+
+    splitted.forEach(item => {
+        arr.push({tags: {[Op.like]: `%${item}%`}});
+    })
+
+    return arr;
+}
+
+const getTitleFilters: (s: string) => any[] = s => {
+    let splitted: any[] = s.split(' ');
+
+    let arr = [];
+
+    splitted.forEach(item => {
+        arr.push({tags: {[Op.like]: `%${item}%`}});
+    })
+
+    return arr;
+}
+
 export const getRelated = async (req: Request, res: Response) => {
 
     let {fields, exact, pagination} = req.body;
@@ -88,6 +113,8 @@ export const getRelated = async (req: Request, res: Response) => {
         if(fields.user_id) filters.push({user_id: fields.user_id});
         if(fields.banner) filters.push({banner: fields.banner});
         if(fields.video_id) filters.push({id: fields.video_id});
+        if(fields.tags) filters.concat(getTagFilters(fields.tags));
+        if(fields.title) filters.concat(getTitleFilters(fields.title));
 
         
 
@@ -99,8 +126,17 @@ export const getRelated = async (req: Request, res: Response) => {
             include: {
                 model: Channel,
                 as: 'channel'
-            }
+            },
+            attributes: {
+                include: [
+                    [Sequelize.literal('(SELECT COUNT(*) from views WHERE "video_id" = video.id)'), 'view_count'],
+                    [Sequelize.literal('(SELECT COUNT(*) from likes WHERE "video_id" = video.id AND "likes"."deletedAt" IS NULL)'), "like_count"]
+                ]
+            },
+            group: ['video.id', 'channel.id'],
         }
+
+        console.log(req.body);
 
         if(pagination){
             videoCount = await Video.count(filtersObj);

@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  react:
+    container_name: easydev-react
+    build:
+      context: .
+      dockerfile: 'template/Dockerfile.prod'
+    ports:
+      - "3000:80"

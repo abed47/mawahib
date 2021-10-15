@@ -18,7 +18,7 @@ export const create = async (req: Request, res: Response) => {
         res.status(200).json({
             status: true,
             type: 'success',
-            data: null,
+            data: c.dataValues,
             message: 'created successfully'
         });
 

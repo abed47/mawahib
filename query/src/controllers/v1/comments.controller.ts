@@ -4,7 +4,7 @@ import { returnErrResponse } from "../../utils";
 import { Op } from 'sequelize';
 
 export const filter = async (req: Request, res: Response) => {
-    let {fields, exact, pagination} = req.body;
+    let {fields, exact, exclude, pagination} = req.body;
     let commentCount = null;
     let filters = [];
 
@@ -12,9 +12,18 @@ export const filter = async (req: Request, res: Response) => {
 
     try{
         
+        //search fields
         if(fields.user_id) filters.push({user_id: fields.user_id});        
         if(fields.video_id) filters.push({video_id: fields.video_id});
-        if(fields.content) filters.push({content: { [Op.like] : `%${fields.content}%`}})
+        if(fields.content) filters.push({content: { [Op.like] : `%${fields.content}%`}});
+
+        //excluded values
+        if(exclude && Object.keys(exclude).length){
+            if(exclude.id){
+                if(typeof exclude.id === 'object' && exclude.id.length) filters.push({id: { [Op.notIn]: exclude.id}});
+                if(typeof exclude.id === 'string' || typeof exclude.id === 'number') filters.push({id: {[Op.not]: exclude.id}});
+            }
+        }
 
         let filtersObj:any = {
             where:{

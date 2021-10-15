@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  react:
+    container_name: easydev-react
+    build:
+      context: .
+      dockerfile: 'template/Dockerfile'
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    command: ["yarn", "start"]
