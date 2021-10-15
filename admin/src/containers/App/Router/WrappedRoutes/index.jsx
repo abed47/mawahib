@@ -19,6 +19,7 @@ import Account from './Account';
 import ECommerce from './ECommerce';
 import DefaultPages from './DefaultPages';
 import Documentation from './Documentation';
+import Categories from '../../../Categories';
 
 export default () => (
   <div>
@@ -42,6 +43,7 @@ export default () => (
       <Route path="/e-commerce" component={ECommerce} />
       <Route path="/default_pages" component={DefaultPages} />
       <Route path="/documentation" component={Documentation} />
+      <Route path="/categories" component={Categories} />
     </div>
   </div>
 );

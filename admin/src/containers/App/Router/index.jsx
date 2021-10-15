@@ -11,7 +11,6 @@ import RegisterPhoto from '../../Account/RegisterPhoto/index';
 import ResetPassword from '../../Account/ResetPassword/index';
 import ResetPasswordPhoto from '../../Account/ResetPasswordPhoto';
 import WrappedRoutes from './WrappedRoutes';
-import Categories from '../../Categories';
 
 const Router = () => (
   <MainWrapper>
@@ -27,7 +26,6 @@ const Router = () => (
         <Route path="/reset_password" component={ResetPassword} />
         <Route path="/reset_password_photo" component={ResetPasswordPhoto} />
         <Route path="/" component={WrappedRoutes} />
-        <Route path="/categories" component={Categories} />
       </Switch>
     </main>
   </MainWrapper>
