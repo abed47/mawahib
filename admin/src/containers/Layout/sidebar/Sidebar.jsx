@@ -1,35 +1,41 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Scrollbar from 'react-smooth-scrollbar';
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
+import { SidebarProps } from '@/shared/prop-types/ReducerProps';
 import SidebarContent from './SidebarContent';
 
 const Sidebar = ({
-  changeMobileSidebarVisibility, sidebarShow, sidebarCollapse,
+  changeToDark, changeToLight, changeMobileSidebarVisibility, sidebar,
 }) => {
   const sidebarClass = classNames({
     sidebar: true,
-    'sidebar--show': sidebarShow,
-    'sidebar--collapse': sidebarCollapse,
+    'sidebar--show': sidebar.show,
+    'sidebar--collapse': sidebar.collapse,
   });
 
   return (
     <div className={sidebarClass}>
       <button
-        type="button"
-        aria-label="sidebar visibility"
         className="sidebar__back"
+        type="button"
+        aria-label="change mobile sidebar visibility button"
         onClick={changeMobileSidebarVisibility}
       />
       <Scrollbar className="sidebar__scroll scroll">
         <div className="sidebar__wrapper sidebar__wrapper--desktop">
           <SidebarContent
             onClick={() => {}}
+            changeToDark={changeToDark}
+            changeToLight={changeToLight}
+            sidebarCollapse={sidebar.collapse}
           />
         </div>
         <div className="sidebar__wrapper sidebar__wrapper--mobile">
           <SidebarContent
             onClick={changeMobileSidebarVisibility}
+            changeToDark={changeToDark}
+            changeToLight={changeToLight}
           />
         </div>
       </Scrollbar>
@@ -38,8 +44,9 @@ const Sidebar = ({
 };
 
 Sidebar.propTypes = {
-  sidebarShow: PropTypes.bool.isRequired,
-  sidebarCollapse: PropTypes.bool.isRequired,
+  sidebar: SidebarProps.isRequired,
+  changeToDark: PropTypes.func.isRequired,
+  changeToLight: PropTypes.func.isRequired,
   changeMobileSidebarVisibility: PropTypes.func.isRequired,
 };
 

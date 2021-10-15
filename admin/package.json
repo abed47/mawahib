@@ -1,12 +1,17 @@
 {
-  "name": "easydev-seed-without-redux",
-  "version": "2.5.0",
+  "name": "Mawahib-Admin",
+  "version": "3.6.0",
   "private": true,
+  "homepage": "https://previews.aspirity.com/easydev",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "docker": "cd ../ && docker-compose up",
+    "docker-build": "cd ../ && docker-compose build",
+    "docker:prod": "cd ../ && docker-compose -f docker-compose.production.yml up",
+    "docker-build:prod": "cd ../ && docker-compose -f docker-compose.production.yml build"
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.13",
@@ -22,6 +27,7 @@
     "customize-cra": "^1.0.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "firebase": "^8.2.1",
     "i18next": "^19.8.4",
     "immutability-helper": "^3.1.1",
     "lodash.range": "^3.2.0",
@@ -78,7 +84,11 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-node": "^0.3.4",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "react-app-rewired": "^2.1.8"
   },
   "eslintConfig": {
     "extends": "react-app"

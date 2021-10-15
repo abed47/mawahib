@@ -1,5 +1,8 @@
 @import 'settings/variable';  //themes' colors
 
+//vendor...
+@import './vendor';
+
 //base...
 @import 'generic/normalize.scss';
 @import 'generic/box-sizing.scss';
@@ -61,8 +64,20 @@
 @import './component/input.scss';
 
 //pages...
-@import 'containers/account';
+@import 'containers/account';              // pages/account/* (except profile)
+@import 'containers/cart';                 // pages/e-commerce/cart/*
+@import 'containers/dashboard';            // pages/dashboards/*
+@import 'containers/invoice';              // pages/default_page/invoice_template
+@import 'containers/not-found';            // pages/default_page/404/*
+@import 'containers/payment';              // pages/e-commerce/payment/*
+@import 'containers/product-card';         // pages/e-commerce/product-page/components/ProductCard.js
+@import 'containers/product-edit';         // pages/e-commerce/product_edit/*
+@import 'containers/products-list';        // pages/e-commerce/product_list/*
+@import 'containers/profile';              // pages/account/profile/*
+@import 'containers/project-summary';      // pages/default_pages/project_summary/*
+@import 'containers/documentation';
+@import 'containers/landing';
 
 //objects...
-@import 'objects/layout.scss';
+@import 'objects/layout.scss';        // layout settings
 
