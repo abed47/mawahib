@@ -4,28 +4,29 @@ import { Collapse } from 'reactstrap';
 import classNames from 'classnames';
 
 const SidebarCategory = ({
-  title, icon, isNew, children,
+  title, icon, isNew, children, sidebarCollapse,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const categoryClass = classNames({
     'sidebar__category-wrap': true,
     'sidebar__category-wrap--open': isCollapsed,
+    'sidebar__link sidebar__category': true,
   });
 
-  const handleToggleCollapse = () => {
+  const collapseSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   return (
-    <div className={categoryClass}>
-      <button type="button" className="sidebar__link sidebar__category" onClick={handleToggleCollapse}>
+    <div className={sidebarCollapse ? 'sidebar-collapse-wrapper' : ''}>
+      <button className={categoryClass} type="button" onClick={collapseSidebar}>
         {icon ? <span className={`sidebar__link-icon lnr lnr-${icon}`} /> : ''}
         <p className="sidebar__link-title">{title}
           {isNew && <span className="sidebar__category-new" />}
         </p>
         <span className="sidebar__category-icon lnr lnr-chevron-right" />
       </button>
-      <Collapse isOpen={isCollapsed} className="sidebar__submenu-wrap">
+      <Collapse isOpen={sidebarCollapse || isCollapsed} className="sidebar__submenu-wrap">
         <ul className="sidebar__submenu">
           <div>
             {children}
@@ -41,6 +42,7 @@ SidebarCategory.propTypes = {
   icon: PropTypes.string,
   isNew: PropTypes.bool,
   children: PropTypes.arrayOf(PropTypes.element).isRequired,
+  sidebarCollapse: PropTypes.bool.isRequired,
 };
 
 SidebarCategory.defaultProps = {
