@@ -4,6 +4,7 @@ import Dashboard from './pages/dashboard';
 import LoginPage from './pages/auth';
 import ProtectedRoute from './utils/components/ProtectedRoutes';
 import ForbiddenPage from './pages/auth/403';
+import Categories from './pages/Categories';
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
             <Layout  >
                     
               <ProtectedRoute path="/" exact={true} component={Dashboard} />
+              <ProtectedRoute path="/categories" exact={true} component={Categories} />
 
             </Layout>
 
