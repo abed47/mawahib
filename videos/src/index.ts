@@ -6,6 +6,7 @@ import * as cors from 'cors';
 import VideoRoutes from './routes/v1/video.routes';
 import LikeRoutes from './routes/v1/like.routes';
 import CommentRoutes from './routes/v1/comment.routes';
+import CategoryRoutes from './routes/v1/category.routes';
 import * as upload from 'express-fileupload';
 import * as path from 'path';
 import { natsWrapper } from './nats-wrapper';
@@ -43,6 +44,7 @@ db.connect();
 app.use('/api/v1/v/videos', VideoRoutes);
 app.use('/api/v1/v/like', LikeRoutes);
 app.use('/api/v1/v/comments', CommentRoutes);
+app.use('/api/v1/v/category', CategoryRoutes);
 app.use('/api/v1/v/uploads', express.static(path.join(__dirname, '../uploads')));
 
 
