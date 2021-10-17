@@ -78,23 +78,49 @@ export const create = async (req: Request, res: Response) => {
 
 export const updateOne = async (req: Request, res: Response) => {
     let id = req.params.id;
-    let body = req.body;
+    let {name, description} = req.body;
 
-    try{
+    if(req.files.photo){
+        let photo: any = req.files.photo;
+        let filepath = 'cat-' + securePin.generatePinSync(5) + '.png';
+        
+        photo.mv('./uploads/images/' + filepath , async photoError => {
 
-        await Category.update(body, {where: {id}});
+            try{
 
-        body['id'] = id;
-        new CategoryUpdatedPublisher(natsWrapper.client).publish({body});
+                if(photoError) return returnErrResponse(res, photoError.message || 'unable to upload', 400);
 
-        return res.status(200).json({
-            status: true,
-            type: 'success',
-            data: null,
-            message: 'updated successfully'
-        });
-    }catch(err){
-        return returnErrResponse(res, err.message || 'unknown error', 500);
+                let v:any = await Category.update({name, description, photo: filepath}, {where:{id}});
+
+                new CategoryUpdatedPublisher(natsWrapper.client).publish({name, description, id});
+
+                return res.status(200).json({
+                    status: true,
+                    type: 'success',
+                    data: v,
+                    message: 'updated successfully'
+                });
+
+            }catch(err){
+                return returnErrResponse(res, err.message || 'unknown error', 500);
+            }
+        } )
+    }else{
+        try{
+
+            await Category.update({name, description}, {where: {id}});
+    
+            new CategoryUpdatedPublisher(natsWrapper.client).publish({name, description, id});
+    
+            return res.status(200).json({
+                status: true,
+                type: 'success',
+                data: null,
+                message: 'updated successfully'
+            });
+        }catch(err){
+            return returnErrResponse(res, err.message || 'unknown error', 500);
+        }
     }
 }
 

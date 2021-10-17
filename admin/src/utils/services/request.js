@@ -50,6 +50,21 @@ export const createCategory = async body => {
     }
 };
 
+export const updateCategory = async (body, id) => {
+
+    try{
+        let response = await fetch(`${videos_ms_url}category/${id}`, {
+            method: 'PUT',
+            body
+        });
+
+        let responseObj = await response.json();
+        return responseObj;
+    }catch(err){
+        return JSON.parse(err);
+    }
+};
+
 export const deleteCategory = async id => {
 
     try{

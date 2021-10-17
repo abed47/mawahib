@@ -4,6 +4,7 @@ import { LayoutContext } from "../../utils/context/LayoutContext";
 import DataTable from 'react-data-table-component';
 import AddDialog from './components/add-dialog';
 import DeleteDialog from './components/delete-dialog';
+import UpdateDialog from './components/update-dialog';
 import { getCategories, getCategoryPhoto } from '../../utils/services/request';
 
 const Columns = (handleDelete, handleEdit) => [
@@ -83,7 +84,19 @@ const CategoriesPage = props => {
 
     const handleEdit = row => {
         setSelectedRow(row);
-        setDeleteDialogOpen(true);
+        setUpdateDialogOpen(true);
+    }
+
+    const handleEditDialogClose = status => {
+        if(status){
+            setUpdateDialogOpen(false);
+            setSelectedRow(null);
+            loadData();
+            return;
+        }
+
+        setUpdateDialogOpen(false);
+        setSelectedRow(null);
     }
 
     const handleDelete = row => {
@@ -94,7 +107,7 @@ const CategoriesPage = props => {
     const handleDeleteDialogClose = (status) => {
         if(status){
             setDeleteDialogOpen(false);
-            setSelectedRow(false);
+            setSelectedRow(null);
             loadData();
             return;
         }
@@ -123,6 +136,7 @@ const CategoriesPage = props => {
 
             <AddDialog handleClose={handleCreateDialogClose} open={createDialogOpen} />
             <DeleteDialog open={deleteDialogOpen} handleClose={handleDeleteDialogClose} data={selectedRow} />
+            <UpdateDialog open={updateDialogOpen} handleClose={handleEditDialogClose} data={selectedRow} />
         </main>
     );
 }
