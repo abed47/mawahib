@@ -28,12 +28,13 @@ const CategoriesPage = props => {
         {id: 2, name: 'Weekly Covers'},
         {id: 3, name: 'Monthly Covers'}
     ]);
+
     const [progressPadding, setProgressPadding] = useState(false);
 
     const layoutCtx = useContext(LayoutContext);
 
     useEffect(() => {
-        // layoutCtx.showPreLoader();
+        loadData();
     }, []);
 
     const loadData = async () => {
@@ -47,14 +48,14 @@ const CategoriesPage = props => {
                 <Button variant="contained" color="primary">Create</Button>
             </header>
             <section>
-            <DataTable 
-                title={false}
-                columns={Columns} 
-                data={data} 
-                pagination
-                noHeader
-                className='data-table'
-                progressPadding={progressPadding} />
+                <DataTable 
+                    title={false}
+                    columns={Columns} 
+                    data={data} 
+                    pagination
+                    noHeader
+                    className='data-table'
+                    progressPadding={progressPadding} />
             </section>
             <footer></footer>
         </main>
