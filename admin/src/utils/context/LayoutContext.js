@@ -2,6 +2,10 @@ import React, {createContext, useState, useCallback} from 'react';
 
 export const LayoutContext = createContext({
     msg: "",
+    /**
+     * @param {string} msg - message text
+     * @param {string} type - message type
+     */
     showSnack: () => {},
     hideSnack: () => {},
     snackOpen: false,
@@ -35,7 +39,7 @@ const LayoutUtilsProvider = ({children}) => {
     const hideSnack = () => {
         setOpen(false);
         setMsg("");
-        setType("");
+        // setType("");
     }
 
     const contextValue = {

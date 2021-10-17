@@ -10,6 +10,10 @@ const Category = db.define('category', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    photo: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     type: {
         type: DataTypes.INTEGER,
         allowNull: true,

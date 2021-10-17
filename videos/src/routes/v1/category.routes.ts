@@ -6,6 +6,6 @@ router.get('/', categoryController.getAll);
 router.get('/:id', categoryController.getOne);
 router.put('/:id', categoryController.updateOne);
 router.delete('/:id', categoryController.destroy);
-router.post('/:id', categoryController.create);
+router.post('/', categoryController.create);
 
 export default router;

@@ -1,0 +1,39 @@
+.mr-1{
+    margin-right: 5px !important;
+}
+
+.mr-2{
+    margin-right: 10px !important;
+}
+
+.mr-3{
+    margin-right: 15px !important;
+}
+
+.mr-4{
+    margin-right: 20px !important;
+}
+
+.mr-5{
+    margin-right: 25px !important;
+}
+
+.color{
+
+    &-white{
+        color: white !important;
+        fill: white !important;
+    }
+}
+
+.w{
+    &-20p{
+        width: 20px !important;
+    }
+}
+
+.h{
+    &-20p{
+        height: 20px !important;
+    }
+}

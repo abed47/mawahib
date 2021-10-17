@@ -2,6 +2,8 @@ import { Button } from '@material-ui/core';
 import { useContext, useEffect, useState } from "react";
 import { LayoutContext } from "../../utils/context/LayoutContext";
 import DataTable from 'react-data-table-component';
+import AddDialog from './components/add-dialog';
+import { getCategories, getCategoryPhoto } from '../../utils/services/request';
 
 const Columns = [
     {
@@ -15,6 +17,12 @@ const Columns = [
         sortable: true,
     },
     {
+        name: 'Photo',
+        selector: 'photo',
+        sortable: false,
+        format: row => <img src={getCategoryPhoto(row.photo)} alt="" className="category-photo" />
+    },
+    {
         name: 'Actions',
         selector: 'id',
         format: (row) => <div className="table-actions-column"><Button color="primary" variant="contained">Edit</Button><Button color="secondary" variant="contained">Delete</Button></div>
@@ -23,12 +31,9 @@ const Columns = [
 
 const CategoriesPage = props => {
 
-    const [data, setData] = useState([
-        {id: 1, name: 'Music'},
-        {id: 2, name: 'Weekly Covers'},
-        {id: 3, name: 'Monthly Covers'}
-    ]);
+    const [data, setData] = useState([]);
 
+    const [createDialogOpen, setCreateDialogOpen] = useState(false);
     const [progressPadding, setProgressPadding] = useState(false);
 
     const layoutCtx = useContext(LayoutContext);
@@ -38,14 +43,41 @@ const CategoriesPage = props => {
     }, []);
 
     const loadData = async () => {
+        
+        try{
+            layoutCtx.showPreLoader();
+            let res = await getCategories();
+            
+            if(res.status){
+                layoutCtx.hidePreLoader();
+                setData(res.data);
+                return;
+            }
+            layoutCtx.hidePreLoader();
+            layoutCtx.showSnack(res.message, 'error');
+        }catch(err){
+            layoutCtx.hidePreLoader();
+            layoutCtx.showSnack(err.message || 'unknown error', 'error')
+        }
+    }
 
+    const handleCreateDialogOpen = () => setCreateDialogOpen(true);
+
+    const handleCreateDialogClose = (status) => {
+        if(status){
+            setCreateDialogOpen(false);
+            loadData();
+            return;
+        }
+
+        setCreateDialogOpen(false);
     }
 
     return (
         <main className="categories-page">
             <header>
                 <h1>Categories</h1>
-                <Button variant="contained" color="primary">Create</Button>
+                <Button variant="contained" color="primary" onClick={handleCreateDialogOpen}>Create</Button>
             </header>
             <section>
                 <DataTable 
@@ -58,6 +90,8 @@ const CategoriesPage = props => {
                     progressPadding={progressPadding} />
             </section>
             <footer></footer>
+
+            <AddDialog handleClose={handleCreateDialogClose} open={createDialogOpen} />
         </main>
     );
 }
