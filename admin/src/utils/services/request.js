@@ -49,3 +49,18 @@ export const createCategory = async body => {
         return JSON.parse(err);
     }
 };
+
+export const deleteCategory = async id => {
+
+    try{
+        let response = await fetch(`${videos_ms_url}category/${id}`, {
+            method: 'DELETE'
+        });
+
+        let responseObj = await response.json();
+        return responseObj;
+    }catch(err){
+        return JSON.parse(err);
+    }
+
+};

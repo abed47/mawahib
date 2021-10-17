@@ -3,9 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { LayoutContext } from "../../utils/context/LayoutContext";
 import DataTable from 'react-data-table-component';
 import AddDialog from './components/add-dialog';
+import DeleteDialog from './components/delete-dialog';
 import { getCategories, getCategoryPhoto } from '../../utils/services/request';
 
-const Columns = [
+const Columns = (handleDelete, handleEdit) => [
     {
         name: '#',
         selector: 'id',
@@ -25,7 +26,11 @@ const Columns = [
     {
         name: 'Actions',
         selector: 'id',
-        format: (row) => <div className="table-actions-column"><Button color="primary" variant="contained">Edit</Button><Button color="secondary" variant="contained">Delete</Button></div>
+        format: (row) => (
+            <div className="table-actions-column">
+                <Button color="primary" variant="contained" onClick={() => handleEdit(row)}>Edit</Button>
+                <Button color="secondary" variant="contained" onClick={() => handleDelete(row)}>Delete</Button>
+            </div>)
     }
 ]
 
@@ -34,7 +39,10 @@ const CategoriesPage = props => {
     const [data, setData] = useState([]);
 
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
     const [progressPadding, setProgressPadding] = useState(false);
+    const [selectedRow, setSelectedRow] = useState(null);
 
     const layoutCtx = useContext(LayoutContext);
 
@@ -73,6 +81,28 @@ const CategoriesPage = props => {
         setCreateDialogOpen(false);
     }
 
+    const handleEdit = row => {
+        setSelectedRow(row);
+        setDeleteDialogOpen(true);
+    }
+
+    const handleDelete = row => {
+        setSelectedRow(row);
+        setDeleteDialogOpen(true);
+    }
+
+    const handleDeleteDialogClose = (status) => {
+        if(status){
+            setDeleteDialogOpen(false);
+            setSelectedRow(false);
+            loadData();
+            return;
+        }
+
+        setDeleteDialogOpen(false);
+        setSelectedRow(null);
+    }
+
     return (
         <main className="categories-page">
             <header>
@@ -82,7 +112,7 @@ const CategoriesPage = props => {
             <section>
                 <DataTable 
                     title={false}
-                    columns={Columns} 
+                    columns={Columns(handleDelete, handleEdit)} 
                     data={data} 
                     pagination
                     noHeader
@@ -92,6 +122,7 @@ const CategoriesPage = props => {
             <footer></footer>
 
             <AddDialog handleClose={handleCreateDialogClose} open={createDialogOpen} />
+            <DeleteDialog open={deleteDialogOpen} handleClose={handleDeleteDialogClose} data={selectedRow} />
         </main>
     );
 }
