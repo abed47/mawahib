@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import Category from "../../database/models/category";
 import { returnErrResponse } from "../../utils";
 import * as securePin from 'secure-pin';
+import { CategoryDeletedPublisher } from "../../utils/events/category-deleted-event";
+import { natsWrapper } from "../../nats-wrapper";
+import { CategoryUpdatedPublisher } from "../../utils/events/category-updated-event";
+import { CategoryCreatedPublisher } from "../../utils/events/category-created-event";
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -55,7 +59,9 @@ export const create = async (req: Request, res: Response) => {
 
             if(photoError) return returnErrResponse(res, photoError.message || 'unable to upload', 400);
 
-            let v = await Category.create({name, description, photo: filepath});
+            let v:any = await Category.create({name, description, photo: filepath});
+
+            new CategoryCreatedPublisher(natsWrapper.client).publish(v.dataValues);
 
             return res.status(200).json({
                 status: true,
@@ -78,6 +84,9 @@ export const updateOne = async (req: Request, res: Response) => {
 
         await Category.update(body, {where: {id}});
 
+        body['id'] = id;
+        new CategoryUpdatedPublisher(natsWrapper.client).publish({body});
+
         return res.status(200).json({
             status: true,
             type: 'success',
@@ -95,6 +104,8 @@ export const destroy = async (req: Request, res: Response) => {
     try{
         
         await Category.destroy({where: {id}});
+
+        new CategoryDeletedPublisher(natsWrapper.client).publish({id});
 
         return res.status(200).json({
             status: true,

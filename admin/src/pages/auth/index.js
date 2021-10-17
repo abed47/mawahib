@@ -1,10 +1,10 @@
 /*jshint ignore: start*/
 import {useState, useRef} from 'react'
-import shipImage from '../../assets/images/ship.png';
-import logo from '../../assets/images/logo.png';
-import fbIcon from '../../assets/images/fb.png';
-import instaIcon from '../../assets/images/insta.png';
-import twitterIcon from '../../assets/images/twitter.png';
+// import shipImage from '../../assets/images/ship.png';
+// import logo from '../../assets/images/logo.png';
+// import fbIcon from '../../assets/images/fb.png';
+// import instaIcon from '../../assets/images/insta.png';
+// import twitterIcon from '../../assets/images/twitter.png';
 import {Button, TextField,CircularProgress} from '@material-ui/core';
 import dataProvider from '../../utils/providers';
 import {useHistory} from 'react-router-dom';
@@ -95,7 +95,7 @@ const LoginPage = () => {
 
                 <dir className="form-section">
                     <div className="left">
-                        <img src={logo} />
+                        {/* <img src={logo} /> */}
                         <h2>Login Account</h2>
                         <p>This is a secure system and you will need to provide you login details to access the site.</p>
 
@@ -143,14 +143,14 @@ const LoginPage = () => {
                     </div>
 
                     <div className="right">
-                        <a><img src={fbIcon} /></a>
-                        <a><img src={instaIcon} /></a>
-                        <a><img src={twitterIcon} /></a>
+                        {/* <a><img src={fbIcon} /></a> */}
+                        {/* <a><img src={instaIcon} /></a> */}
+                        {/* <a><img src={twitterIcon} /></a> */}
                     </div>
                 </dir>
 
                 <div className="image-section">
-                    <img src={shipImage} />
+                    {/* <img src={shipImage} /> */}
                 </div>
             </div>
 

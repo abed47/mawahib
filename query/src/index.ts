@@ -30,6 +30,9 @@ import { VideoDeletedListener } from './utils/events/video-deleted-event';
 import { CommentCreatedListener } from './utils/events/comment-create-event';
 import { CommentUpdatedListener } from './utils/events/comment-updated-event';
 import { CommentDeletedListener } from './utils/events/comment-deleted-event';
+import { CategoryCreatedListener } from './utils/events/category-created-event';
+import { CategoryUpdatedListener } from './utils/events/category-updated-event';
+import { CategoryDeletedListener } from './utils/events/category-deleted-event';
 import { VideoViewListener } from './utils/events/video-view-event';
 //enable env file
 dotenv.config();
@@ -69,7 +72,10 @@ try{
         new CommentCreatedListener(natsWrapper.client).listen();
         new CommentUpdatedListener(natsWrapper.client).listen();
         new CommentDeletedListener(natsWrapper.client).listen();
-        
+        //category events
+        new CategoryCreatedListener(natsWrapper.client).listen();
+        new CategoryUpdatedListener(natsWrapper.client).listen();
+        new CategoryDeletedListener(natsWrapper.client).listen();
     })
 
     

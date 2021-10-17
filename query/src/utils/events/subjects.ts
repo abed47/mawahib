@@ -15,5 +15,8 @@ export enum Subjects {
     VideoDisliked = 'video:disliked',
     CommentCreated = 'comment:created',
     CommentUpdated = 'comment:updated',
-    CommentDeleted = 'comment:deleted'
+    CommentDeleted = 'comment:deleted',
+    CategoryCreated = 'category:created',
+    CategoryDeleted = 'category:deleted',
+    CategoryUpdated = 'category:updated'
 }
