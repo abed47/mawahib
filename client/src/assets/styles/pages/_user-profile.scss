@@ -1,0 +1,55 @@
+.user-profile{
+    background: $color-light-grey;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    // padding: 0 10px;
+    $side-padding: 50px;
+
+    .header{
+        padding: 0 $side-padding;
+        padding-top: 80px;
+        width: 100%;
+
+        .info{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+
+            .options{
+                height: 100%;
+                margin-left: 1.5rem;
+
+                h1{
+                    color: white;
+                    text-transform: capitalize;
+                    font-size: 20px;
+                }
+            }
+
+            img{
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        }
+
+        .tab-container{
+            margin-top: 20px;
+
+            .tab-list{
+
+                &-item{
+                    color: white;
+
+                    &.Mui-selected{
+                        color: $color-secondary;
+                    }
+                }
+            }
+        }
+    }
+}

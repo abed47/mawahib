@@ -1,0 +1,91 @@
+.channel-profile{
+    background-color: $color-light-grey;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    $side-padding: 50px;
+    overflow-y: auto;
+
+    .header{
+        padding: 0 $side-padding;
+        padding-top: 80px;
+        width: 100%;
+
+        .info{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0%;
+
+            .options{
+                height: 100%;
+                margin-left: -1.5rem;
+                flex-basis: 33%;
+
+                h1{
+                    color: white;
+                    text-transform: capitalize;
+                    font-size: 20px;
+                    margin-bottom: 5px;
+                }
+
+                h2{
+                    margin: 0;
+                    color: $color-light;
+                    margin-bottom: 5px;
+                    font-size: 15px;
+                }
+            }
+
+            .numbers{
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                flex-direction: row;
+                justify-self: flex-end;
+                flex-basis: 33%;
+
+                span{
+                    h1{
+                        font-size: 21px;
+                        color: white;
+                        margin-bottom: 0;
+                    }
+                    h2{
+                        font-size: 15px;
+                        color: $color-light;
+                        margin-top: 0px;
+                    }
+                }
+            }
+
+            img{
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 50%;
+                flex-basis: 0%;
+
+            }
+        }
+
+        .tab-container{
+            margin-top: 20px;
+
+            .tab-list{
+
+                &-item{
+                    color: white;
+
+                    &.Mui-selected{
+                        color: $color-secondary;
+                    }
+                }
+            }
+        }
+    }
+}
