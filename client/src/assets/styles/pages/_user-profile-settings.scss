@@ -1,0 +1,155 @@
+.user-profile-settings{
+    background: $color-light-grey;
+    height: 100%;
+    width: 100%;
+    color: white;
+    box-sizing: border-box;
+    padding: 0 50px;
+    overflow-y: auto;
+    
+    .header{
+        padding-top: 50px;
+        // margin-top: 50px;
+    }
+
+    .wrapper{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        .photo-holder{
+            display: flex;
+            flex-direction: column;
+            
+            img{
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 50%;
+                margin-bottom: 20px;
+            }
+        }
+
+        section{
+            .actions{
+                width: 600px;
+                text-align: right;
+            }
+            .settings-group{
+
+                margin-bottom: 25px;
+
+                h1{
+                    margin: 10px 0;
+                    font-size: 18px;
+                }
+
+                .form-group{
+                    max-width: 600px;
+                    margin: 10px 0;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    label{
+                        color: $color-light;
+                        font-size: 12px;
+                        margin-right: 15px;
+                    }
+
+                    .special-input-auto-complete{
+                        height: 35px !important;
+                        // width: 100%;
+                        width: 60%;
+                        // display: none;?
+
+                        &>*{
+                            max-height: 28px;
+                            height: 100%;
+                            padding: 0 !important;
+                        }
+
+                        input{
+                            max-height: 100%;
+                            height: 35px !important;
+                            padding: 7px !important;
+                            border: none;
+                            outline: none;
+                            height: 35px;
+                            font-size: 15px !important;
+                            background: $color-dark-grey;
+                            color: white;
+                            border-radius: 5px;
+                        }
+                    }
+
+                    button.btn{
+                        width: 60%;
+                    }
+
+                    input[type=text], input[type=date]{
+                        padding: 7px !important;
+                        width: 60%;
+                        border: none;
+                        outline: none;
+                        height: 35px;
+                        font-size: 15px !important;
+                        background: $color-dark-grey;
+                        color: white;
+                        border-radius: 5px;
+
+                        &::placeholder{
+                            color: $color-light;
+                        }
+                    }
+
+                    select{
+                        padding: 7px !important;
+                        width: 60%;
+                        border: none;
+                        outline: none;
+                        height: 25px;
+                        background: $color-dark-grey;
+                        color: white;
+                        border-radius: 5px;
+
+                        &::placeholder{
+                            color: $color-light;
+                        }
+                    }
+                }
+            }
+        }
+
+        section:nth-child(2){
+            width: 70%;
+        }
+    }
+
+    .upload-file-btn{
+        position: relative;
+
+        button{
+            width: 100%;
+        }
+
+        input[type=file]{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+    }
+
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 2px;
+    opacity: 0.6;
+    filter: invert(0.8);
+  }

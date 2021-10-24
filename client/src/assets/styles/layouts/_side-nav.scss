@@ -1,0 +1,35 @@
+.side-nav-container{
+    
+    background-color: $color-dark-grey !important;
+    background: $color-dark-grey !important;
+    
+    .nav-list{
+
+        &-item{
+            color: white !important;
+
+            &-icon{
+                color: white;
+            }
+        }
+
+        &-item.active{
+            color: $color-secondary !important;
+
+            .nav-list-item-icon{
+                color: $color-secondary !important;
+            }
+        }
+    }
+
+    .side-nav-header{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        img{
+            width: auto;
+            max-height: 25px;
+        }
+    }
+}
