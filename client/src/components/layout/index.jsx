@@ -15,16 +15,29 @@ import Toolbar from '@mui/material/Toolbar';
 import MawahibCroppedLogo from '../../assets/images/mawahib-croped.png'
 import PagePreloader from './PagesPreLoader';
 import SnackBar from './SnackBar';
-
+import {sideNavMenu} from '../../utils/config/menus';
+import { useLocation, useHistory } from 'react-router-dom';
 const drawerWidth = 240;
 
 function ResponsiveDrawer(props) {
   const { window, children } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [currentPath, setCurrentPath] = React.useState('/');
+
+  const mLocation = useLocation();
+  const history = useHistory();
+
+  React.useEffect(() => {
+    setCurrentPath(mLocation.pathname);
+  }, [mLocation.pathname])  
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const navigate = (p) => {
+    history.push(p);
+  }
 
   const drawer = (
     <div className="side-nav-container">
@@ -33,17 +46,24 @@ function ResponsiveDrawer(props) {
       </Toolbar>
       <Divider />
       <List className={'nav-list categories'}>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text} className={`nav-list-item ${index === 0 ? 'active' : ''}` }>
-            <ListItemIcon className="nav-list-item-icon">
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        
+        {
+          sideNavMenu.map((item, index) => {
+            if(item.type === 1) return (
+              <ListItem button key='home' className={`nav-list-item ${currentPath === item.path ? 'active' : ''}` } onClick={() => navigate(item.path)}>
+                    <ListItemIcon className="nav-list-item-icon">
+                      <item.icon />
+                    </ListItemIcon>
+                    <ListItemText primary={item.title} />
+              </ListItem>
+            );
+          })
+        }
+
+
       </List>
       <Divider />
-      <List>
+      {/* <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
@@ -52,7 +72,7 @@ function ResponsiveDrawer(props) {
             <ListItemText primary={text} />
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </div>
   );
 
