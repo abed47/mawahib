@@ -5,7 +5,7 @@ import LoginPage from './pages/auth';
 import ProtectedRoute from './utils/components/ProtectedRoutes';
 import ForbiddenPage from './pages/auth/403';
 import Categories from './pages/Categories';
-
+import UsersPage from './pages/Users';
 function App() {
 
   return (
@@ -18,6 +18,7 @@ function App() {
                     
               <ProtectedRoute path="/" exact={true} component={Dashboard} />
               <ProtectedRoute path="/categories" exact={true} component={Categories} />
+              <ProtectedRoute path="/users" exact component={UsersPage} />
 
             </Layout>
 

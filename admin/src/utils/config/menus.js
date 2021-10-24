@@ -17,6 +17,12 @@ export const sidenav = [
         icon: 'list-outline',
         title: 'Categories',
         permissions: Permissions.ADMIN
+    },
+    {
+        path: '/users',
+        icon: 'list-outline',
+        title: 'Users',
+        permissions: Permissions.ADMIN
     }
 ]
 
