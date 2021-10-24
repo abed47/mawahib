@@ -34,6 +34,11 @@ const Channel = db.define('channel', {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         defaultValue: false
+    },
+    category_id:{
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 99
     }
 }, {
     timestamps: true,
