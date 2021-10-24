@@ -10,7 +10,7 @@ import HomePage from './pages/home';
 import UserProfilePage from './pages/user-profile';
 import UserChannel from './pages/channel';
 import WatchPage from './pages/watch';
-
+import CategoryPage from './pages/categories';
 const  App = () => {
 
   return (
@@ -28,6 +28,10 @@ const  App = () => {
               <Route path="/user-profile" component={UserProfilePage} />
               <Route path="/channel" component={UserChannel} />
               <Route path="/watch/:id" component={WatchPage} />
+
+              <Route path="/categories">
+                <CategoryPage />
+              </Route>
             </Layout>
 
           </Switch>
