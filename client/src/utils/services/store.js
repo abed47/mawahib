@@ -26,6 +26,8 @@ const get = (key, type = null) => {
 
 const clear = () => {
     let storage = (localStorage.getItem('type') == 2 ? localStorage : sessionStorage);
+    localStorage.clear()
+    sessionStorage.clear();
     storage.clear();
 }
 

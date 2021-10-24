@@ -396,6 +396,25 @@ export const recordView = async (body, service = null) => {
     }
 }
 
+export const getCategories = async () => {
+    let sUrl = videos_ms_url;
+
+    try {
+        let response = await fetch(sUrl + 'category', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        let responseObj =  await response.json();
+
+        return responseObj;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 const RequestService = {signup, login};
 
 export default RequestService;

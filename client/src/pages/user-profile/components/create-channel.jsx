@@ -11,7 +11,7 @@ import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { LayoutContext } from '../../../utils/context/layout';
 import { AuthContext } from '../../../utils/context/auth';
 import { imgToBase64 } from '../../../utils/helpers';
-import {createChannel, getCurrentUser, getCurrentUserChannel, updateUserProfile, uploadPhoto} from '../../../utils/services/request';
+import {createChannel, getCategories, getCurrentUser, getCurrentUserChannel, updateUserProfile, uploadPhoto} from '../../../utils/services/request';
 import { useHistory } from 'react-router-dom';
 import StoreService from '../../../utils/services/store';
 
@@ -62,6 +62,8 @@ const CreateChannelPage = (props) => {
     const [coverDataUrl, setCoverDataUrl] = useState('');
     const [logoDataUrl, setLogoDataUrl] = useState('');
     const [watermarkDataUrl, setWatermarkDataUrl] = useState('');
+    const [categoryList, setCategoryList] = useState([]);
+    const [categorySelected, setCategorySelected] = useState(0);
 
     const layoutCtx = useContext(LayoutContext);
     const authCtx = useContext(AuthContext);
@@ -94,11 +96,22 @@ const CreateChannelPage = (props) => {
                         await updateUserProfile(StoreService.get('currentUser').id, {channel_id: c.data.id})
                     }
                     layoutCtx.showSnackBar('user already has a channel', 'info')
-                    history.push('/user-profile')
+                    history.push('/user-profile');
+                    return;
                 }
+                loadData();
             } catch (error) {
                 
             }
+        }
+    }
+
+    const loadData = async () => {
+        try{
+            let cats = await getCategories();
+            setCategoryList(cats.data || []);
+        }catch(err){
+            layoutCtx.showSnackBar(err.message || 'please check your internet connection and reload the page', 'error');
         }
     }
 
@@ -169,6 +182,9 @@ const CreateChannelPage = (props) => {
       const handleAgreementChange = (e, v) => {
           setAcceptedAgreement(v);
       }
+      const handleCategoryChange = e => {
+          setCategorySelected(e.target.value);
+      }
 
       let stepOneProps = {
           channelName,
@@ -176,7 +192,10 @@ const CreateChannelPage = (props) => {
           channelSlogan,
           handleSloganChange,
           channelDescription,
-          handleDescriptionChange
+          handleDescriptionChange,
+          categoryList,
+          categorySelected,
+          handleCategoryChange
       };
 
       let stepTowProps = {
@@ -273,7 +292,8 @@ const CreateChannelPage = (props) => {
                 photo: lUrl || '',
                 userId: authCtx.user.id,
                 cover: cUrl || '',
-                watermark: wUrl
+                watermark: wUrl,
+                category_id: categorySelected || 0
             }
             
             let res = await createChannel(channelObj);
@@ -352,6 +372,19 @@ let Step1 = (props) => {
                 <label>Channel name</label>
                 <input type="text" value={props.channelName} onChange={props.handleNameChange} />
             </div>
+
+            <div className="form-control">
+                <label>Channel Category</label>
+                {/* <input type="text" value={props.channelName} onChange={props.handleNameChange} /> */}
+                <select value={props.categorySelected} onChange={props.handleCategoryChange}>
+                    {
+                        props.categoryList.map((item, index) => {
+                            return <option key={`category-list-item-${index}`} value={item.id}>{item.name}</option>
+                        })
+                    }
+                </select>
+            </div>
+
             <div className="form-control">
                 <label>Channel slogan</label>
                 <input type="text" value={props.channelSlogan} onChange={props.handleSloganChange} />
