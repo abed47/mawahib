@@ -21,6 +21,7 @@ const getServiceUrl = (num) => {
 export const getPhotoPublicPath = (file) => users_ms_url + 'uploads/' + file;
 export const getVideoThumbnailPublicPath = (file) => videos_ms_url + 'uploads/images/' + file;
 export const getVideoPublicPath = (file) => videos_ms_url + 'uploads/videos/' + file;
+export const getCategoryImage = (file) => videos_ms_url + 'uploads/images/' + file;
 
 const signup = async (body) => {
     try {
@@ -395,6 +396,7 @@ export const recordView = async (body, service = null) => {
         throw new Error(err);
     }
 }
+
 
 export const getCategories = async () => {
     let sUrl = videos_ms_url;
