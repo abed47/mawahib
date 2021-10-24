@@ -34,6 +34,7 @@ import { CategoryCreatedListener } from './utils/events/category-created-event';
 import { CategoryUpdatedListener } from './utils/events/category-updated-event';
 import { CategoryDeletedListener } from './utils/events/category-deleted-event';
 import { VideoViewListener } from './utils/events/video-view-event';
+import * as DbOptions from './database';
 //enable env file
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use(upload());
 
 //connect to nats
 try{
+    DbOptions.connect();
     natsWrapper.connect('mawahib', 'query-service', 'http://localhost:4222').then();
 
     //init listeners
