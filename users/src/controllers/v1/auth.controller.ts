@@ -19,11 +19,7 @@ export const login = async (req: Request, res: Response) => {
     
     try {
         let user: any = await User.findOne({where: {
-            [Op.or]:[
-                {email: email || ''},
-                {username: username || ''},
-                {phone: username|| ''}
-            ]
+            email
         }});
 
         if(!user) return returnErrResponse(res, 'user not found', 404);
