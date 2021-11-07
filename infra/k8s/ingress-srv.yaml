@@ -11,6 +11,20 @@ spec:
     - host: mawahib-abed.com
       http:
         paths:
+          - path: /api/v1/q
+            pathType: Prefix
+            backend:
+              service:
+                name: query-srv
+                port:
+                  number: 4000
+          - path: /api/v1/v
+            pathType: Prefix
+            backend:
+              service:
+                name: videos-srv
+                port:
+                  number: 4002
           - path: /api/v1/u
             pathType: Prefix
             backend:

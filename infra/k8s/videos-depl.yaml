@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: videos-depl
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mawahib-videos
+  template:
+    metadata:
+      labels:
+        app: mawahib-videos
+    spec:
+      containers:
+        - name: mawahib-videos
+          image: abed47/mawahib-videos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: videos-srv
+spec:
+  selector:
+    app: mawahib-videos
+  ports:
+  - name: videos
+    protocol: TCP
+    port: 4001
+    targetPort: 4001

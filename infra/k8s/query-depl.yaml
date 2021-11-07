@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: query-depl
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: mawahib-query
+  template:
+    metadata:
+      labels:
+        app: mawahib-query
+    spec:
+      containers:
+        - name: mawahib-query
+          image: abed47/mawahib-query
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv
+spec:
+  selector:
+    app: mawahib-query
+  ports:
+  - name: query
+    protocol: TCP
+    port: 4000
+    targetPort: 4000
