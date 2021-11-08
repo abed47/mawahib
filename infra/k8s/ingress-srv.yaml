@@ -8,7 +8,7 @@ metadata:
     nginx.ingress.kubernetes.io/keep-alive: 'true'
 spec:
   rules:
-    - host: mawahib.talent
+    - host: 207.154.254.97
       http:
         paths:
           - path: /api/v1/q
