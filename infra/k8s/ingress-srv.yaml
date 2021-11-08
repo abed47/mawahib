@@ -6,9 +6,10 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
     nginx.ingress.kubernetes.io/keep-alive: 'true'
+    kubernetes.io/ingress-class: public
 spec:
   rules:
-    - host: mawahib.talent
+    - host: mawahib.com
       http:
         paths:
           - path: /api/v1/q
