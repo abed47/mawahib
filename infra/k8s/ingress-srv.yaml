@@ -35,3 +35,10 @@ spec:
                 name: users-srv
                 port:
                   number: 4001
+          - path: /docs
+            pathType: Prefix
+            backend:
+              service:
+                name: docs-srv
+                port:
+                  number: 4500
