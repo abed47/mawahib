@@ -24,7 +24,7 @@ app.use(upload());
 
 //connect to nats
 try{
-    natsWrapper.connect('mawahib', 'video-service', 'http://localhost:4222').then();
+    natsWrapper.connect('mawahib', 'video-service', 'http://10.103.5.149:4222').then();
   
     natsWrapper.client.on('close', () => {
         console.log('Nats Connection closed!');

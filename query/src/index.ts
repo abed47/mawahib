@@ -49,7 +49,7 @@ app.use(upload());
 //connect to nats
 try{
     DbOptions.connect();
-    natsWrapper.connect('mawahib', 'query-service', 'http://localhost:4222').then();
+    natsWrapper.connect('mawahib', 'query-service', 'http://10.103.5.149:4222').then();
 
     //init listeners
     natsWrapper.client.on('connect', () => {
