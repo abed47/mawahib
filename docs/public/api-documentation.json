@@ -8,13 +8,13 @@
   "externalDocs": {},
   "servers": [
       {
+          "url":"http://staging.mawahib.tv/api/v1"
+      },
+      {
           "url": "/api/v1/"
       },
       {
           "url": "http://localhost"
-      },
-      {
-          "url":"http://staging.mawahib.tv/api/v1"
       }
   ],
   "tags": [
@@ -89,7 +89,15 @@
                                   "properties": {
                                       "status": {"type": "boolean"},
                                       "type": { "type": "string", "description": "error or success"},
-                                      "data": {"type": "object"},
+                                      "data": {
+                                          "type": "object",
+                                          "properties": {
+                                              "token": {"type": "string"},
+                                              "user": {
+                                                  "$ref": "#/definitions/UserResponseObj"
+                                              }
+                                          }
+                                      },
                                       "message": {"type" :"string"}
                                   }
                               }
@@ -120,7 +128,7 @@
                                   "password": {"type": "string", "required": true},
                                   "first_name": {"type": "string"},
                                   "last_name": {"type": "string"},
-                                  "dob": {"type": "string"},
+                                  "dob": {"type": "string", "format": "MM-DD-YYYY"},
                                   "username": {"type": "string"}
                               }
                           }
@@ -149,6 +157,35 @@
                   "401": {"description":"unauthorized action"},
                   "500": {"description":"server error"}
               }
+          }
+      }
+  },
+  "definitions":{
+      "UserResponseObj": {
+          "type": "object",
+          "properties": {
+              "id": {"type": "number"},
+              "first_name": {"type": "string"},
+              "last_name": {"type": "string"},
+              "middle_name": {"type": "string"},
+              "phone": {"type": "string"},
+              "email": {"type": "string"},
+              "username": {"type": "string"},
+              "dob": {"type": "string"},
+              "otp": {"type": "string"},
+              "fcm_token": {"type": "string"},
+              "fb_token": {"type": "string"},
+              "g_token": {"type": "string"},
+              "photo": {"type": "string"},
+              "last_login_ip": {"type": "string"},
+              "banned": {"type": "boolean"},
+              "ban_reason": {"type": "string"},
+              "channel_id": {"type": "number"},
+              "type": {"type": "number"},
+              "country": {"type": "string"},
+              "createdAt": {"type": "string"},
+              "updatedAt": {"type": "string"},
+              "deletedAt": {"type": "string"}
           }
       }
   },
