@@ -70,7 +70,7 @@ export const register = async (req: Request, res: Response) => {
         let createUserObj = {email, password: hashedPass, first_name, last_name}
         if(dob) createUserObj['dob'] = dob;
         if(username) createUserObj['username'] = username;
-        let createdUser: any = await User.create();
+        let createdUser: any = await User.create(createUserObj);
 
         new UserCreatedPublisher(natsWrapper.client).publish(createdUser.dataValues);
 
