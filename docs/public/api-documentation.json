@@ -116,11 +116,38 @@
                           "schema": {
                               "type": "object",
                               "properties": {
-                                  "email": {"type": "string", "required": true}
+                                  "email": {"type": "string", "required": true},
+                                  "password": {"type": "string", "required": true},
+                                  "first_name": {"type": "string"},
+                                  "last_name": {"type": "string"},
+                                  "dob": {"type": "string"},
+                                  "username": {"type": "string"}
                               }
                           }
                       }
                   }
+              },
+              "responses": {
+                  "200": {
+                      "description": "operation successful",
+                      "content": {
+                          "application/json": {
+                              "type": "object",
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "status": {"type":"boolean"},
+                                      "type": {"type": "string"},
+                                      "data": {"type": "object"},
+                                      "message": {"type": "string"}
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {"description":"client error"},
+                  "401": {"description":"unauthorized action"},
+                  "500": {"description":"server error"}
               }
           }
       }
