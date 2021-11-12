@@ -8,7 +8,7 @@ spec:
     email: abed472011@gmail.com
     privateKeySecretRef:
       name: letsencrypt-cluster-issuer-key
-    solver:
+    solvers:
     - http01:
         ingress:
           class: nginx
