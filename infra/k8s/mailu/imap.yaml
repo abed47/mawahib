@@ -43,13 +43,13 @@ spec:
             containerPort: 143
           - name: sieve
             containerPort: 4190
-        resources:
-          requests:
-            memory: 1Gi
-            cpu: 1000m
-          limits:
-            memory: 1Gi
-            cpu: 1000m
+        # resources:
+        #   requests:
+        #     memory: 1Gi
+        #     # cpu: 1000m
+        #   limits:
+        #     memory: 1Gi
+        #     cpu: 1000m
       volumes:
         - name: maildata
           persistentVolumeClaim:
