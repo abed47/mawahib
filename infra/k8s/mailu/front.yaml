@@ -2,7 +2,7 @@ apiVersion: apps/v1beta2
 kind: DaemonSet
 metadata:
   name: mailu-front
-  namespace: mailu-mailserver
+  # namespace: mailu-mailserver
   labels:
     k8s-app: mail-loadbalancer
     component: ingress-controller
@@ -77,25 +77,16 @@ spec:
         resources:
           requests:
             memory: 100Mi
-            cpu: 100m
+            # cpu: 100m
           limits:
             memory: 200Mi
-            cpu: 200m
-      volumes:
-        - name: certs
-          secret:
-            items:
-              - key: tls.crt
-                path: cert.pem
-              - key: tls.key
-                path: key.pem
-            secretName: letsencrypt-certs-all
+            # cpu: 200m
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: front
-  namespace: mailu-mailserver
+  # namespace: mailu-mailserver
   labels:
     k8s-app: mail-loadbalancer
     component: ingress-controller

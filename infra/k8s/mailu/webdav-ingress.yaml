@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mailu-webdav-ingress
-  namespace: mailu-mailserver
+  # namespace: mailu-mailserver
   annotations:
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
