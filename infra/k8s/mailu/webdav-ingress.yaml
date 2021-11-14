@@ -6,7 +6,7 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    certmanager.k8s.io/cluster-issuer: letsencrypt-stage
+    certmanager.k8s.io/cluster-issuer: letsencrypt-cluster-issuer
     #ingress.kubernetes.io/auth-url: http://admin.mailu-mailserver.svc.cluster.local/internal/auth/basic
     ingress.kubernetes.io/configuration-snippet: |
       rewrite ^/webdav/(.*) /$1 break;
