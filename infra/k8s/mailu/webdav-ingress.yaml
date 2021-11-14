@@ -33,10 +33,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "mail.example.com"
+    - "mail.mawahib.tv"
     secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
-  - host: "mail.example.com"
+  - host: "mail.mawahib.tv"
     http:
       paths:
       - path: "/webdav"

@@ -19,10 +19,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "webmail.example.com"
+    - "webmail.mawahib.tv"
     secretName: letsencrypt-webmail # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
-    - host: "webmail.example.com"
+    - host: "webmail.mawahib.tv"
       http:
         paths:
         - path: "/"

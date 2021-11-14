@@ -7,7 +7,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     certmanager.k8s.io/cluster-issuer: letsencrypt-stage
-    ingress.kubernetes.io/permanent-redirect: "https://mail.example.com/admin/ui/"
+    ingress.kubernetes.io/permanent-redirect: "https://mail.mawahib.tv/admin/ui/"
     ingress.kubernetes.io/follow-redirects: "true"
   labels:
     app: mailu
@@ -16,10 +16,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "mail.example.com"
+    - "mail.mawahib.tv"
     secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
-  - host: "mail.example.com"
+  - host: "mail.mawahib.tv"
     http:
       paths:
       - path: "/admin"
@@ -45,10 +45,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "mail.example.com"
+    - "mail.mawahib.tv"
     secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
-  - host: "mail.example.com"
+  - host: "mail.mawahib.tv"
     http:
       paths:
       - path: "/admin/ui"
@@ -74,10 +74,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "mail.example.com"
+    - "mail.mawahib.tv"
     secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
-  - host: "mail.example.com"
+  - host: "mail.mawahib.tv"
     http:
       paths:
       - path: "/admin/static"
