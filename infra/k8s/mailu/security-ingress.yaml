@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mailu-antispam-ingress
+  namespace: mailu-mailserver
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    certmanager.k8s.io/cluster-issuer: letsencrypt-stage
+    ingress.kubernetes.io/configuration-snippet: |
+      rewrite ^/admin/antispam/(.*) /$1 break;
+      auth_request /internal/auth/admin;
+      proxy_set_header X-Real-IP "";
+      proxy_set_header X-Forwarded-For "";
+  labels:
+    app: mailu
+    role: mail
+    tier: frontend
+spec:
+  tls:
+  - hosts:
+    - "mail.mawahib.tv"
+    secretName: mawahib-app-tls # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
+  rules:
+  - host: "mail.mawahib.tv"
+    http:
+      paths:
+      - path: "/admin/antispam"
+        pathType: Prefix
+        backend:
+          service:
+            name: antispam
+            port:
+              number: 11334

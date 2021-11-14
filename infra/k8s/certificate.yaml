@@ -6,6 +6,7 @@ metadata:
 spec:
   dnsNames:
     - staging.mawahib.tv
+    - mail.mawahib.tv
   secretName: mawahib-app-tls
   issuerRef:
     name: letsencrypt-cluster-issuer
