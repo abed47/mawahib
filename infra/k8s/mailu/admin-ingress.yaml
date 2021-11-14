@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mailu-admin-ingress
-  namespace: mailu-mailserver
   annotations:
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
@@ -36,7 +35,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mailu-admin-ui-ingress
-  namespace: mailu-mailserver
   annotations:
     nginx.ingress.kubernetes.io/use-regex: 'true'
     nginx.ingress.kubernetes.io/keep-alive: 'true'
@@ -70,7 +68,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mailu-admin-static-ingress
-  namespace: mailu-mailserver
   annotations:
     nginx.ingress.kubernetes.io/use-regex: 'true'
     nginx.ingress.kubernetes.io/keep-alive: 'true'
