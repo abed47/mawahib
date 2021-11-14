@@ -22,10 +22,10 @@ spec:
   - host: "mail.mawahib.tv"
     http:
       paths:
-      - path: "/admin"
-        backend:
-          serviceName: admin
-          servicePort: 80
+        - path: "/admin"
+          backend:
+            serviceName: admin
+            servicePort: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -51,12 +51,12 @@ spec:
   - host: "mail.mawahib.tv"
     http:
       paths:
-      - path: "/admin/ui"
-        backend:
-          serviceName: admin
-          servicePort: 80
+        - path: "/admin/ui"
+          backend:
+            serviceName: admin
+            servicePort: 80
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mailu-admin-static-ingress
@@ -80,7 +80,7 @@ spec:
   - host: "mail.mawahib.tv"
     http:
       paths:
-      - path: "/admin/static"
-        backend:
-          serviceName: admin
-          servicePort: 80
+        - path: "/admin/static"
+          backend:
+            serviceName: admin
+            servicePort: 80
