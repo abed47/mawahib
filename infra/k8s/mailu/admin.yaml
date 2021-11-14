@@ -54,6 +54,8 @@ metadata:
     role: mail
     tier: backend
 spec:
+  type: ExternalName
+  externalName: mailu-admin-service.mailu-mailserver.svc.cluster.local
   selector:
     app: mailu-admin
     role: mail
