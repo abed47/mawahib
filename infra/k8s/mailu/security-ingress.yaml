@@ -18,8 +18,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "mail.mawahib.tv"
-    secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
+    - mail.mawahib.tv
+    secretName: mawahib-app-tls
   rules:
   - host: "mail.mawahib.tv"
     http:
