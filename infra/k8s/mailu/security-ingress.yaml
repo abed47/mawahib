@@ -25,6 +25,9 @@ spec:
     http:
       paths:
       - path: "/admin/antispam"
+        pathType: Prefix
         backend:
-          serviceName: antispam
-          servicePort: 11334
+          service:
+            name: antispam
+            port:
+              number: 11334

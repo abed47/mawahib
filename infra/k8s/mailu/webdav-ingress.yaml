@@ -40,6 +40,9 @@ spec:
     http:
       paths:
       - path: "/webdav"
+        pathType: Prefix
         backend:
-          serviceName: webdav
-          servicePort: 5232
+          service:
+            name: webdav
+            port:
+              number: 5232
