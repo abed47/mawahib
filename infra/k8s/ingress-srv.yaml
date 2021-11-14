@@ -13,6 +13,7 @@ spec:
   tls:
   - hosts:
     - staging.mawahib.tv
+    - mail.mawahib.tv
     secretName: mawahib-app-tls
   rules:
     - host: staging.mawahib.tv
