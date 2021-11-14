@@ -54,7 +54,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                namespace: mailu-admin
-                name: admin
+                name: mailu-admin
                 port: 
                   number: 80
