@@ -47,8 +47,7 @@ export const login = async (req: Request, res: Response) => {
 }
 
 export const register = async (req: Request, res: Response) => {
-    let {email, password, first_name, last_name, dob} = req.body;
-    console.log(req.body);
+    let {email, password, first_name, last_name, dob, username} = req.body;
 
     //validation layer start
     if(!email || !password || !first_name || !last_name) return returnErrResponse(res, 'all fields are require', 400);
@@ -67,7 +66,11 @@ export const register = async (req: Request, res: Response) => {
         let salt = await bcrypt.genSalt(10);
         let hashedPass = await bcrypt.hash(password, salt);
         
-        let createdUser: any = await User.create({email, password: hashedPass, first_name, last_name});
+        let createUserObj = {email, password: hashedPass, first_name: first_name, last_name: last_name}
+        if(dob) createUserObj['dob'] = dob;
+        if(username) createUserObj['username'] = username;
+        console.log(createUserObj);
+        let createdUser: any = await User.create({...createUserObj});
 
         new UserCreatedPublisher(natsWrapper.client).publish(createdUser.dataValues);
 

@@ -10,6 +10,10 @@ metadata:
     #kubernetes.io/ingress-class: public
     #nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  tls:
+  - hosts:
+    - staging.mawahib.tv
+    secretName: mawahib-app-tls
   rules:
     - host: staging.mawahib.tv
       http:

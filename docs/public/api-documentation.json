@@ -1,21 +1,224 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.2",
   "info": {
-    "title": "MNA API",
-    "description": "Mawahib API documentation",
-    "contact": { "email": "abed472011@gmail.com" },
-    "version": "v1"
+      "title": "Swagger api documentation for Mawahib - OpenAPI 3.0",
+      "description": ""
   },
-  "host": "api.mna.dev.spsapps.net",
-  "schemes": ["https"],
-  "basePath": "/",
-  "consumes": ["application/json"],
-  "produces": ["application/json"],
-  "securityDefinitions": { "Basic": { "type": "http", "schema": "bearer", "bearerFormat": "JWT" } },
-  "security": [{ "Basic": [] }],
+  "version": "0.1.0",
+  "externalDocs": {},
+  "servers": [
+      {
+          "url":"https://staging.mawahib.tv/api/v1"
+      },
+      {
+          "url":"http://staging.mawahib.tv/api/v1"
+      },
+      {
+          "url": "/api/v1/"
+      },
+      {
+          "url": "http://localhost"
+      }
+  ],
+  "tags": [
+      {
+          "name": "Auth"
+      },
+      {
+          "name": "User",
+          "description": "",
+          "externalDocs": {
+              "description": "",
+              "url": ""
+          }
+      }
+      ,{
+          "name": "Channel",
+          "description": "",
+          "externalDocs": {
+              "description": "",
+              "url": ""
+          }
+      }
+      ,{
+          "name": "Category",
+          "description": "",
+          "externalDocs": {
+              "description": "",
+              "url": ""
+          }
+      }
+      ,{
+          "name": "Video",
+          "description": "",
+          "externalDocs": {
+              "description": "",
+              "url": ""
+          }
+      }
+  ],
   "paths": {
- 
+      "/u/auth/login":{
+          "post": {
+              "tags": ["Auth"],
+              "summary": "User Email Login",
+              "consumes": "application/json",
+              "produces": "application/json",
+              "requestBody": {
+                  "content": {
+                      "application/json": {
+                          "type": "object",
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "email": {
+                                      "type": "string"
+                                  },
+                                  "password":{
+                                      "type": "string"
+                                  }
+                              }
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "200": {
+                      "description": "operation successful",
+                      "content":{
+                          "application/json": {
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "status": {"type": "boolean"},
+                                      "type": { "type": "string", "description": "error or success"},
+                                      "data": {
+                                          "type": "object",
+                                          "properties": {
+                                              "token": {"type": "string"},
+                                              "user": {
+                                                  "$ref": "#/definitions/UserResponseObj"
+                                              }
+                                          }
+                                      },
+                                      "message": {"type" :"string"}
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "client error"
+                  },
+                  "500":{
+                      "description": "server error"
+                  }
+              }
+          }
+      },
+      "/u/auth/register": {
+          "post": {
+              "tags": ["Auth"],
+              "summary": "User sign up",
+              "requestBody": {
+                  "content": {
+                      "application/json": {
+                          "type": "object",
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "email": {"type": "string", "required": true},
+                                  "password": {"type": "string", "required": true},
+                                  "first_name": {"type": "string"},
+                                  "last_name": {"type": "string"},
+                                  "dob": {"type": "string", "format": "MM-DD-YYYY"},
+                                  "username": {"type": "string"}
+                              }
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "200": {
+                      "description": "operation successful",
+                      "content": {
+                          "application/json": {
+                              "type": "object",
+                              "schema": {
+                                  "type": "object",
+                                  "properties": {
+                                      "status": {"type":"boolean"},
+                                      "type": {"type": "string"},
+                                      "data": {"type": "object"},
+                                      "message": {"type": "string"}
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {"description":"client error"},
+                  "401": {"description":"unauthorized action"},
+                  "500": {"description":"server error"}
+              }
+          }
+      }
   },
-  "definitions": {
+  "definitions":{
+      "UserResponseObj": {
+          "type": "object",
+          "properties": {
+              "id": {"type": "number"},
+              "first_name": {"type": "string"},
+              "last_name": {"type": "string"},
+              "middle_name": {"type": "string"},
+              "phone": {"type": "string"},
+              "email": {"type": "string"},
+              "username": {"type": "string"},
+              "dob": {"type": "string"},
+              "otp": {"type": "string"},
+              "fcm_token": {"type": "string"},
+              "fb_token": {"type": "string"},
+              "g_token": {"type": "string"},
+              "photo": {"type": "string"},
+              "last_login_ip": {"type": "string"},
+              "banned": {"type": "boolean"},
+              "ban_reason": {"type": "string"},
+              "channel_id": {"type": "number"},
+              "type": {"type": "number"},
+              "country": {"type": "string"},
+              "createdAt": {"type": "string"},
+              "updatedAt": {"type": "string"},
+              "deletedAt": {"type": "string"}
+          }
+      }
+  },
+  "components": {
+      "schemas": {
+          
+      },
+      "securitySchemes": {
+          "petstore_auth": {
+              "type": "oauth2",
+              "flows": {
+                  "implicit": {
+                      "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
+                      "scopes": {
+                          "write:pets": "modify pets in your account",
+                          "read:pets": "read your pets"
+                      }
+                  }
+              }
+          },
+          "api_key": {
+              "type": "apiKey",
+              "name": "api_key",
+              "in": "header"
+          },
+          "bearer_token":{
+              "type":"http",
+              "scheme":"bearer",
+              "bearerFormat":"JWT"
+          }
+      }
   }
 }
