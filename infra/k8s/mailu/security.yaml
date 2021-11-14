@@ -1,10 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mailu-security
   namespace: mailu-mailserver
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: mailu-security
   template:
     metadata:
       labels:

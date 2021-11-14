@@ -1,10 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mailu-redis
   namespace: mailu-mailserver
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: mailu-redis
   template:
     metadata:
       labels:
