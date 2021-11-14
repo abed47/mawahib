@@ -9,6 +9,8 @@ metadata:
     certmanager.k8s.io/cluster-issuer: letsencrypt-cluster-issuer
     ingress.kubernetes.io/permanent-redirect: "https://mail.mawahib.tv/admin/ui/"
     ingress.kubernetes.io/follow-redirects: "true"
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/keep-alive: 'true'
   labels:
     app: mailu
     role: mail
@@ -36,6 +38,8 @@ metadata:
   name: mailu-admin-ui-ingress
   namespace: mailu-mailserver
   annotations:
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/keep-alive: 'true'
     kubernetes.io/tls-acme: "true"
     certmanager.k8s.io/cluster-issuer: letsencrypt-cluster-issuer
     ingress.kubernetes.io/rewrite-target: "/ui"
@@ -68,6 +72,8 @@ metadata:
   name: mailu-admin-static-ingress
   namespace: mailu-mailserver
   annotations:
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/keep-alive: 'true'
     kubernetes.io/tls-acme: "true"
     certmanager.k8s.io/cluster-issuer: letsencrypt-cluster-issuer
     ingress.kubernetes.io/rewrite-target: "/static"
