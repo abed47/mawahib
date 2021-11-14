@@ -4,6 +4,7 @@ metadata:
   name: ingress-srv
   namespace: default
   annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     #kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
     nginx.ingress.kubernetes.io/keep-alive: 'true'
@@ -54,14 +55,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: mailu-admin-service
+                name: admin
                 port: 
                   number: 80
           - path: /admin/ui
             pathType: Prefix
             backend:
               service:
-                name: mailu-admin-service
+                name: admin
                 port: 
                   number: 80
           - path: /admin/static

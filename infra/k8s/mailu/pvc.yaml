@@ -2,7 +2,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: redis-hdd
-  namespace: mailu-mailserver
   annotations:
     volume.beta.kubernetes.io/storage-class: "hostpath"
 spec:
@@ -16,7 +15,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mail-storage
-  namespace: mailu-mailserver
   annotations:
     volume.beta.kubernetes.io/storage-class: "hostpath"
 spec:

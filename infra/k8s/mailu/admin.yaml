@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: admin
-        image: mailu/admin:master
+        image: mailu/admin:1.6
         imagePullPolicy: Always
         envFrom:
           - configMapRef:
@@ -42,7 +42,6 @@ spec:
           persistentVolumeClaim:
             claimName: mail-storage
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -52,8 +51,6 @@ metadata:
     role: mail
     tier: backend
 spec:
-  type: ExternalName
-  externalName: mailu-admin-service.mailu-mailserver.svc.cluster.local
   selector:
     app: mailu-admin
     role: mail

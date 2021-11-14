@@ -2,7 +2,6 @@
    kind: ConfigMap
    metadata:
      name: mailu-config
-     namespace: mailu-mailserver
    data:
     # Mailu main configuration file
     #
