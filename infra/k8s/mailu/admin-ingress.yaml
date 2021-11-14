@@ -16,8 +16,8 @@ metadata:
 spec:
   tls:
   - hosts:
-    - mail.mawahib.tv
-    secretName: mawahib-app-tls
+    - "mail.mawahib.tv"
+    secretName: mawahib-app-tls # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
   - host: "mail.mawahib.tv"
     http:
@@ -49,7 +49,7 @@ spec:
   tls:
   - hosts:
     - "mail.mawahib.tv"
-    secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
+    secretName: mawahib-app-tls # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
   - host: "mail.mawahib.tv"
     http:
@@ -81,7 +81,7 @@ spec:
   tls:
   - hosts:
     - "mail.mawahib.tv"
-    secretName: letsencrypt-certs-all # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
+    secretName: mawahib-app-tls # If unsure how to generate these, check out https://github.com/ployst/docker-letsencrypt
   rules:
   - host: "mail.mawahib.tv"
     http:
