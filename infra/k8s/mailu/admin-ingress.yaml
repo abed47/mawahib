@@ -65,6 +65,9 @@ metadata:
   annotations:
     kubernetes.io/tls-acme: "true"
     certmanager.k8s.io/cluster-issuer: letsencrypt-cluster-issuer
+    ingress.kubernetes.io/rewrite-target: "/static"
+    ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header X-Forwarded-Prefix /admin;
   labels:
     app: mailu
     role: mail
