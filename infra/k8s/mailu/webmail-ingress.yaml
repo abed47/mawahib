@@ -10,7 +10,6 @@ metadata:
     kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header Host $http_host;
-      proxy_set_header X-Real-IP $remote_addr;
     certmanager.k8s.io/cluster-issuer: letsencrypt-cluster-issuer
   labels:
     app: mailu
