@@ -40,9 +40,6 @@ spec:
         envFrom:
           - configMapRef:
               name: mailu-config
-        volumeMounts:
-          - name: certs
-            mountPath: /certs
         ports:
           - name: pop3
             containerPort: 110
