@@ -81,7 +81,7 @@ spec:
   - host: mail.mawahib.tv
     http:
       paths:
-        - path: /static
+        - path: /admin/static
           pathType: Prefix
           backend:
             service:
