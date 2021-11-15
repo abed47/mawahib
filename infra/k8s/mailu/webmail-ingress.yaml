@@ -4,8 +4,10 @@ metadata:
   name: mailu-webmail-ingress
   # namespace: mailu-mailserver
   annotations:
-    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/keep-alive: 'true'
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    kubernetes.io/tls-acme: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header Host $http_host;
       proxy_set_header X-Real-IP $remote_addr;
