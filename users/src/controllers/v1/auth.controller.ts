@@ -98,22 +98,57 @@ export const requestOtp = async (req: Request, res: Response) => {
         if(!user) return returnErrResponse(res, 'user not found', 404);
 
         let pin = securePin.generatePinSync(5);
-        user.otp = pin;
+        user.otp = 12345//pin;
         await user.save();
 
-        if(type == 'email'){
-            let email = user.email;
-            if(!email) return returnErrResponse(res, 'user does not have an email', 400);
-            //send with email logic            
-        }
+        // if(type == 'email'){
+        //     let email = user.email;
+        //     if(!email) return returnErrResponse(res, 'user does not have an email', 400);
+        //     //send with email logic            
+        // }
 
-        if(type == 'phone'){
-            let phone = user.phone;
-            if(!phone) return returnErrResponse(res, 'user does not have a mobile phone', 400);
-            //send with phone logic
-        }
+        // if(type == 'phone'){
+        //     let phone = user.phone;
+        //     if(!phone) return returnErrResponse(res, 'user does not have a mobile phone', 400);
+        //     //send with phone logic
+        // }
+
+        res.status(200).json({
+            status: true,
+            type: 'success',
+            data: null,
+            message: 'otp set successfully'
+        });
 
     } catch (err) {
         returnErrResponse(res, err.message || 'unknown error', 500);
+    }
+}
+
+export const verifyOtp = async (req: Request, res: Response) => {
+
+    try{
+        let {user_id, otp} = req.body;
+
+        if(!user_id || !otp) return returnErrResponse(res, 'all fields are required', 400);
+
+        let user:any = await User.findOne({where: {id: user_id}});
+
+        if(!user) return returnErrResponse(res, 'user not found', 404);
+
+        if(user.otp != otp) return returnErrResponse(res, 'wrong otp', 401);
+
+        user.otp = null;
+        user.verified = 1;
+        await user.save();
+
+        res.status(200).json({
+            status: true,
+            type: "success",
+            data: user,
+            message: 'verified successfully'
+        });
+    }catch(err){
+        returnErrResponse(res, err.message || 'Server Error', 500);
     }
 }

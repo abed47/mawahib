@@ -79,6 +79,11 @@ const User = db.define('user',{
     country:{
         type: DataTypes.STRING,
         allowNull: true
+    },
+    verifies: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
     }
 }, {
     timestamps: true,

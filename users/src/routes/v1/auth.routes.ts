@@ -7,5 +7,6 @@ let route = Router();
 route.post('/login', authController.login);
 route.post('/register', authController.register);
 route.post('/request-otp', authController.requestOtp);
+route.post('/verify-otp', authController.verifyOtp);
 
 export default route;
