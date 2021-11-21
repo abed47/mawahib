@@ -90,7 +90,7 @@ export const requestOtp = async (req: Request, res: Response) => {
     let {userId, type} = req.body;
     
     //validation start
-    if(!userId || !type) return returnErrResponse(res, 'all fields are required', 400);
+    if(!userId) return returnErrResponse(res, 'all fields are required', 400);
 
     try {
         let user:any = await User.findOne({where:{id: userId}});

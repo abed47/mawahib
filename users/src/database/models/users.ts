@@ -80,7 +80,7 @@ const User = db.define('user',{
         type: DataTypes.STRING,
         allowNull: true
     },
-    verifies: {
+    verified: {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0
