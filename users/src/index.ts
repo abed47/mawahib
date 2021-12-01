@@ -8,6 +8,10 @@ import AuthRoutes from './routes/v1/auth.routes';
 import UserRoutes from './routes/v1/users.routes';
 import ChannelRoutes from './routes/v1/channel.routes';
 import SubscriptionRoutes from './routes/v1/subscriptions.routes';
+import VideoRoutes from './routes/v1/video.routes';
+// import ChannelRoutes from './routes/v1/channel.routes';
+import CommentRoutes from './routes/v1/comment.routes';
+import LikeRoutes from './routes/v1/like.routes';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as upload from 'express-fileupload';
@@ -43,12 +47,12 @@ try{
 db.connect();
 
 //apply routes
-app.use('/api/v1/u/utils', UtilsRoutes);
-app.use('/api/v1/u/auth', AuthRoutes);
-app.use('/api/v1/u/user', UserRoutes);
-app.use('/api/v1/u', SubscriptionRoutes);
-app.use('/api/v1/u/channel', ChannelRoutes);
-app.use('/api/v1/u/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/api/v1/utils', UtilsRoutes);
+app.use('/api/v1/auth', AuthRoutes);
+app.use('/api/v1/user', UserRoutes);
+app.use('/api/v1/', SubscriptionRoutes);
+app.use('/api/v1/channel', ChannelRoutes);
+app.use('/api/v1/uploads', express.static(path.join(__dirname, '../uploads')));
 // app.use('/public', express.static)
 
 app.listen(process.env.PORT, () => {
