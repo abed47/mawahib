@@ -1,11 +1,19 @@
-import User from "./users";
-import Channel from "./channel";
-import Subscription from "./subscription";
+import Video from "./videos";
+import Tag from "./tags";
+import View from "./views";
+import Comment from './comments';
+import Like from './likes';
+import Category from './category';
 
-User.hasOne(Channel, {foreignKey: 'user_id'});
-Channel.belongsTo(User, {foreignKey: 'user_id'});
-Channel.hasMany(Subscription, {foreignKey: 'channel_id'});
-Subscription.belongsToMany(Channel, {through: 'channel_id'});
-Subscription.belongsToMany(User, {through: 'user_id'});
+Video.belongsTo(Category, {foreignKey: 'category_id'});
+Category.hasMany(Video, {foreignKey: 'category_id'});
 
-export {User, Channel, Subscription}
+Video.hasMany(Comment);
+// Video.hasMany(Tag);
+Video.hasMany(View);
+
+Comment.belongsTo(Video);
+View.belongsTo(Video);
+// Tag.belongsTo(Video);
+
+export {Video, Tag, View, Comment, Like};

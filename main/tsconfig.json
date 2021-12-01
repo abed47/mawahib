@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module":"CommonJS",
+        "removeComments": true,
+        "sourceMap": false,
+        "rootDir": "src",
+        "outDir": "app",
+        "moduleResolution": "Node",
+        "target": "ES5",
+        "allowSyntheticDefaultImports": true,
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "node_modules/**/*", "**/*.spec.ts"]
+}
