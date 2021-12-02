@@ -7,8 +7,6 @@ import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
 import * as securePin from 'secure-pin';
-import { UserCreatedPublisher } from "../../utils/events/user-created-publisher";
-import { natsWrapper } from "../../nats-wrapper";
 
 dotenv.config();
 
@@ -72,8 +70,6 @@ export const register = async (req: Request, res: Response) => {
         console.log(createUserObj);
         let createdUser: any = await User.create({...createUserObj});
 
-        new UserCreatedPublisher(natsWrapper.client).publish(createdUser.dataValues);
-
         res.status(200).json({
             status: true,
             type: 'success',
@@ -100,18 +96,6 @@ export const requestOtp = async (req: Request, res: Response) => {
         let pin = securePin.generatePinSync(5);
         user.otp = 12345//pin;
         await user.save();
-
-        // if(type == 'email'){
-        //     let email = user.email;
-        //     if(!email) return returnErrResponse(res, 'user does not have an email', 400);
-        //     //send with email logic            
-        // }
-
-        // if(type == 'phone'){
-        //     let phone = user.phone;
-        //     if(!phone) return returnErrResponse(res, 'user does not have a mobile phone', 400);
-        //     //send with phone logic
-        // }
 
         res.status(200).json({
             status: true,

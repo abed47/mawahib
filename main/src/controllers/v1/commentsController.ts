@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { Comment } from "../../database/models";
-import { natsWrapper } from "../../nats-wrapper";
+import { Comments } from "../../database/models";
 import { returnErrResponse } from "../../utils";
-import { CommentCreatedPublisher } from "../../utils/events/comment-create-event";
 import { Op } from 'sequelize';
 
 export const create = async (req: Request, res: Response) => {
@@ -11,9 +9,8 @@ export const create = async (req: Request, res: Response) => {
     if(!user_id || !content || !video_id) return returnErrResponse(res, 'all fields are required', 400);
 
     try {
-        let c:any = await Comment.create({user_id, video_id, content});
+        let c:any = await Comments.create({user_id, video_id, content});
 
-        new CommentCreatedPublisher(natsWrapper.client).publish(c.dataValues);
 
         res.status(200).json({
             status: true,
@@ -48,14 +45,14 @@ export const filter = async (req: Request, res: Response) => {
         }
 
         if(pagination){
-            commentCount = await Comment.count(filtersObj);
+            commentCount = await Comments.count(filtersObj);
         }
 
         if(pagination?.offset) filtersObj['offset'] = pagination.offset;
         if(pagination?.limit) filtersObj['limit'] = pagination.limit;
         
 
-        let videos = await Comment.findAll(filtersObj);
+        let videos = await Comments.findAll(filtersObj);
 
         return res.status(200).json({
             status: true,

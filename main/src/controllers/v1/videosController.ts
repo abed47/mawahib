@@ -3,9 +3,6 @@ import { Video, View } from "../../database/models";
 import { returnErrResponse } from "../../utils";
 import * as securePin from 'secure-pin';
 import { Op } from "sequelize";
-import { VideoCreatedPublisher } from "../../utils/events/video-created-event";
-import { natsWrapper } from "../../nats-wrapper";
-import { VideoViewPublisher } from "../../utils/events/video-view-event";
 
 export const view = async (req: Request, res: Response) => {
     let {user_id, video_id} = req.body;
@@ -14,7 +11,6 @@ export const view = async (req: Request, res: Response) => {
 
         let v: any = await View.create({user_id, video_id});
 
-        new VideoViewPublisher(natsWrapper.client).publish(v.dataValues);
         
         res.status(200).json({
             status: true,
@@ -66,8 +62,6 @@ export const create = async (req: Request, res: Response) => {
                         data: v,
                         message: 'uploaded successfully'
                     });
-
-                    new VideoCreatedPublisher(natsWrapper.client).publish(v.dataValues);
 
                 }catch(err){
                     return returnErrResponse(res, err.message || 'unknown error', 500);

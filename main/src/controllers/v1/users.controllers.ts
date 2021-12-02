@@ -3,8 +3,6 @@ import { Channel, Subscription, User } from "../../database/models";
 import { returnErrResponse } from "../../utils";
 import { Model } from "sequelize";
 import * as securePin from 'secure-pin';
-import { UserUpdatedListener, UserUpdatedPublisher } from "../../utils/events/user-updated-event";
-import { natsWrapper } from "../../nats-wrapper";
 
 interface ChannelAttributes {
     id: string | number
@@ -50,7 +48,6 @@ export const update = async (req: Request, res: Response) => {
         });
         
         data.id = userId;
-        new UserUpdatedPublisher(natsWrapper.client).publish(data);
     }catch(err){
         returnErrResponse(res, err.message || 'unknown err', 500);
     }
@@ -83,7 +80,6 @@ export const updateUserProfile = async (req: Request, res: Response) => {
         });
 
         let eventData = {id, photo: filename}
-        new UserUpdatedPublisher(natsWrapper.client).publish(eventData);
         return
     }
 

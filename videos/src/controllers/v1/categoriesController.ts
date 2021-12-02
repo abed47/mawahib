@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import Category from "../../database/models/category";
 import { returnErrResponse } from "../../utils";
 import * as securePin from 'secure-pin';
-import { CategoryDeletedPublisher } from "../../utils/events/category-deleted-event";
 import { natsWrapper } from "../../nats-wrapper";
-import { CategoryUpdatedPublisher } from "../../utils/events/category-updated-event";
-import { CategoryCreatedPublisher } from "../../utils/events/category-created-event";
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -61,8 +58,6 @@ export const create = async (req: Request, res: Response) => {
 
             let v:any = await Category.create({name, description, photo: filepath});
 
-            new CategoryCreatedPublisher(natsWrapper.client).publish(v.dataValues);
-
             return res.status(200).json({
                 status: true,
                 type: 'success',
@@ -92,8 +87,6 @@ export const updateOne = async (req: Request, res: Response) => {
 
                 let v:any = await Category.update({name, description, photo: filepath}, {where:{id}});
 
-                new CategoryUpdatedPublisher(natsWrapper.client).publish({name, description, id});
-
                 return res.status(200).json({
                     status: true,
                     type: 'success',
@@ -109,9 +102,7 @@ export const updateOne = async (req: Request, res: Response) => {
         try{
 
             await Category.update({name, description}, {where: {id}});
-    
-            new CategoryUpdatedPublisher(natsWrapper.client).publish({name, description, id});
-    
+        
             return res.status(200).json({
                 status: true,
                 type: 'success',
@@ -130,8 +121,6 @@ export const destroy = async (req: Request, res: Response) => {
     try{
         
         await Category.destroy({where: {id}});
-
-        new CategoryDeletedPublisher(natsWrapper.client).publish({id});
 
         return res.status(200).json({
             status: true,

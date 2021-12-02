@@ -45,4 +45,4 @@ View.belongsTo(Video, {foreignKey: 'video_id'});
 // Subscription.belongsToMany(Channel, {through: 'channel_id'});
 // Subscription.belongsToMany(User, {through: 'user_id'});
 
-export {User, Channel, Subscription, Video, View, Comments}
+export {User, Channel, Subscription, Video, View, Comments, Like}

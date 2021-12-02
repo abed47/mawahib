@@ -1,11 +1,7 @@
 import { Request, Response } from "express";
 import { Op, Sequelize } from "sequelize";
 import { Channel, Subscription, User } from "../../database/models";
-import { natsWrapper } from "../../nats-wrapper";
 import { returnErrResponse } from "../../utils";
-import { ChannelCreatedListener, ChannelCreatedPublisher } from "../../utils/events/channel-created-event";
-import { ChannelDeletedPublisher } from "../../utils/events/channel-deleted-event";
-import { ChannelUpdatedPublisher } from "../../utils/events/channel-updated-event";
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -69,7 +65,6 @@ export const create = async (req: Request, res: Response) => {
             message: 'created successfully'
         });
 
-        new ChannelCreatedPublisher(natsWrapper.client).publish(channel.dataValues);
 
     } catch (err) {
         returnErrResponse(res, err.message || 'unknown error', 500);
@@ -105,8 +100,6 @@ export const update = async (req: Request, res: Response) => {
 
     updateObj.id = channelId;
 
-    new ChannelUpdatedPublisher(natsWrapper.client).publish(updateObj);
-
     }catch(err){
         returnErrResponse(res, err.message || 'unknown error', 500);
     }
@@ -138,7 +131,6 @@ export const destroy = async (req: Request, res: Response) => {
             message: 'deleted successfully'
         });
 
-        new ChannelDeletedPublisher(natsWrapper.client).publish({id});
 
     } catch (err) {
         returnErrResponse(res, err.message || 'unknown error', 500);

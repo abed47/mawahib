@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { Like } from "../../database/models";
-import { natsWrapper } from "../../nats-wrapper";
 import { returnErrResponse } from "../../utils";
-import { VideoDislikePublish } from "../../utils/events/video-dislike-event";
-import { VideoLikePublisher } from "../../utils/events/video-like-event";
 import { Op, Sequelize } from 'sequelize';
 export const like = async (req: Request, res: Response) => {
     let {user_id, video_id} = req.body;
@@ -20,7 +17,6 @@ export const like = async (req: Request, res: Response) => {
             message: 'video liked successfully'
         });
 
-        new VideoLikePublisher(natsWrapper.client).publish(like.dataValues);
     }catch(err){
         returnErrResponse(res, err.message || 'unknown error', 500);
     }
@@ -35,7 +31,6 @@ export const dislike = async (req: Request, res: Response) => {
         let like: any = await Like.findOne({where: {video_id, user_id}});
         let id = like.id;
         await Like.destroy({where: {video_id, user_id}});
-        new VideoDislikePublish(natsWrapper.client).publish({id});
         res.status(200).json({
             status: true,
             type: 'success',
