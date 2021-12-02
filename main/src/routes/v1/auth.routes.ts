@@ -8,5 +8,6 @@ route.post('/login', authController.login);
 route.post('/register', authController.register);
 route.post('/request-otp', authController.requestOtp);
 route.post('/verify-otp', authController.verifyOtp);
+route.post('/social', authController.socialLogin);
 
 export default route;
