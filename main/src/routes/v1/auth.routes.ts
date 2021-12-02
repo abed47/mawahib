@@ -9,5 +9,6 @@ route.post('/register', authController.register);
 route.post('/request-otp', authController.requestOtp);
 route.post('/verify-otp', authController.verifyOtp);
 route.post('/social', authController.socialLogin);
-
+route.post('/reset-password', authController.resetPassword);
+route.post('/request-password-reset', authController.requestPasswordReset);
 export default route;

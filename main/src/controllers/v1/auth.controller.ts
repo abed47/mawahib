@@ -153,7 +153,6 @@ export const register = async (req: Request, res: Response) => {
         let createUserObj = {email, password: hashedPass, first_name: first_name, last_name: last_name}
         if(dob) createUserObj['dob'] = dob;
         if(username) createUserObj['username'] = username;
-        console.log(createUserObj);
         let createdUser: any = await User.create({...createUserObj});
 
         res.status(200).json({
@@ -221,6 +220,68 @@ export const verifyOtp = async (req: Request, res: Response) => {
             data: user,
             message: 'verified successfully'
         });
+    }catch(err){
+        returnErrResponse(res, err.message || 'Server Error', 500);
+    }
+}
+
+export const requestPasswordReset = async (req: Request, res: Response) => {
+    let {email, type} = req.body;
+    
+    //validation start
+    if(!email) return returnErrResponse(res, 'all fields are required', 400);
+
+    try {
+        let user:any = await User.findOne({where:{email}});
+        
+        if(!user) return returnErrResponse(res, 'user not found', 404);
+
+        let pin = securePin.generatePinSync(5);
+        user.otp = pin;
+        await user.save();
+
+        let r = await sendEmail(user.email, null, 'Password Reset', `Your Password Reset Code is: ${pin}`)
+
+        res.status(200).json({
+            status: true,
+            type: 'success',
+            data: r,
+            message: 'otp set successfully'
+        });
+
+    } catch (err) {
+        console.log(err);
+        returnErrResponse(res, err.message || 'unknown error', 500);
+    }
+}
+
+export const resetPassword = async (req: Request, res: Response) => {
+    try{
+        let {email, otp, password} = req.body;
+
+        if(!email || !otp || !password) return returnErrResponse(res, 'all fields are required', 400);
+
+        let user:any = await User.findOne({where: {email}});
+
+        if(!user) return returnErrResponse(res, 'user not found', 404);
+
+        if(user.otp != otp) return returnErrResponse(res, 'wrong otp', 401);
+
+        let salt = await bcrypt.genSalt(10);
+        let hashedPass = await bcrypt.hash(password, salt);
+
+        user.otp = null;
+        // user.verified = 1;
+        user.password = hashedPass;
+        await user.save();
+
+        res.status(200).json({
+            status: true,
+            type: "success",
+            data: user,
+            message: 'verified successfully'
+        });
+
     }catch(err){
         returnErrResponse(res, err.message || 'Server Error', 500);
     }

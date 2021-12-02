@@ -18,7 +18,7 @@ export const sendEmail = (receiver: string, sender: string, topic: string, messa
         });
 
         transporter.sendMail({
-            from: '"Mawahib APP" <staging.mawahib.tv',
+            from: '"Mawahib APP" <staging.mawahib.tv>',
             to: receiver,
             subject: topic,
             text: message
