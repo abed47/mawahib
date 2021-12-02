@@ -10,6 +10,7 @@ import * as securePin from 'secure-pin';
 import * as queryString from 'query-string';
 import axios from 'axios';
 import Twitter from 'node-twitter-api';
+import { sendEmail } from "../../utils/communication";
 dotenv.config();
 
 export const socialLogin = async (req: Request, res: Response) => {
@@ -179,17 +180,20 @@ export const requestOtp = async (req: Request, res: Response) => {
         if(!user) return returnErrResponse(res, 'user not found', 404);
 
         let pin = securePin.generatePinSync(5);
-        user.otp = 12345//pin;
+        user.otp = pin;
         await user.save();
+
+        let r = await sendEmail(user.email, null, 'Mawahib OTP', `Your OTP is: ${pin}`)
 
         res.status(200).json({
             status: true,
             type: 'success',
-            data: null,
+            data: r,
             message: 'otp set successfully'
         });
 
     } catch (err) {
+        console.log(err);
         returnErrResponse(res, err.message || 'unknown error', 500);
     }
 }
