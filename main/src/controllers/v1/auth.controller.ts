@@ -9,7 +9,7 @@ import * as jwt from 'jsonwebtoken';
 import * as securePin from 'secure-pin';
 import * as queryString from 'query-string';
 import axios from 'axios';
-
+import Twitter from 'node-twitter-api';
 dotenv.config();
 
 export const socialLogin = async (req: Request, res: Response) => {
@@ -39,7 +39,7 @@ const facebookLogin = async (req: Request, res: Response) => {
        }
 
        delete user.dataValues.password;
-       
+
        let jwtToken = jwt.sign(user.dataValues,process.env.JWT_SECRET);
 
        res.status(200).json({
@@ -82,7 +82,18 @@ const getFacebookUserData = async (access_token) => {
     return data;
 }
 
-const twitterLogin = async (req: Request, res: Response) => {}
+const twitterLogin = async (req: Request, res: Response) => {
+    return res.status(304).json({message: 'under construction'});
+
+    let twitter = new Twitter({
+        consumerKey: process.env.TWITTER_API_KEY,
+        consumerSecret: process.env.TWITTER_API_KEY_SECRET
+    });
+
+    twitter.getRequestToken((err, requestToken, requestSecret) => {
+
+    })
+}
 
 export const login = async (req: Request, res: Response) => {
     let {email, password, username, phone} = req.body;
