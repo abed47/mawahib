@@ -187,7 +187,7 @@ const UploadVideoScreen = (props) => {
 
             let axiosRes = await axios.request({
                 method: 'POST',
-                url: videos_ms_url + 'videos/upload',
+                url: videos_ms_url + 'video/upload',
                 data: formData,
                 headers: {
                     'Authorization': 'Bearer ' + token

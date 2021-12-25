@@ -1,9 +1,15 @@
 import axios from 'axios';
 import StoreService from './store';
+const host = "staging.mawahib.tv";
+const port = 4001;
+export const users_ms_url   = `http://${host}:${port}/api/v1/`;
+export const videos_ms_url  = `http://${host}:${port}/api/v1/`;
+export const query_ms_url   = `http://${host}:${port}/api/v1/`;
 
-export const users_ms_url   = "http://localhost:4001/api/v1/u/";
-export const videos_ms_url  = "http://localhost:4002/api/v1/v/";
-export const query_ms_url   = "http://localhost:4000/api/v1/q/";
+// export const users_ms_url   = "http://localhost:4001/api/v1/u/";
+// export const videos_ms_url  = "http://localhost:4002/api/v1/v/";
+// export const query_ms_url   = "http://localhost:4000/api/v1/q/";
+
 
 const getServiceUrl = (num) => {
     switch(num){
@@ -20,7 +26,7 @@ const getServiceUrl = (num) => {
 
 export const getPhotoPublicPath = (file) => users_ms_url + 'uploads/' + file;
 export const getVideoThumbnailPublicPath = (file) => videos_ms_url + 'uploads/images/' + file;
-export const getVideoPublicPath = (file) => videos_ms_url + 'uploads/videos/' + file;
+export const getVideoPublicPath = (file) => videos_ms_url + 'uploads/video/' + file;
 export const getCategoryImage = (file) => videos_ms_url + 'uploads/images/' + file;
 
 const signup = async (body) => {
@@ -242,7 +248,7 @@ export const uploadChannelVideo = async (body) => {
 
     try{
         
-        let response = await fetch(videos_ms_url + 'videos/upload', {
+        let response = await fetch(videos_ms_url + 'video/upload', {
             method: 'POST',
             body,
             headers: {
@@ -267,7 +273,7 @@ export const searchVideos = async (body, service = null) => {
 
     try{
 
-        let response = await fetch(sUrl + 'videos/search',{
+        let response = await fetch(sUrl + 'video/search',{
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
@@ -291,7 +297,7 @@ export const getRelatedVideos = async (body, service = null) => {
 
     try{
 
-        let response = await fetch(sUrl + 'videos/related',{
+        let response = await fetch(sUrl + 'video/related',{
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
@@ -384,7 +390,7 @@ export const recordView = async (body, service = null) => {
     if(service) sUrl = getServiceUrl(service);
 
     try {
-        let response = await fetch(sUrl + 'videos/view', {
+        let response = await fetch(sUrl + 'video/view', {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
