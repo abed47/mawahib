@@ -14,8 +14,8 @@ import CommentRoutes from './routes/v1/like.routes';
 import CategoryRoutes from './routes/v1/category.routes';
 
 import * as path from 'path';
-import * as fs from 'fs';
 import * as upload from 'express-fileupload';
+import initAdminPanel from './admin';
 //enable env file
 dotenv.config();
 
@@ -25,22 +25,25 @@ const app: express.Express = express();
 //add app middleware
 app.use(bodyParser.json());
 app.use(cors());
-app.use(upload());
 
 //connect to database
 db.connect();
 
+//initialize admin panel
+let adminPanel = initAdminPanel(db.db);
+
 //apply routes
-app.use('/api/v1/utils', UtilsRoutes);
+app.use('/api/v1/utils', upload(), UtilsRoutes);
 app.use('/api/v1/auth', AuthRoutes);
-app.use('/api/v1/user', UserRoutes);
+app.use('/api/v1/user', upload(), UserRoutes);
 app.use('/api/v1', SubscriptionRoutes);
-app.use('/api/v1/channel', ChannelRoutes);
+app.use('/api/v1/channel', upload(), ChannelRoutes);
 app.use('/api/v1/like', LikeRoutes);
-app.use('/api/v1/video', VideoRoutes);
+app.use('/api/v1/video', upload(), VideoRoutes);
 app.use('/api/v1/comment', CommentRoutes);
-app.use('/api/v1/category', CategoryRoutes);
+app.use('/api/v1/category', upload(), CategoryRoutes);
 app.use('/api/v1/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/admin', adminPanel);
 // app.use('/public', express.static)
 app.get('/', (req, res) => {res.send('OK')})
 app.listen(process.env.PORT, () => {

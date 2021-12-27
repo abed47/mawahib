@@ -20,7 +20,7 @@ const Video = db.define('video', {
     },
     category_id:{
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     url:{
         type: DataTypes.STRING,
@@ -55,8 +55,9 @@ const Video = db.define('video', {
         allowNull: true
     },
     banner: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
     },
     tags:{
         type: DataTypes.STRING,
