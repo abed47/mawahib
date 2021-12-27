@@ -50,15 +50,13 @@ const signup = async (body) => {
 };
 
 const login = async (body) => {
-    let form = new FormData();
-    form.append('email', body.email);
-    form.append('password', body.password)
+    let form = JSON.stringify(body);
     try{
         let response = await fetch(users_ms_url + 'auth/login', {
             method: 'POST',
             body: form,
             headers:{
-                // 'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             }
         });
 
