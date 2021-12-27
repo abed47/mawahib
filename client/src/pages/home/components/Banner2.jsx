@@ -94,7 +94,7 @@ const Banner2 = (props) => {
     const loadData = async () => {
         
         try{
-            let res = await searchVideos({pagination: {limit: 5},fields: {channel_id: 2}});
+            let res = await searchVideos({pagination: {limit: 5},fields: {banner: 1}});
             
             if(res.status){
                 setVideoList(res.data);

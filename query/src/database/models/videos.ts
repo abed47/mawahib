@@ -55,7 +55,7 @@ const Video = db.define('video', {
         allowNull: true
     },
     banner: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: true
     },
     tags:{
