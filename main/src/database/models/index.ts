@@ -8,10 +8,10 @@ import Like from "./likes";
 import Category from './category';
 
 //category associations
-Category.hasMany(Video, {foreignKey: 'category_id'});
-Channel.belongsTo(Category, {foreignKey: 'category_id', targetKey: 'id'});
-Category.hasMany(Channel, {foreignKey: 'category_id', sourceKey: 'id'});
-Video.belongsTo(Category, {foreignKey: 'category_id', targetKey: 'id'});
+// Category.hasMany(Video, {foreignKey: 'category_id'});
+Channel.belongsTo(Category, {foreignKey: 'category_id'});
+// Category.hasMany(Channel, {foreignKey: 'category_id'});
+Video.belongsTo(Category, {foreignKey: 'category_id'});
 
 //user associations
 User.hasOne(Channel, {foreignKey: 'user_id'});
