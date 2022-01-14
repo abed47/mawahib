@@ -25,5 +25,6 @@ html, body{
 }
 
 html, body, #app, #root, .App, #app>div , .Mui-root{
-    height: 100%
+    height: 100%;
+    font-family: $font-base;
 }

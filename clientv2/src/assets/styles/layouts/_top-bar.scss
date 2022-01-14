@@ -101,6 +101,128 @@
                 border-radius: 50%;
                 cursor: pointer;
             }
+
+            .pop-over{
+                position: absolute;
+                background-color: $box-color;
+                border: 1px solid $color-secondary;
+                border-radius: 5px;
+                width: 200px;
+                left: -220px;
+                top: calc(100% + 10px);
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                user-select: none;
+                color: $text-color2;
+                display: none;
+                &.active{
+                    display: flex;
+                }
+
+                
+                h4{
+                    color: $text-color;
+                    margin-bottom: 15px;
+                }
+                
+                .menu-item.s{
+                    margin: 5px 0;
+                    padding: 10px;
+                    background-color: $box-color2;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    box-sizing: border-box;
+
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+
+                    &:hover{
+                        background-color: $color-primary;
+                        color: $text-color;
+                    }
+
+                    .icon{
+                        display: flex;
+                    }
+
+                    p{
+                        font-size: 12px;
+                        margin: 0;
+                        display: inline;
+                    }
+
+                    .amount{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        p{
+                            margin: 0 5px;
+                        }
+                    }
+                }
+
+                .menu-item{
+                    margin: 5px 0;
+                    padding: 10px;
+                    background-color: $box-color2;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    width: 100%;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    box-sizing: border-box;
+
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+
+                    &:hover{
+                        background-color: $color-primary;
+                        color: $text-color;
+                    }
+
+                    .icon{
+                        display: flex;
+                    }
+
+                    p{
+                        font-size: 12px;
+                        margin: 0;
+                        display: inline-block;
+                        margin-left: 15px;
+                    }
+                }
+
+                .combined{
+                    margin: 5px 0;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: center;
+                    background-color: $box-color2;
+                    border-radius: 15px;
+                    hr{
+                        width: 85%;
+                        margin: 0;
+                        border-color: $text-color2;
+                    }
+
+                    .menu-item{
+                        margin: 0;
+                        padding: 10px;
+                    }
+                }
+            }
         }
     }
 

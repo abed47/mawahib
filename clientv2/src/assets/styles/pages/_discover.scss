@@ -1,0 +1,36 @@
+.discover-page{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+
+    .banner{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .slider-wrapper{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .slider-item{
+                transition: all 300ms ease-in-out;
+                width: 200px;
+                height: 110px;
+
+                &.swiper-slide-next{
+                    height: 150px;
+                }
+
+                img{
+                    width: 100%;
+                    height: 100%;
+                    background-color: red;
+                    border-radius: 15px;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+}

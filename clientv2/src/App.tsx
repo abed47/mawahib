@@ -1,13 +1,19 @@
 import React from 'react';
 import './assets/styles/styles.scss'
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {  Route, Routes } from 'react-router-dom';
 import Layout from './components/layout';
+
+import DiscoverPage from './pages/discover';
+import CategoriesPage from './pages/categories';
 
 function App() {
   return (
     <div className="App">
       <Layout>
-        <div className="page">page</div>
+        <Routes>
+          <Route path="/" element={<DiscoverPage />} />
+          <Route path="/categories" element={<CategoriesPage />} />
+        </Routes>
       </Layout>
     </div>
   );
