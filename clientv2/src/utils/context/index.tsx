@@ -9,7 +9,12 @@ export interface MainContextInterface {
     setLoggedIn: (v: boolean) => void,
     preloaderActive: boolean,
     showPreloader: () => void,
-    hidePreloader: () => void
+    hidePreloader: () => void,
+    showSnackbar: (message: string, type: string) => void,
+    hideSnackbar: () => void,
+    snackbarOpen: boolean,
+    snackbarType: string,
+    snackbarMessage: string
 }
 
 export const mainContextDefaults: MainContextInterface = {
@@ -21,7 +26,12 @@ export const mainContextDefaults: MainContextInterface = {
     setLoggedIn: () => null,
     preloaderActive: false,
     showPreloader: () => null,
-    hidePreloader: () => null
+    hidePreloader: () => null,
+    showSnackbar: () => null,
+    hideSnackbar: () => null,
+    snackbarOpen: false,
+    snackbarType: 'info',
+    snackbarMessage: ''
 }
 
 const MainContext:any = createContext(mainContextDefaults);
@@ -36,6 +46,9 @@ const MainContextProvider: React.FC = props => {
     const [token, setToken] = useState(null);
     const [loggedIn, setLoggedIn] = useState(null);
     const [preloaderActive, setPreloaderActive] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarType, setSnackbarType] = useState('info');
+    const [snackbarMessage, setSnackbarMessage] = useState('');
 
     const showPreloader = () => {
         setPreloaderActive(true);
@@ -43,6 +56,16 @@ const MainContextProvider: React.FC = props => {
 
     const hidePreloader = () => {
         setPreloaderActive(false);
+    }
+
+    const showSnackbar = (message: string, type: string) => {
+        setSnackbarMessage(message);
+        setSnackbarType(type);
+        setSnackbarOpen(true);
+    }
+
+    const hideSnackbar = () => {
+        setSnackbarOpen(false);
     }
 
     return (
@@ -55,7 +78,10 @@ const MainContextProvider: React.FC = props => {
             setLoggedIn,
             preloaderActive,
             showPreloader,
-            hidePreloader
+            hidePreloader,
+            showSnackbar,
+            snackbarOpen,
+            hideSnackbar
             }}>
             {props.children}
         </MainContext.Provider>

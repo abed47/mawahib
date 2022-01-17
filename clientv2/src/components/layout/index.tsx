@@ -5,6 +5,7 @@ import RightPanel from './RightPanel';
 import { useCtx } from '../../utils/context';
 import StorageService from '../../utils/services/store';
 import PreLoader from './components/Preloader';
+import SnackBar from './components/SnackBar';
 
 const Layout: React.FC = (props) => {
 
@@ -36,10 +37,10 @@ const Layout: React.FC = (props) => {
                 <SideNav />
                     <div className="page-wrapper">
                         {props.children}
+                        <PreLoader />
+                        <SnackBar />
                     </div>
                 <RightPanel />
-
-                <PreLoader />
             </div>
 
         </div>
