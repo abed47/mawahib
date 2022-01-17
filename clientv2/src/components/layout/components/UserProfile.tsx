@@ -5,10 +5,15 @@ import { GiTwoCoins } from 'react-icons/gi';
 import { FiChevronRight, FiLogOut } from 'react-icons/fi';
 import { MdOutlineContactPage } from 'react-icons/md';
 import { FaCog } from 'react-icons/fa';
+import { useCtx } from '../../../utils/context';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile: React.FC = props => {
 
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
+    
+    const ctx = useCtx();
+    const navigation = useNavigate();
 
     useEffect(() => {
 
@@ -28,6 +33,8 @@ const UserProfile: React.FC = props => {
     }
 
     const handleOpenMenu = () => {
+        console.log(ctx)
+        if(!ctx.loggedIn) return navigation('/login');
         setMenuOpen(true);
     }
 

@@ -28,3 +28,19 @@ html, body, #app, #root, .App, #app>div , .Mui-root{
     height: 100%;
     font-family: $font-base;
 }
+
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.192);        
+    width: 100%;
+}
+
+*::-webkit-scrollbar-thumb {
+background-color: $color-primary;    
+border-radius: 20px;       
+height: 5px;
+}

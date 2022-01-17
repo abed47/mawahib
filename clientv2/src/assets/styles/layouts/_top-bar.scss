@@ -117,6 +117,7 @@
                 user-select: none;
                 color: $text-color2;
                 display: none;
+                z-index: 999;
                 &.active{
                     display: flex;
                 }

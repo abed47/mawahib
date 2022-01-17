@@ -4,36 +4,47 @@ export const videos = [
         title: 'hello world',
         description: 'test video',
         thumbnail: 'https://s3.amazonaws.com/newblog.psd2html.com/wp-content/uploads/2019/01/08135742/Illustration_JS_918x603.jpg',
-        url: 'https://vimeo.com/243556536'
+        url: 'https://vimeo.com/243556536',
+        views: 500,
+        channel: 'channel 2'
     },
     {
         id: 2,
         title: 'hello world',
         description: 'test video',
         thumbnail: 'https://s3.amazonaws.com/newblog.psd2html.com/wp-content/uploads/2019/01/08135742/Illustration_JS_918x603.jpg',
-        url: 'https://vimeo.com/243556536'
+        url: 'https://vimeo.com/243556536',
+        views: 3659,
+        channel: 'channel 3'
     },
     {
         id: 4,
         title: 'hello world',
         description: 'test video',
         thumbnail: 'https://s3.amazonaws.com/newblog.psd2html.com/wp-content/uploads/2019/01/08135742/Illustration_JS_918x603.jpg',
-        url: 'https://vimeo.com/243556536'
+        url: 'https://vimeo.com/243556536',
+        views: 5,
+        channel: 'channel 50'
     },
     {
         id: 5,
         title: 'hello world',
         description: 'test video',
         thumbnail: 'https://s3.amazonaws.com/newblog.psd2html.com/wp-content/uploads/2019/01/08135742/Illustration_JS_918x603.jpg',
-        url: 'https://vimeo.com/243556536'
+        url: 'https://vimeo.com/243556536',
+        views: 969858963,
+        channel: 'channel 35'
     },
     {
         id: 6,
         title: 'hello world',
         description: 'test video',
         thumbnail: 'https://s3.amazonaws.com/newblog.psd2html.com/wp-content/uploads/2019/01/08135742/Illustration_JS_918x603.jpg',
-        url: 'https://vimeo.com/243556536'
+        url: 'https://vimeo.com/243556536',
+        views: 4523696,
+        channel: 'channel 1'
     },
+
 ];
 
 export const channels = [
@@ -41,13 +52,64 @@ export const channels = [
         title: 'test channel',
         photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
         id: 1,
-        live: 1
+        live: 1,
+        category: 'category 1'
     },
     {
         title: 'test channel 2',
         photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
         id: 1,
-        live: 2
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
+    },
+    {
+        title: 'test channel 2',
+        photo: 'https://i2.wp.com/www.cssscript.com/wp-content/uploads/2015/12/Material-Photo-Gallery.jpg?fit=541%2C403&ssl=1',
+        id: 1,
+        live: 2,
+        category: 'category 2'
     },
 ]
 
