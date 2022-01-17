@@ -33,7 +33,6 @@ const UserProfile: React.FC = props => {
     }
 
     const handleOpenMenu = () => {
-        console.log(ctx)
         if(!ctx.loggedIn) return navigation('/login');
         setMenuOpen(true);
     }

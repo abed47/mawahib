@@ -2,7 +2,8 @@ const AuthApis = (host: string) =>  {
     return {
         emailLogin: async (body: string) => {
             try{
-                let res = await fetch(host + 'v1/auth/email-login', {
+                let res = await fetch(host + 'v1/auth/login', {
+                    method: 'POST',
                     body,
                     headers: {
                         'Content-Type': 'application/json'

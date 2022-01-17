@@ -81,7 +81,9 @@ const MainContextProvider: React.FC = props => {
             hidePreloader,
             showSnackbar,
             snackbarOpen,
-            hideSnackbar
+            hideSnackbar,
+            snackbarMessage,
+            snackbarType
             }}>
             {props.children}
         </MainContext.Provider>

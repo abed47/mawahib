@@ -11,11 +11,12 @@ const SnackBar: React.FC = () => {
 
     const ctx = useCtx();
 
-    const handleClose = () => ctx.hideSnackbar();
+    const handleClose = () => {
+        ctx.hideSnackbar();}
 
     return(
         <Stack spacing={2} sx={{ width: '100%' }}>
-            <Snackbar open={ctx.snackbarOpen} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={ctx.snackbarOpen} autoHideDuration={3000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity={ctx.snackbarType} sx={{ width: '100%' }}>
                     {ctx.snackbarMessage}
                 </Alert>

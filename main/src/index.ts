@@ -45,7 +45,8 @@ app.use('/api/v1/category', upload(), CategoryRoutes);
 app.use('/api/v1/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/admin', adminPanel);
 // app.use('/public', express.static)
-app.get('/', (req, res) => {res.send('OK')})
+app.get('/', (req, res) => {res.send('OK')});
+
 app.listen(process.env.PORT, () => {
     console.log('server started on: ' + process.env.PORT);
 });

@@ -6,7 +6,8 @@ import StorageService from '../../utils/services/store';
 import LogoImg from '../../assets/images/logo.png';
 import { BsGoogle } from 'react-icons/bs';
 import { FaFacebook, FaLinkedinIn } from 'react-icons/fa';
-
+import { AuthRequests } from '../../utils/services/request';
+import validator from 'validator';
 const LoginPage: React.FC = props => {
 
     const [email, setEmail] = useState('');
@@ -27,11 +28,59 @@ const LoginPage: React.FC = props => {
         navigation('/signup')
     }
 
+    const handleEmailChange = (e: any) => {
+        let err = {...errors};
+        err.email = false;
+        setErrors(err);
+        setEmail(e.target.value)
+    }
+
+    const handlePasswordChange = (e: any) => {
+        let err = {...errors};
+        err.password = false;
+        setErrors(err);
+        setPassword(e.target.value)
+    }
+
+    const isValid = () => {
+        if(!validator.isEmail(email)){
+            let e = {...errors}
+            e.email = true;
+            setErrors(e);
+            return false;
+        }
+
+        if(validator.isEmpty(password)){
+            let e = {...errors}
+            e.password = true;
+            setErrors(e);
+            return false;
+        }
+
+        return true;
+    }
+
     const handleLogin = async () => {
+        if(!isValid()) return;
         ctx.showPreloader();
 
-        try{}catch(err){
-            
+        try{
+            let body = JSON.stringify({email, password});
+            let res = await AuthRequests.emailLogin(body);
+
+            if(res?.status){
+                ctx.hidePreloader();
+                console.log(res);
+            }
+
+            if(res?.message){
+                ctx.hidePreloader();
+                ctx.showSnackbar(res?.message, res?.type || 'error')
+            }
+
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'server error', 'error');
         }
     }
 
@@ -47,8 +96,8 @@ const LoginPage: React.FC = props => {
                 <p>new to MAWAHIB? <span className="color-secondary" onClick={handleSignUpClick}>Sign up for free</span></p>
 
                 <form>
-                    <input type="text" value={email} onChange={e => setEmail(e.target.value)} className={`mawahib input glowing ${errors.email ? 'error-active' : ''}`} placeholder='Email Address' />
-                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} className={`mawahib input glowing ${errors.password ? 'error-active' : ''}`} placeholder='Password' />
+                    <input type="text" value={email} onChange={handleEmailChange} className={`mawahib input glowing ${errors.email ? 'error-active' : ''}`} placeholder='Email Address' />
+                    <input type="password" value={password} onChange={handlePasswordChange} className={`mawahib input glowing ${errors.password ? 'error-active' : ''}`} placeholder='Password' />
                 </form>
 
                 <Button className='btn' onClick={handleLogin}>Sign in</Button>
