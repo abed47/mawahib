@@ -5,18 +5,29 @@ const SelectComponent: React.FC <{
     label: string, 
     selectedValue: boolean, 
     onChange: (e: any) => void,
-    error: boolean
+    error: boolean,
+    value?: string
 }> = props => {
 
     const [menuOpen, setMenuOpen] = useState(false);
-    const [selectedValue, setSelectedValue] = useState<string>('');
-    
+
     const handleClickOutside = () => {
         setMenuOpen(false);
     }
 
-    const handleFocus = () => {
+    const handleFocus = (e:any) => {
+        if(menuOpen){
+            setMenuOpen(false);
+            return;
+        }
         setMenuOpen(true)
+    }
+
+    const handleInputPress = (e: any) => {
+        if(!menuOpen){
+            setMenuOpen(true);
+            return;
+        }
     }
 
     const handleClick = (e: any) => {
@@ -26,11 +37,13 @@ const SelectComponent: React.FC <{
 
     return (
         <div 
+            id={'selectInput' + props.label.trim()}
             className="input select glowing" 
             onFocus={handleFocus} 
+            onClick={handleInputPress}
             onBlur={handleClickOutside}
             tabIndex={6}>
-            <p>{props.label}</p>
+            <p className={`${props?.value ? 'active' : ''}`}>{props?.value ? props.value : props.label }</p>
             
             <ul className={`menu ${menuOpen ? 'active' : ''}`}>
                 {

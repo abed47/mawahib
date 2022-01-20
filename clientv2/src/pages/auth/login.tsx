@@ -8,6 +8,10 @@ import { BsGoogle } from 'react-icons/bs';
 import { FaFacebook, FaLinkedinIn } from 'react-icons/fa';
 import { AuthRequests } from '../../utils/services/request';
 import validator from 'validator';
+import { useLinkedIn } from 'react-linkedin-login-oauth2';
+import GoogleLogin from 'react-google-login';
+import { facebookLogin, twitterLogin } from '../../utils/services/firebase/auth';
+
 const LoginPage: React.FC = props => {
 
     const [email, setEmail] = useState('');
@@ -67,15 +71,112 @@ const LoginPage: React.FC = props => {
         try{
             let body = JSON.stringify({email, password});
             let res = await AuthRequests.emailLogin(body);
+            ctx.hidePreloader();
 
             if(res?.status){
-                ctx.hidePreloader();
-                console.log(res);
+                StorageService.setItem('currentUser', res.data.user);
+                StorageService.setItem('loggedIn', true);
+                StorageService.setItem('token', res.data.token);
+                ctx.setCurrentUser(res.data.user);
+                ctx.setLoggedIn(true);
+                ctx.setToken(res.data.token);
+                navigation('/')
+                return;
+            }
+
+            ctx.showSnackbar(res?.message || 'server error', 'error');
+
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
+
+    const handleGoogleSuccess = async (e: any) => {
+        let body = JSON.stringify({type: 'google', token: e.tokenId});
+        ctx.showPreloader();
+        try{
+            let res = await AuthRequests.social(body);
+            ctx.hidePreloader();
+
+            if(res?.status){
+                StorageService.setItem('currentUser', res.data);
+                StorageService.setItem('loggedIn', true);
+                StorageService.setItem('token', res.data.token);
+                ctx.setCurrentUser(res.data);
+                ctx.setLoggedIn(true);
+                ctx.setToken(res.data.token);
+                navigation('/')
+                return;
+            }
+
+            ctx.showSnackbar(res?.message || 'server error', 'error');
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'request error', 'error');
+        }
+    };
+    const handleGoogleFailure = (err: any) => {
+        ctx.showSnackbar(err?.message || 'error occurred', 'error');
+    }
+
+    const handleFacebookResponse = (e: any) => {
+        facebookLogin().then(async (res: any) => {
+            if(res?.user && res?.user?.accessToken){
+
+                ctx.showPreloader();
+
+                try{
+                    let response = await AuthRequests.social(JSON.stringify({type: 'facebook', token: res.user.accessToken, name: res.user.displayName, email: res.user.email, profile_pic: res.user.photoURL}));
+                    ctx.hidePreloader();
+                    
+                    if(response?.status){
+                        console.log(response)
+                        StorageService.setItem('currentUser', response.data);
+                        StorageService.setItem('loggedIn', true);
+                        StorageService.setItem('token', response.data.token);
+                        ctx.setCurrentUser(response.data);
+                        ctx.setLoggedIn(true);
+                        ctx.setToken(response.data.token);
+                        navigation('/')
+                        return;
+                    }
+
+                    if(response?.message){
+                        ctx.showSnackbar(response?.message || 'server error', response?.type || 'error');
+                    }
+                }catch(err: any){
+                    ctx.hidePreloader();
+                    ctx.showSnackbar(err?.message || 'server error', 'error');
+                }
+
+            }
+        }).catch(err => console.log(err))
+    }
+
+    const handleLinkedInLogin = async (e: string) => {
+        ctx.showPreloader();
+
+        try{
+            let res = await AuthRequests.social(JSON.stringify({
+                token: e,
+                type: 'linkedin'
+            }));
+            ctx.hidePreloader();
+
+            if(res?.status){
+                StorageService.setItem('currentUser', res.data);
+                StorageService.setItem('loggedIn', true);
+                StorageService.setItem('token', res.data.token);
+                ctx.setCurrentUser(res.data);
+                ctx.setLoggedIn(true);
+                ctx.setToken(res.data.token);
+                navigation('/')
+                return;
             }
 
             if(res?.message){
-                ctx.hidePreloader();
-                ctx.showSnackbar(res?.message, res?.type || 'error')
+                ctx.showSnackbar(res?.message || 'server error', res?.type || 'error');
             }
 
         }catch(err: any){
@@ -83,6 +184,16 @@ const LoginPage: React.FC = props => {
             ctx.showSnackbar(err?.message || 'server error', 'error');
         }
     }
+
+    const { linkedInLogin } = useLinkedIn({
+        clientId: '78hlwqe988mqdd',
+        redirectUri: `${window.location.origin}/linkedin`,
+        scope:"r_liteprofile,r_emailaddress",
+        onSuccess: handleLinkedInLogin,
+        onError: (err: any) => {
+            console.log(err);
+        }
+    })
 
     return (
         <div className="login-page">
@@ -104,15 +215,23 @@ const LoginPage: React.FC = props => {
 
                 <p className="continue-with-socials">Or continue with</p>
 
-                <Button className='btn icon' onClick={() => {}}>
-                    <span><BsGoogle /></span>
-                    <span>Google</span>
-                </Button>
-                <Button className='btn icon' onClick={() => {}}>
+                <GoogleLogin 
+                        clientId='607293539045-ue9vdfogoisgrg222si7db7h5ghk11is.apps.googleusercontent.com'
+                        render={renderProps => {
+                            return <Button className='btn icon' onClick={renderProps.onClick}>
+                            <span><BsGoogle /></span>
+                            <span>Google</span>
+                        </Button>
+                        }}
+                        cookiePolicy='single_host_origin'
+                        onSuccess={handleGoogleSuccess}
+                        onFailure={handleGoogleFailure}
+                    />
+                <Button className='btn icon' onClick={handleFacebookResponse}>
                     <span><FaFacebook/></span>
                     <span>Facebook</span>
                 </Button>
-                <Button className='btn icon' onClick={() => {}}>
+                <Button className='btn icon' onClick={linkedInLogin}>
                     <span><FaLinkedinIn /></span>
                     <span>Linkedin</span>
                 </Button>

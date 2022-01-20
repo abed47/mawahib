@@ -7,6 +7,7 @@ import { MdOutlineContactPage } from 'react-icons/md';
 import { FaCog } from 'react-icons/fa';
 import { useCtx } from '../../../utils/context';
 import { useNavigate } from 'react-router-dom';
+import StorageService from '../../../utils/services/store';
 
 const UserProfile: React.FC = props => {
 
@@ -40,6 +41,14 @@ const UserProfile: React.FC = props => {
     const handleCloseMenu = () => {
         setMenuOpen(false);
     }
+
+    const handleLogout = () => {
+        ctx.setCurrentUser(null);
+        ctx.setToken('');
+        ctx.setLoggedIn(false);
+        StorageService.clear();
+        navigation('/login')
+    }
     
     return (
         <div className="profile-circle">
@@ -48,7 +57,7 @@ const UserProfile: React.FC = props => {
             <div className={`pop-over ${menuOpen ? 'active' : ''}`}>
 
                 <h4>
-                    Ibrahim Mahammed
+                    {ctx?.currentUser?.name || ''}
                 </h4>
 
                 <div className="menu-item s">
@@ -90,7 +99,7 @@ const UserProfile: React.FC = props => {
                     </div>
                 </div>
 
-                <div className="menu-item">
+                <div className="menu-item" onClick={handleLogout}>
                     <div className="icon">
                         <FiLogOut />
                     </div>

@@ -21,9 +21,12 @@
         box-shadow: 0px 0px 10px 1px rgba($color: $color-secondary, $alpha: 0);
 
         p{
-            color: #9C9C9C;
+            color: #9C9C9C !important;
             font-size: 12px;
             font-family: $font-base;
+            &.active{
+                color: black !important;
+            }
         }
         
         &:focus{

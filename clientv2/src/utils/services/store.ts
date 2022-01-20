@@ -6,11 +6,11 @@ export const getItem: (key: string, type?: number) => string | number | any[] | 
     return JSON.parse(item);
 }
 
-export const setItem: (key: string, value: any, type: number) => void = (key, value, type = 0) => {
+export const setItem: (key: string, value: any, type?: number) => void = (key, value, type = 0) => {
     storage[type].setItem(key, JSON.stringify(value));
 }
 
-export const clear: (type: number) => void = (type = 0) => {
+export const clear: (type?: number) => void = (type = 0) => {
     storage[type].clear();
 }
 

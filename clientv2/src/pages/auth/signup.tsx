@@ -6,12 +6,16 @@ import StorageService from '../../utils/services/store';
 import LogoImg from '../../assets/images/logo.png';
 import { BsGoogle } from 'react-icons/bs';
 import { FaFacebook, FaLinkedinIn } from 'react-icons/fa';
+import { FiTwitter } from 'react-icons/fi';
 import { AuthRequests } from '../../utils/services/request';
 import validator from 'validator';
 import moment from 'moment';
 import SelectComponent from '../../components/SelectComponent';
 //@ts-ignore
 import countryCodes from 'country-codes-list';
+import GoogleLogin from 'react-google-login';
+import { facebookLogin, twitterLogin } from '../../utils/services/firebase/auth';
+import { useLinkedIn } from 'react-linkedin-login-oauth2';
 
 const LoginPage: React.FC = props => {
 
@@ -21,7 +25,7 @@ const LoginPage: React.FC = props => {
     const [username, setUsername] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [country, setCountry] = useState('');
-    const [phone, setphone] = useState('');
+    const [phone, setPhone] = useState('');
     const [countryCode, setCountryCode] = useState('');
     const [dob, setDob] = useState<any>(moment().format('YYYY-MM-DD'))
     const [errors, setErrors] = useState<{
@@ -37,6 +41,8 @@ const LoginPage: React.FC = props => {
 
     const ctx = useCtx();
     const navigation = useNavigate();
+
+    
 
     useEffect(() => {
 
@@ -78,7 +84,14 @@ const LoginPage: React.FC = props => {
     }
 
     const handleDobChange = (e:any) => {
-        console.log(e.target.value)
+        let errs = {...errors};
+        errs.dob = false;
+        setErrors(errs);
+        setDob(e.target.value)
+        if(!moment(e.target.value, 'YYYY-MM-DD').isValid()){
+            errs.dob = true;
+            setErrors(errs);
+        }
     }
 
     const handlePasswordConfirmChange = (e: any) => {
@@ -110,6 +123,30 @@ const LoginPage: React.FC = props => {
             setErrors(e);
             return false;
         }
+        
+
+        if(validator.isEmpty(username)){
+            let e = {...errors}
+            e.username = true;
+            setErrors(e);
+            return false;
+        }
+        
+
+        if(validator.isEmpty(name)){
+            let e = {...errors}
+            e.name = true;
+            setErrors(e);
+            return false;
+        }
+
+        if(validator.isEmpty(confirmPassword)){
+            let e = {...errors}
+            e.confirmPassword = true;
+            setErrors(e);
+            return false;
+        }
+        
 
         return true;
     }
@@ -119,13 +156,23 @@ const LoginPage: React.FC = props => {
         ctx.showPreloader();
 
         try{
-            let body = JSON.stringify({email, password});
-            let res = await AuthRequests.emailLogin(body);
-            console.log(res);
+            
+            let body = JSON.stringify({
+                username,
+                dob,
+                email,
+                name,
+                country,
+                phone,
+                password
+            });
+
+            let res = await AuthRequests.register(body);
 
             if(res?.status){
                 ctx.hidePreloader();
-                console.log(res);
+                navigation('/login');
+                return;
             }
 
             if(res?.message){
@@ -138,6 +185,143 @@ const LoginPage: React.FC = props => {
             ctx.showSnackbar(err?.message || 'server error', 'error');
         }
     }
+
+    const handleGoogleSuccess = async (e: any) => {
+        let body = JSON.stringify({type: 'google', token: e.tokenId});
+        ctx.showPreloader();
+        try{
+            let res = await AuthRequests.social(body);
+            ctx.hidePreloader();
+
+            if(res?.status){
+                StorageService.setItem('currentUser', res.data);
+                StorageService.setItem('loggedIn', true);
+                StorageService.setItem('token', res.data.token);
+                ctx.setCurrentUser(res.data);
+                ctx.setLoggedIn(true);
+                ctx.setToken(res.data.token);
+                navigation('/')
+                return;
+            }
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'request error', 'error');
+        }
+    };
+    const handleGoogleFailure = (err: any) => {
+        ctx.showSnackbar(err?.message || 'error occurred', 'error');
+    }
+
+    const handleFacebookResponse = (e: any) => {
+        facebookLogin().then(async (res: any) => {
+            if(res?.user && res?.user?.accessToken){
+
+                ctx.showPreloader();
+
+                try{
+                    let response = await AuthRequests.social(JSON.stringify({type: 'facebook', token: res.user.accessToken, name: res.user.displayName, email: res.user.email, profile_pic: res.user.photoURL}));
+                    ctx.hidePreloader();
+                    
+                    if(response?.status){
+                        StorageService.setItem('currentUser', response.data);
+                        StorageService.setItem('loggedIn', true);
+                        StorageService.setItem('token', response.data.token);
+                        ctx.setCurrentUser(response.data);
+                        ctx.setLoggedIn(true);
+                        ctx.setToken(response.data.token);
+                        navigation('/')
+                        return;
+                    }
+
+                    if(response?.message){
+                        ctx.showSnackbar(response?.message || 'server error', response?.type || 'error');
+                    }
+                }catch(err: any){
+                    ctx.hidePreloader();
+                    ctx.showSnackbar(err?.message || 'server error', 'error');
+                }
+
+            }
+        }).catch(err => console.log(err))
+    }
+
+    const handleTwitterSignup = () => {
+        twitterLogin().then(async (res: any) => {
+            console.log(res);
+            if(res?._tokenResponse){
+                ctx.showPreloader();
+                try{
+                    let response = await AuthRequests.social(JSON.stringify({
+                        type: 'twitter', token: res._tokenResponse.oauthAccessToken, 
+                        token_secret: res._tokenResponse.oauthTokenSecret}));
+                    ctx.hidePreloader();
+                    
+
+                    if(response?.status){
+                        StorageService.setItem('currentUser', response.data);
+                        StorageService.setItem('loggedIn', true);
+                        StorageService.setItem('token', response.data.token);
+                        ctx.setCurrentUser(response.data);
+                        ctx.setLoggedIn(true);
+                        ctx.setToken(response.data.token);
+                        navigation('/')
+                        return;
+                    }
+
+                    if(response?.message){
+                        ctx.showSnackbar(response?.message || 'server error', response?.type || 'error');
+                    }
+                }catch(err: any){
+                    ctx.hidePreloader();
+                    ctx.showSnackbar(err?.message || 'server error', 'error');
+                }
+            }
+            
+        }).catch(err => {
+            ctx.showSnackbar(err?.message || 'error occurred', 'error');
+        })
+    }
+
+    const handleLinkedInLogin = async (e: string) => {
+        ctx.showPreloader();
+
+        try{
+            let res = await AuthRequests.social(JSON.stringify({
+                token: e,
+                type: 'linkedin'
+            }));
+            ctx.hidePreloader();
+
+            if(res?.status){
+                StorageService.setItem('currentUser', res.data);
+                StorageService.setItem('loggedIn', true);
+                StorageService.setItem('token', res.data.token);
+                ctx.setCurrentUser(res.data);
+                ctx.setLoggedIn(true);
+                ctx.setToken(res.data.token);
+                navigation('/')
+                return;
+            }
+
+            if(res?.message){
+                ctx.showSnackbar(res?.message || 'server error', res?.type || 'error');
+            }
+
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
+
+    const { linkedInLogin } = useLinkedIn({
+        clientId: '78hlwqe988mqdd',
+        redirectUri: `${window.location.origin}/linkedin`,
+        scope:"r_liteprofile,r_emailaddress",
+        onSuccess: handleLinkedInLogin,
+        onError: (err: any) => {
+            console.log(err);
+        }
+    })
 
     return (
         <div className="signup-page">
@@ -167,7 +351,14 @@ const LoginPage: React.FC = props => {
                     </div>
 
                     <div className="form-group">
-                        <SelectComponent error={errors.country} items={Object.keys(countryCodes.customList('countryNameEn'))} label="Country" onChange={() => {}} selectedValue={false} />
+                        <SelectComponent 
+                            value={country}
+                            error={errors.country} 
+                            items={Object.keys(countryCodes.customList('countryNameEn'))} 
+                            label="Country" 
+                            onChange={e => setCountry(e)} 
+                            selectedValue={false} />
+                        <input type="text" value={phone} onChange={e => setPhone(e.target.value)} className={`mawahib input glowing ${errors?.phone ? 'error-active' : ''}`} placeholder="Phone number" />
                     </div>
 
                 </form>
@@ -176,19 +367,36 @@ const LoginPage: React.FC = props => {
 
                 <p className="continue-with-socials">Or continue with</p>
 
-                <Button className='btn icon' onClick={() => {}}>
-                    <span><BsGoogle /></span>
-                    <span>Google</span>
-                </Button>
-                <Button className='btn icon' onClick={() => {}}>
-                    <span><FaFacebook/></span>
-                    <span>Facebook</span>
-                </Button>
-                <Button className='btn icon' onClick={() => {}}>
-                    <span><FaLinkedinIn /></span>
-                    <span>Linkedin</span>
-                </Button>
+                <div className="btn-group">
+                    <GoogleLogin 
+                        clientId='607293539045-ue9vdfogoisgrg222si7db7h5ghk11is.apps.googleusercontent.com'
+                        render={renderProps => {
+                            return <Button {...renderProps} className='btn icon'>
+                                <span><BsGoogle /></span>
+                                <span>Google</span>
+                            </Button>
+                        }}
+                        cookiePolicy='single_host_origin'
+                        onSuccess={handleGoogleSuccess}
+                        onFailure={handleGoogleFailure}
+                    />
+                    <Button className='btn icon' onClick={handleFacebookResponse}>
+                        <span><FaFacebook/></span>
+                        <span>Facebook</span>
+                    </Button>
+                </div>
 
+                <div className="btn-group">
+                    <Button className='btn icon' onClick={linkedInLogin}>
+                        <span><FaLinkedinIn /></span>
+                        <span>Linkedin</span>
+                    </Button>
+
+                    <Button className='btn icon' onClick={handleTwitterSignup}>
+                        <span><FiTwitter /></span>
+                        <span>Twitter</span>
+                    </Button>
+                </div>
             </div>
         </div>
     );
