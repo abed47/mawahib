@@ -18,6 +18,11 @@ const Category = db.define('category', {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 1
+    },
+    home: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
     }
 }, {
     timestamps: true,
