@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { returnErrResponse } from "../../utils";
+import { errorResponse, returnErrResponse, successResponse } from "../../utils";
 import validator from 'validator';
 import { User } from "../../database/models";
 import { Op, Model } from "sequelize";
@@ -9,7 +9,8 @@ import * as jwt from 'jsonwebtoken';
 import * as securePin from 'secure-pin';
 import * as queryString from 'query-string';
 import axios from 'axios';
-import Twitter from 'node-twitter-api';
+import Twitter from 'twitter-api-v2';
+import { OAuth2Client } from "google-auth-library";
 import { sendEmail } from "../../utils/communication";
 
 dotenv.config();
@@ -21,34 +22,73 @@ export const socialLogin = async (req: Request, res: Response) => {
 
     if(type == 'facebook') return facebookLogin(req,res);
     if(type == 'twitter') return twitterLogin(req,res);
+    if(type == 'google') return googleLogin(req, res);
+    if(type == 'linkedin') return linkedInLogin(req, res);
+}
+
+const googleLogin = (req: Request, res: Response) => {
+
+    let { token } = req.body;
+    const client = new OAuth2Client(process.env.GCP_APP_ID);
+
+    client.verifyIdToken({
+        idToken: token
+    }).then(async ticket => {
+        let { name, email, picture } = ticket.getPayload();
+
+        try{
+            let u: any = await User.findOne({where: {email}});
+            if(u){
+                let t = jwt.sign(u.dataValues,process.env.JWT_SECRET);
+                let r = u.dataValues;
+                r.token = t;
+                return successResponse(res, 200, 'login successful', r);
+            }
+            // if(u) return returnErrResponse(res, 'user already exist')
+            await User.create({name, email, photo: picture});
+            u = await User.findOne({where: { email }});
+            let t = jwt.sign(u.dataValues,process.env.JWT_SECRET);
+            let r = u.dataValues;
+            r.token = t;
+            return successResponse(res, 200, 'login successful', r);
+        }catch(err){
+            return returnErrResponse(res, err?.message || 'server error', 500);
+        }
+
+
+    }).catch(err => {
+        return returnErrResponse(res, err?.message || 'google server error', 500);
+    })
+
 }
 
 const facebookLogin = async (req: Request, res: Response) => {
 
-    let {token} = req.body;
+    let {token, name, email, profile_pic} = req.body;
 
     if(!token) return returnErrResponse(res, 'token required', 400);
 
     try{
-       let data =  await getFacebookUserData(token);
+    //    let data =  await getFacebookUserData(token);
        
-       if(!data || !data?.email) return returnErrResponse(res, 'email is required', 400);
+    //    if(!data || !data?.email) return returnErrResponse(res, 'email is required', 400);
 
-       let user:any = await User.findOne({where: {email: data.email}});
+       let user:any = await User.findOne({where: {email}});
 
        if(!user){
-           user = await User.create({first_name: data.first_name, last_name: data.last_name, email: data.email, password: token});
+           user = await User.create({name, email, photo: profile_pic});
        }
 
        delete user.dataValues.password;
 
        let jwtToken = jwt.sign(user.dataValues,process.env.JWT_SECRET);
 
+       let u = {...user.dataValues, token: jwtToken}
+
        res.status(200).json({
-           token: jwtToken,
            status: true,
            type: 'success',
-           data: user,
+           data: u,
            message: 'login successfully'
        });
 
@@ -72,29 +112,102 @@ const facebookLogin = async (req: Request, res: Response) => {
 // }
 
 const getFacebookUserData = async (access_token) => {
+    console.log({access_token})
     const { data } = await axios({
         url: 'https://graph.facebook.com/me',
         method: 'get',
         params: {
-            fields: ['id', 'email', 'first_name', 'last_name'].join(','),
+            fields: ['id', 'email', 'name'].join(','),
             access_token: access_token
         }
     });
-
     return data;
 }
 
 const twitterLogin = async (req: Request, res: Response) => {
-    return res.status(304).json({message: 'under construction'});
+    // return res.status(304).json({message: 'under construction'});
+    try{
 
-    let twitter = new Twitter({
-        consumerKey: process.env.TWITTER_API_KEY,
-        consumerSecret: process.env.TWITTER_API_KEY_SECRET
-    });
+        let { token, token_secret } = req.body;
 
-    twitter.getRequestToken((err, requestToken, requestSecret) => {
+        let twitterClient = new Twitter({
+            appKey: process.env.TWITTER_API_KEY, 
+            appSecret: process.env.TWITTER_API_KEY_SECRET, 
+            accessToken: token, 
+            accessSecret: token_secret
+        });
 
-    })
+        const userData = await twitterClient.v1.verifyCredentials({include_email: true});
+
+        let u = await User.findOne({where: { email: userData.email }});
+
+        if(!u){
+            u = await User.create({name: userData.name, email: userData.email, username: userData.screen_name, photo: userData.profile_image_url_https});
+        }
+
+        let r = await User.findOne({where: { email: userData.email}});
+        
+        return successResponse(res, 200, 'login successful', r);
+
+    }catch(err){
+        return errorResponse(res, 500, err?.message || err?.error || 'server error');
+    }
+}
+
+const linkedInLogin = async (req: Request, res: Response) => {
+    try{
+
+        let accessTokenResponse = await axios.post(
+            'https://www.linkedin.com/oauth/v2/accessToken',
+            queryString.stringify({
+                client_id: process.env.LINKEDIN_CLIENT_ID,
+                client_secret: process.env.LINKEDIN_CLIENT_SECRET,
+                grant_type: 'authorization_code',
+                redirect_uri: 'https://localhost:5000/linkedin',
+                code: req.body.token
+            }),
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }
+        );
+
+        let access_token = accessTokenResponse.data.access_token;
+
+        let { data: emailRes }  = await axios.get('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', {
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
+        });
+        
+        let email = emailRes.elements[0]["handle~"].emailAddress;
+
+        let { data: nameRes } = await axios.get('https://api.linkedin.com/v2/me', {
+            headers: {
+                Authorization: 'Bearer ' + access_token
+            }
+        });
+
+        let name = nameRes.localizedFirstName + " " + nameRes.localizedLastName;
+
+        if(!email || !name) return errorResponse(res, 400, 'insuficient data try another way');
+
+        let u = await User.findOne({where: { email }});
+        if(!u){
+            await User.create({name, email});
+        }
+
+        let user:any = await User.findOne({where: { email }});
+
+        let token = jwt.sign(user.dataValues, process.env.JWT_SECRET);
+        
+        return successResponse(res, 200, 'login successful', {...user.dataValues, token});
+
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
 }
 
 export const login = async (req: Request, res: Response) => {
@@ -132,10 +245,11 @@ export const login = async (req: Request, res: Response) => {
 }
 
 export const register = async (req: Request, res: Response) => {
-    let {email, password, first_name, last_name, dob, username} = req.body;
+    let {email, password, name, dob, username, phone, country} = req.body;
 
+    console.log(req.body)
     //validation layer start
-    if(!email || !password || !first_name || !last_name) return returnErrResponse(res, 'all fields are require', 400);
+    if(!email || !password || !name || !username || !dob) return returnErrResponse(res, 'all fields are require', 400);
     if(!validator.isEmail(email)) return returnErrResponse(res, 'email not valid', 400);
     if(!validator.isLength(password, {min: 6})) return returnErrResponse(res, 'password too short', 400);
 
@@ -143,15 +257,15 @@ export const register = async (req: Request, res: Response) => {
     try {
         
         //check for existing users
-        let user = await User.findOne({where:{email}});
-        if(user) return returnErrResponse(res, 'email already exists', 401);
+        let user = await User.findOne({where:{[Op.or]: {email, username}}});
+        if(user) return returnErrResponse(res, 'user already exists', 401);
 
 
         //hash password start
         let salt = await bcrypt.genSalt(10);
         let hashedPass = await bcrypt.hash(password, salt);
         
-        let createUserObj = {email, password: hashedPass, first_name: first_name, last_name: last_name}
+        let createUserObj = {email, password: hashedPass, name, dob, phone, country, username}
         if(dob) createUserObj['dob'] = dob;
         if(username) createUserObj['username'] = username;
         let createdUser: any = await User.create({...createUserObj});
@@ -159,7 +273,7 @@ export const register = async (req: Request, res: Response) => {
         res.status(200).json({
             status: true,
             type: 'success',
-            data: {email, first_name, last_name, dob},
+            data: {email, name, dob},
             message: 'registration successful'
         });
 

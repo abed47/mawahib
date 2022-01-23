@@ -4,13 +4,17 @@ import { DataTypes } from "sequelize";
 const User = db.define('user',{
     first_name:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     last_name:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     middle_name:{
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    name: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -48,7 +52,7 @@ const User = db.define('user',{
     },
     password:{
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     photo:{
         type: DataTypes.STRING,
