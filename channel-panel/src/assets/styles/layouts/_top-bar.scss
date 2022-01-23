@@ -1,0 +1,235 @@
+.top-bar{
+    background-color: $box-color;
+    width: 100%;
+    height: 60px;
+    box-shadow: 1px 2px 6px rgba(0,0,0,0.2);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 20px;
+
+    .logo{
+        height: 100%;
+
+        img{
+            height: 100%;
+        }
+    }
+
+    .search-bar-container{
+
+        .search-bar-wrapper{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type=text]{
+            background-color: $box-color2;
+            border: none;
+            height: 100%;
+            width: 250px;
+            height: 35px;
+            padding: 0;
+            border-left: 1px solid rgba(255, 255, 255, 0.288);
+            border-right: 1px solid rgba(255, 255, 255, 0.288);
+            outline: none;
+            color: $text-color2;
+            box-sizing: border-box;
+            padding-left: 15px;
+            font-family: $font-medium;
+        }
+
+        .search-btn{
+            color: $text-color2;
+            height: 35px;
+            background-color: $box-color2;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0 ;
+        }
+
+        .menu-wrapper{
+            font-family: $font-medium;
+            font-size: 13px !important;
+            .Dropdown-control{
+                background-color: $box-color2;
+                border: none;
+                color: $text-color2;
+                border-radius: unset;
+                height: 35px;
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+            }
+
+            .Dropdown-menu{
+                background-color: $box-color;
+                border: none;
+                color: $text-color2;
+
+                .Dropdown-option{
+
+                    &.is-selected{
+                        background-color: $color-primary;
+                        color: $text-color;
+                    }
+
+                    color: $text-color2;
+
+                    &:hover{
+                        background-color: $color-primary;
+                    }
+                }
+            }
+        }
+    }
+
+    .tools{
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .profile-circle{
+            height: 60%;
+            position: relative;
+    
+            img{
+                height: 100%;
+                // width: 5px;
+                object-fit: contain;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            .pop-over{
+                position: absolute;
+                background-color: $box-color;
+                border: 1px solid $color-secondary;
+                border-radius: 5px;
+                width: 200px;
+                left: -220px;
+                top: calc(100% + 10px);
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                user-select: none;
+                color: $text-color2;
+                display: none;
+                z-index: 999;
+                &.active{
+                    display: flex;
+                }
+
+                
+                h4{
+                    color: $text-color;
+                    margin-bottom: 15px;
+                }
+                
+                .menu-item.s{
+                    margin: 5px 0;
+                    padding: 10px;
+                    background-color: $box-color2;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    box-sizing: border-box;
+
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+
+                    &:hover{
+                        background-color: $color-primary;
+                        color: $text-color;
+                    }
+
+                    .icon{
+                        display: flex;
+                    }
+
+                    p{
+                        font-size: 12px;
+                        margin: 0;
+                        display: inline;
+                    }
+
+                    .amount{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        p{
+                            margin: 0 5px;
+                        }
+                    }
+                }
+
+                .menu-item{
+                    margin: 5px 0;
+                    padding: 10px;
+                    background-color: $box-color2;
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    width: 100%;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    box-sizing: border-box;
+
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+
+                    &:hover{
+                        background-color: $color-primary;
+                        color: $text-color;
+                    }
+
+                    .icon{
+                        display: flex;
+                    }
+
+                    p{
+                        font-size: 12px;
+                        margin: 0;
+                        display: inline-block;
+                        margin-left: 15px;
+                    }
+                }
+
+                .combined{
+                    margin: 5px 0;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: center;
+                    background-color: $box-color2;
+                    border-radius: 15px;
+                    hr{
+                        width: 85%;
+                        margin: 0;
+                        border-color: $text-color2;
+                    }
+
+                    .menu-item{
+                        margin: 0;
+                        padding: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.top-nav-menu-wrapper ul {
+    background-color: red;
+    color: white;
+}

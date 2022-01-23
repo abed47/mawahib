@@ -1,0 +1,17 @@
+.app-wrapper{
+    background-color: $box-color2;
+    height: 100%;
+
+    .inner{
+        display: flex;
+        flex-direction: row;
+        height: calc(100% - 60px);
+        position: relative;
+
+        .page-wrapper{
+            width: calc(100% - 500px);
+        }
+
+        
+    }
+}
