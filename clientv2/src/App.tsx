@@ -9,6 +9,7 @@ import CategoriesPage from './pages/categories';
 import LoginPage from './pages/auth/login';
 import SignUpPage from './pages/auth/signup';
 import { LinkedInCallback } from 'react-linkedin-login-oauth2';
+import CreateChannel from './pages/channel/create';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/linkedin" element={<LinkedInCallback />} />
+            <Route path="/create/channel" element={<CreateChannel />} />
           </Routes>
         </Layout>
       </MainContextProvider>

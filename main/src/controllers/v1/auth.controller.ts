@@ -11,6 +11,7 @@ import * as queryString from 'query-string';
 import axios from 'axios';
 import Twitter from 'node-twitter-api';
 import { sendEmail } from "../../utils/communication";
+
 dotenv.config();
 
 export const socialLogin = async (req: Request, res: Response) => {
