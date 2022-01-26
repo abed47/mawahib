@@ -46,7 +46,7 @@ export const getOne = async (req: Request, res: Response) => {
 }
 
 export const create = async (req: Request, res: Response) => {
-    let {name, description, photo, userId, cover, slogan, watermark, category_id} = req.body;
+    let {name, description, photo, userId, cover, slogan, watermark, category_id, mysterious} = req.body;
 
     if(!name || !userId) return returnErrResponse(res, 'all fields are required', 400);
 
@@ -56,7 +56,7 @@ export const create = async (req: Request, res: Response) => {
 
         if(c) return returnErrResponse(res, 'user already has a channel', 401);
 
-        let channel: any = await Channel.create({name, description, photo, user_id: userId, cover, slogan, watermark, category_id});
+        let channel: any = await Channel.create({name, description, photo, user_id: userId, cover, slogan, watermark, category_id, mysterious});
 
         res.status(200).json({
             status: true,

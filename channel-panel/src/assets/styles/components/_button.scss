@@ -1,0 +1,19 @@
+.btn{
+
+    .secondary-gradient{}
+
+    &.primary-gradient{
+        height: 36px;
+        background: transparent linear-gradient(175deg, var(--color-3) 0%, var(--color-2) 100%) 0% 0% no-repeat padding-box;
+        background: transparent linear-gradient(175deg, #4BBEB6 0%, #006896 100%) 0% 0% no-repeat padding-box;
+        border-radius: 7px;
+        opacity: 1;
+        color: $text-color !important;
+        font-family: $font-base;
+        font-size: 14px;
+        letter-spacing: 0px;
+        color: #FFFFFF;
+        opacity: 1;
+    }
+    
+}

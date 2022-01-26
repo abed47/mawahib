@@ -6,6 +6,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: auto;
+    // padding: 200px 0;
+    box-sizing: border-box;
+    padding-top: 250px;
+    padding-bottom: 50px;
 
     .login-dialog{
         padding: 20px;

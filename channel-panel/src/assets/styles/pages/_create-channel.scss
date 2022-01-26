@@ -1,0 +1,263 @@
+.create-channel-page{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+
+    .title{
+        margin-bottom: 25px;
+        h1{
+            color: $text-color;
+            border-bottom: 1px solid $text-color;
+            width: 300px;
+            font-size: 28px;
+            font-family: $font-bold;
+        }
+    }
+
+    .sub-title{
+
+        p{
+            color: $color-secondary;
+            font-size: 24px;
+            font-family: $font-medium;
+        }
+    }
+
+    .drop-zone{
+        width: 770px;
+        height: 160px;
+        position: relative;
+        border: 1px dashed $text-color2;
+        color: $text-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 25px;
+
+        input[type=file]{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .channel-profile{
+
+        display: flex;
+        position: relative;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        width: 300px;
+        margin-bottom: 15px;
+
+        .image{
+            img{
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                border: 2px solid $color-secondary;
+                object-fit: cover;
+            }
+        }
+
+        input[type=file]{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        h2{
+            font-family: $font-medium;
+            font-size: 16px;
+            color: $text-color;
+            margin: 0 15px;
+        }
+    }
+
+    .mawahib-select-v2{
+        background-color: $box-color;
+        padding: 5px 10px;
+        min-height: 40px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        min-width: 250px;
+        border: 1px solid $box-color;
+        border-radius: 5px;
+        color: $text-color;
+        margin-top: 10px;
+        transition: border 300ms ease-in-out;
+        font-size: 12px;
+        font-family: $font-base;
+
+        &:focus{
+            border: 1px solid $color-secondary;
+
+            ul{
+                display: flex;
+            }
+        }
+
+        &.error-active{
+            border: 1px solid $danger;
+        }
+
+        p{
+            margin: 0;
+        }
+
+        ul{
+            position: absolute;
+            left: calc(100% + 10px);
+            bottom: 0;
+            transition: all 300ms ease-in-out;
+            display: none;
+            list-style: none;
+            // width: auto;
+            padding: 0;
+            background-color: $box-color;
+            border: 1px solid $color-secondary;
+            min-width: 150px;
+            border-radius: 5px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            li{
+                // height: 25px;
+                margin: 5px 0;
+                cursor: pointer;
+                user-select: none;
+                width: 100%;
+                padding: 10px 25px;
+                box-sizing: border-box;
+                
+                &:hover{
+                    background-color: $box-color2;
+                }
+            }
+        }
+    }
+
+    .form-control{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-bottom: 25px;
+
+        label{
+            font-size: 16px;
+            color: $text-color;
+            font-family: $font-medium;
+            display: block;
+            border-bottom: 10px;
+        }
+
+        input, textarea, .input{
+            background-color: $box-color;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: $font-base;
+            padding: 10px;
+            outline: none;
+            min-width: 200px;
+            margin-top: 10px;
+            color: $text-color;
+            min-width: 250px;
+            box-sizing: border-box;
+            border: 1px solid $box-color;
+            transition: border 300ms ease-in-out;
+            
+
+            &::placeholder{
+                color: $text-color2;
+            }
+
+            &:focus{
+                border: 1px solid $color-secondary;
+            }
+
+            &.error-active{
+                border: 1px solid $danger;
+            }
+        }
+
+        .input{
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        small{
+            color: $text-color2;
+            margin-top: 15px;
+            font-size: 12px;
+            max-width: 250px;
+
+            button{
+                background: unset;
+                outline: none;
+                border: unset;
+                color: $color-secondary;
+                font-family: $font-base;
+            }
+        }
+    }
+
+    .actions{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &>*{
+            margin: 0 10px;
+        }
+
+        .btn{
+            padding: 10px 25px;
+            border-radius: 15px;
+            font-family: $font-medium;
+            font-size: 13px;
+
+            &.primary{
+                background-color: $color-primary;
+            }
+
+            &.secondary{
+                background-color: $color-secondary;
+                color: $text-color;
+            }
+
+            &.outlined{
+
+                &.white{
+                    border: 1px solid $text-color2;
+                    color: $text-color;
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 .app-wrapper{
     background-color: $box-color2;
     height: 100%;
+    overflow: auto;
 
     .inner{
         display: flex;
