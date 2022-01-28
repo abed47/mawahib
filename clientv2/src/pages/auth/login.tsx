@@ -78,6 +78,7 @@ const LoginPage: React.FC = props => {
                 StorageService.setItem('loggedIn', true);
                 StorageService.setItem('token', res.data.token);
                 ctx.setCurrentUser(res.data.user);
+                ctx.setUserChannel(res.data?.channel || null)
                 ctx.setLoggedIn(true);
                 ctx.setToken(res.data.token);
                 navigation('/')
@@ -103,6 +104,7 @@ const LoginPage: React.FC = props => {
                 StorageService.setItem('currentUser', res.data);
                 StorageService.setItem('loggedIn', true);
                 StorageService.setItem('token', res.data.token);
+                ctx.setUserChannel(res.data?.channel || null)
                 ctx.setCurrentUser(res.data);
                 ctx.setLoggedIn(true);
                 ctx.setToken(res.data.token);
@@ -135,6 +137,7 @@ const LoginPage: React.FC = props => {
                         StorageService.setItem('currentUser', response.data);
                         StorageService.setItem('loggedIn', true);
                         StorageService.setItem('token', response.data.token);
+                        ctx.setUserChannel(res.data?.channel || null)
                         ctx.setCurrentUser(response.data);
                         ctx.setLoggedIn(true);
                         ctx.setToken(response.data.token);
@@ -168,6 +171,7 @@ const LoginPage: React.FC = props => {
                 StorageService.setItem('currentUser', res.data);
                 StorageService.setItem('loggedIn', true);
                 StorageService.setItem('token', res.data.token);
+                ctx.setUserChannel(res.data?.channel || null)
                 ctx.setCurrentUser(res.data);
                 ctx.setLoggedIn(true);
                 ctx.setToken(res.data.token);

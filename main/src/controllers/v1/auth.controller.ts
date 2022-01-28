@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { errorResponse, returnErrResponse, successResponse } from "../../utils";
 import validator from 'validator';
-import { User } from "../../database/models";
+import { Channel, User } from "../../database/models";
 import { Op, Model } from "sequelize";
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
@@ -12,8 +12,30 @@ import axios from 'axios';
 import Twitter from 'twitter-api-v2';
 import { OAuth2Client } from "google-auth-library";
 import { sendEmail } from "../../utils/communication";
+import { ControllerFunction } from "../../utils/types";
 
 dotenv.config();
+
+export const tokenLogin: ControllerFunction = async (req, res) => {
+    try{
+        let { token } = req.body;
+        if(!token) return errorResponse(res, 401, 'unauthorized');
+        
+        jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+            if(err) return returnErrResponse(res, 'jwt unknown', 401);
+            
+            User.findOne({where: { id: user.id }, include: [ { model: Channel, required: false }]}).then((u: any) => {
+                if(!u?.channel) return errorResponse(res, 401, 'unauthorized action');
+                return successResponse(res, 200, 'operation successful', {token, user: u});
+            }).catch((err) => {
+                return errorResponse(res, 500, err?.message || 'server error')
+            })
+        });
+
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
 
 export const socialLogin = async (req: Request, res: Response) => {
     let {type} = req.body;
@@ -37,7 +59,7 @@ const googleLogin = (req: Request, res: Response) => {
         let { name, email, picture } = ticket.getPayload();
 
         try{
-            let u: any = await User.findOne({where: {email}});
+            let u: any = await User.findOne({ where: {email}, include: [ { model: Channel, required: false } ] });
             if(u){
                 let t = jwt.sign(u.dataValues,process.env.JWT_SECRET);
                 let r = u.dataValues;
@@ -46,7 +68,7 @@ const googleLogin = (req: Request, res: Response) => {
             }
             // if(u) return returnErrResponse(res, 'user already exist')
             await User.create({name, email, photo: picture});
-            u = await User.findOne({where: { email }});
+            u = await User.findOne({ where: { email }, include: [ { model: Channel, required: false } ]});
             let t = jwt.sign(u.dataValues,process.env.JWT_SECRET);
             let r = u.dataValues;
             r.token = t;
@@ -69,11 +91,8 @@ const facebookLogin = async (req: Request, res: Response) => {
     if(!token) return returnErrResponse(res, 'token required', 400);
 
     try{
-    //    let data =  await getFacebookUserData(token);
-       
-    //    if(!data || !data?.email) return returnErrResponse(res, 'email is required', 400);
 
-       let user:any = await User.findOne({where: {email}});
+       let user:any = await User.findOne({where: {email}, include: [ { model: Channel, required: false } ] });
 
        if(!user){
            user = await User.create({name, email, photo: profile_pic});
@@ -97,35 +116,8 @@ const facebookLogin = async (req: Request, res: Response) => {
     }
 }
 
-// const getAccessTokenFromCode = async (code) => {
-//     const { data } = await axios({
-//         url: 'https://graph.facebook.com/v4.0/oauth/access_token',
-//         method: 'get',
-//         params: {
-//             client_id: process.env.FACEBOOK_APP_ID,
-//             client_secret: process.env.FACEBOOK_APP_SECRET,
-//             code
-//         }
-//     });
-
-//     return data.access_token;
-// }
-
-const getFacebookUserData = async (access_token) => {
-    console.log({access_token})
-    const { data } = await axios({
-        url: 'https://graph.facebook.com/me',
-        method: 'get',
-        params: {
-            fields: ['id', 'email', 'name'].join(','),
-            access_token: access_token
-        }
-    });
-    return data;
-}
-
 const twitterLogin = async (req: Request, res: Response) => {
-    // return res.status(304).json({message: 'under construction'});
+
     try{
 
         let { token, token_secret } = req.body;
@@ -145,7 +137,7 @@ const twitterLogin = async (req: Request, res: Response) => {
             u = await User.create({name: userData.name, email: userData.email, username: userData.screen_name, photo: userData.profile_image_url_https});
         }
 
-        let r = await User.findOne({where: { email: userData.email}});
+        let r = await User.findOne({where: { email: userData.email}, include: [ { model: Channel, required: false}]});
         
         return successResponse(res, 200, 'login successful', r);
 
@@ -194,7 +186,7 @@ const linkedInLogin = async (req: Request, res: Response) => {
 
         if(!email || !name) return errorResponse(res, 400, 'insuficient data try another way');
 
-        let u = await User.findOne({where: { email }});
+        let u = await User.findOne({where: { email }, include: [ { model: Channel, required: false}]});
         if(!u){
             await User.create({name, email});
         }
@@ -218,7 +210,7 @@ export const login = async (req: Request, res: Response) => {
     try {
         let user: any = await User.findOne({where: {
             email
-        }});
+        }, include: [ { model: Channel, required: false}]});
 
         if(!user) return returnErrResponse(res, 'user not found', 404);
 

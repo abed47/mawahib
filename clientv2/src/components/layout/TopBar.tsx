@@ -4,6 +4,7 @@ import SearchBar from './components/SearchBar';
 import UserProfile from './components/UserProfile';
 
 const TopBar = () => {
+
     return (
         <div className="top-bar">
 

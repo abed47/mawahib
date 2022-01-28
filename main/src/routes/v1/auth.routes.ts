@@ -11,4 +11,5 @@ route.post('/verify-otp', authController.verifyOtp);
 route.post('/social', authController.socialLogin);
 route.post('/reset-password', authController.resetPassword);
 route.post('/request-password-reset', authController.requestPasswordReset);
+route.post('/token-login', authController.tokenLogin);
 export default route;

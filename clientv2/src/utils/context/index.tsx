@@ -14,7 +14,9 @@ export interface MainContextInterface {
     hideSnackbar: () => void,
     snackbarOpen: boolean,
     snackbarType: string,
-    snackbarMessage: string
+    snackbarMessage: string,
+    userChannel: Object | any,
+    setUserChannel: (c: any) => void
 }
 
 export const mainContextDefaults: MainContextInterface = {
@@ -31,7 +33,9 @@ export const mainContextDefaults: MainContextInterface = {
     hideSnackbar: () => null,
     snackbarOpen: false,
     snackbarType: 'info',
-    snackbarMessage: ''
+    snackbarMessage: '',
+    userChannel: null,
+    setUserChannel: () => null
 }
 
 const MainContext:any = createContext(mainContextDefaults);
@@ -49,6 +53,7 @@ const MainContextProvider: React.FC = props => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarType, setSnackbarType] = useState('info');
     const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [userChannel, setUserChannel] = useState(null);
 
     const showPreloader = () => {
         setPreloaderActive(true);
@@ -83,7 +88,9 @@ const MainContextProvider: React.FC = props => {
             snackbarOpen,
             hideSnackbar,
             snackbarMessage,
-            snackbarType
+            snackbarType,
+            userChannel,
+            setUserChannel
             }}>
             {props.children}
         </MainContext.Provider>

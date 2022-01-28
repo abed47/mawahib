@@ -49,6 +49,12 @@ const UserProfile: React.FC = props => {
         StorageService.clear();
         navigation('/login')
     }
+
+    const navigateTo = (url: string, redirect:boolean = false, includeToken: boolean = false) => {
+        if(includeToken) url += '/login?tok=' + StorageService.getItem('token');
+        if(redirect) return window.open(url, '_blank')
+        navigation(url);
+    }
     
     return (
         <div className="profile-circle">
@@ -78,15 +84,29 @@ const UserProfile: React.FC = props => {
                 </div>
 
                 <div className="combined">
-                    <div className="menu-item">
-                        <div className="icon">
-                            <MdOutlineContactPage />
-                        </div>
+                    {
+                        ctx.userChannel?.id ? (
+                            <div className="menu-item" onClick={() => navigateTo('http://localhost:5000', true, true)}>
+                                <div className="icon">
+                                    <MdOutlineContactPage />
+                                </div>
 
-                        <p className="title">
-                            My Channel
-                        </p>
-                    </div>
+                                <p className="title">
+                                    My Channel
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="menu-item" onClick={() =>  navigateTo('/create/channel')}>
+                                <div className="icon">
+                                    <MdOutlineContactPage />
+                                </div>
+
+                                <p className="title">
+                                    Creat Channel
+                                </p>
+                            </div>
+                        )
+                    }
                     <hr />
                     <div className="menu-item">
                         <div className="icon">

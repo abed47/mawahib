@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import { useCtx } from '../../utils/context';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import StorageService from '../../utils/services/store';
 import LogoImg from '../../assets/images/logo.png';
 import { BsGoogle } from 'react-icons/bs';
@@ -10,7 +10,9 @@ import { AuthRequests } from '../../utils/services/request';
 import validator from 'validator';
 import { useLinkedIn } from 'react-linkedin-login-oauth2';
 import GoogleLogin from 'react-google-login';
-import { facebookLogin, twitterLogin } from '../../utils/services/firebase/auth';
+import { facebookLogin } from '../../utils/services/firebase/auth';
+import SnackBar from '../../components/layout/components/SnackBar';
+import PreLoader from '../../components/layout/components/Preloader';
 
 const LoginPage: React.FC = props => {
 
@@ -20,13 +22,37 @@ const LoginPage: React.FC = props => {
 
     const ctx = useCtx();
     const navigation = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
+        
+        checkParams();
 
         return () => {
             ctx.hidePreloader();
         }
-    }, [])
+    }, []);
+
+    const checkParams = async () => {
+        let q = new URLSearchParams(searchParams);
+        let tok = q.get('tok');
+        if(!tok) return;
+        try{
+            ctx.showPreloader();
+            let res: any = await AuthRequests.tokenLogin({token: tok});
+            ctx.hidePreloader();
+            ctx.setToken(res.token);
+            ctx.setCurrentUser(res.user);
+            ctx.setChannel(res.user.channel);
+            StorageService.setItem('token', res.token);
+            StorageService.setItem('currentUser', res.user);
+            StorageService.setItem('channel', res.user.channel);
+            navigation('/');
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || err?.error || 'server error', 'error');
+        }
+    }
 
     const handleSignUpClick = () => {
         navigation('/signup')
@@ -204,7 +230,7 @@ const LoginPage: React.FC = props => {
 
                 <h1>Sign in</h1>
 
-                <p>new to MAWAHIB? <span className="color-secondary" onClick={handleSignUpClick}>Sign up for free</span></p>
+                {/* <p>new to MAWAHIB? <span className="color-secondary" onClick={handleSignUpClick}>Sign up for free</span></p> */}
 
                 <form>
                     <input type="text" value={email} onChange={handleEmailChange} className={`mawahib input glowing ${errors.email ? 'error-active' : ''}`} placeholder='Email Address' />
@@ -235,7 +261,8 @@ const LoginPage: React.FC = props => {
                     <span><FaLinkedinIn /></span>
                     <span>Linkedin</span>
                 </Button>
-
+                <SnackBar />
+                <PreLoader />
             </div>
         </div>
     );

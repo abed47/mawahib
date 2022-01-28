@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './assets/styles/styles.scss'
-import {  Route, Routes } from 'react-router-dom';
+import {  Route, Routes, useRoutes } from 'react-router-dom';
 import Layout from './components/layout';
 import MainContextProvider from './utils/context';
 
@@ -10,13 +10,32 @@ import LoginPage from './pages/auth/login';
 import SignUpPage from './pages/auth/signup';
 import { LinkedInCallback } from 'react-linkedin-login-oauth2';
 import CreateChannel from './pages/channel/create';
+import routes from './utils/helpers/routes';
+import StorageService from './utils/services/store';
 
 
 function App() {
+
+  const [ isLoggedIn, setIsLoggedIn ] = useState(true);
+
+  useEffect(() => {
+    checkAuth()
+  }, []);
+
+  const checkAuth = () => {
+    let user = StorageService.getItem('currentUser');
+    let token = StorageService.getItem('token');
+    if(user && token) return setIsLoggedIn(true);
+    else return setIsLoggedIn(false);
+  }
+  
+  const routing = useRoutes(routes());
+
   return (
     <div className="App">
       <MainContextProvider>
-        <Layout>
+        {routing}
+        {/* <Layout>
           <Routes>
             <Route path="/" element={<DiscoverPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
@@ -25,7 +44,7 @@ function App() {
             <Route path="/linkedin" element={<LinkedInCallback />} />
             <Route path="/create/channel" element={<CreateChannel />} />
           </Routes>
-        </Layout>
+        </Layout> */}
       </MainContextProvider>
     </div>
   );
