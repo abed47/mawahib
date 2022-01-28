@@ -19,6 +19,10 @@ const UtilsApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        loadPhoto: (url: string) => {
+            if(url?.match(/http:\/\//ig)) return url;
+            return host + 'v1' + url
         }
     }
 }

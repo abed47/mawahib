@@ -6,6 +6,8 @@ import View from './views';
 import Comments from './comments';
 import Like from "./likes";
 import Category from './category';
+import Playlist from "./playlist";
+import PlayListItem from "./playlist-item";
 
 //category associations
 // Category.hasMany(Video, {foreignKey: 'category_id'});
@@ -40,10 +42,30 @@ Video.hasMany(View, {foreignKey: 'video_id'});
 Like.belongsTo(Video, {foreignKey: 'video_id'});
 View.belongsTo(Video, {foreignKey: 'video_id'});
 
+Playlist.belongsTo(User, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade'});
+Playlist.belongsTo(Channel, { foreignKey: 'channel_id', onDelete: 'cascade', onUpdate: 'cascade'});
+Channel.hasMany(Playlist, { foreignKey: 'channel_id', onDelete: 'cascade', onUpdate: 'cascade'});
+User.hasMany(Playlist, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade'});
+
+PlayListItem.belongsTo(Playlist, { foreignKey: 'playlist_id', onDelete: 'cascade', onUpdate: 'cascade'});
+PlayListItem.belongsTo(Video, { foreignKey: 'video_id', onDelete: 'cascade', onUpdate: 'cascade'});
+Playlist.hasMany(PlayListItem, { foreignKey: 'playlist_id', onDelete: 'cascade', onUpdate: 'cascade'});
+Video.hasMany(PlayListItem, { foreignKey: 'video_id', onDelete: 'cascade', onUpdate: 'cascade'});
+
 // User.hasOne(Channel, {foreignKey: 'user_id'});
 // Channel.belongsTo(User, {foreignKey: 'user_id'});
 // Channel.hasMany(Subscription, {foreignKey: 'channel_id'});
 // Subscription.belongsToMany(Channel, {through: 'channel_id'});
 // Subscription.belongsToMany(User, {through: 'user_id'});
 
-export {User, Channel, Subscription, Video, View, Comments, Like}
+export {
+    User, 
+    Channel, 
+    Subscription, 
+    Video, 
+    View, 
+    Comments, 
+    Like,
+    PlayListItem,
+    Playlist
+}

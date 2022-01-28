@@ -1,17 +1,15 @@
 import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { BsFillGrid1X2Fill, BsBookFill, BsViewList } from 'react-icons/bs';
-import { IoArrowUp } from 'react-icons/io5';
-import { BiCalendarMinus } from 'react-icons/bi';
-import { HiClipboardList } from 'react-icons/hi';
-import { FaPlay } from 'react-icons/fa';
+import { BsFillGrid1X2Fill } from 'react-icons/bs';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { BsFillPlayCircleFill } from 'react-icons/bs';
 
 const SideNav: React.FC = () => {
 
     const [bgTop, setBgTop] = useState<number>(0);
     const [activePath, setActivePath] = useState<string>('/');
 
-    const discoverRef = useRef<HTMLDivElement>(null);
+    const dashboardRef = useRef<HTMLDivElement>(null);
+    const videosRef = useRef<HTMLDivElement>(null);
     const categoriesRef = useRef<HTMLDivElement>(null);
     const eventsRef = useRef<HTMLDivElement>(null);
     const playlistRef =  useRef<HTMLDivElement>(null);
@@ -29,7 +27,8 @@ const SideNav: React.FC = () => {
 
     const handleCurrentPage = (p: string) => {
         setActivePath(location.pathname);
-        if(activePath === '/') setBgTop(discoverRef?.current?.offsetTop || 5);
+        if(activePath === '/') setBgTop(dashboardRef?.current?.offsetTop || 5);
+        if(activePath.includes('/videos')) setBgTop(videosRef?.current?.offsetTop || 5)
         if(activePath.includes('/cat')) setBgTop(categoriesRef?.current?.offsetTop || 5);
         if(activePath.includes('/channel')) setBgTop(channelRef?.current?.offsetTop || 5);
         if(activePath.includes('/event')) setBgTop(eventsRef?.current?.offsetTop || 5);
@@ -40,7 +39,7 @@ const SideNav: React.FC = () => {
 
     const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
         setBgTop(e.currentTarget?.offsetTop || 5);
-        navigate(e.currentTarget.innerText === 'Discover' ? '/' : e.currentTarget.innerText.toLocaleLowerCase().replace(/ /, '-'))
+        navigate(e.currentTarget.innerText === 'Dashboard' ? '/' : e.currentTarget.innerText.toLocaleLowerCase().replace(/ /, '-'))
     }
 
     return (
@@ -52,65 +51,21 @@ const SideNav: React.FC = () => {
 
                 <div className="link-list-item-wrapper">
 
-                    <div className={`link-list-item ${activePath === '/' ? 'active' : ''}`} ref={discoverRef} onClick={handleClick}>
+                    <div className={`link-list-item ${activePath === '/' ? 'active' : ''}`} ref={dashboardRef} onClick={handleClick}>
                         <BsFillGrid1X2Fill className='icon' />
 
-                        <p>Discover</p>
+                        <p>Dashboard</p>
                     </div>
 
-                    <div className={`link-list-item ${activePath.includes('/cat') ? 'active' : ''}`} ref={categoriesRef} onClick={handleClick}>
-                        <BsBookFill className='icon' />
+                    <div className={`link-list-item ${activePath.includes('/videos') ? 'active' : ''}`} ref={videosRef} onClick={handleClick}>
+                        <BsFillPlayCircleFill className='icon' />
 
-                        <p>Categories</p>
-                    </div>
-
-                    <div className={`link-list-item ${activePath.includes('/event') ? 'active' : ''}`} ref={eventsRef} onClick={handleClick}>
-                        <BiCalendarMinus className='icon' />
-
-                        <p>Events</p>
-                    </div>
-
-                    <div className={`link-list-item ${activePath.includes('/playlist') ? 'active' : ''}`} ref={playlistRef} onClick={handleClick}>
-                        <HiClipboardList className='icon' />
-
-                        <p>Playlists</p>
-                    </div>
-
-                    <div className={`link-list-item ${activePath.includes('/channel') ? 'active' : ''}`} ref={channelRef} onClick={handleClick}>
-                        <BsViewList className='icon' />
-
-                        <p>Channel</p>
-                    </div>
-
-                    <div className={`link-list-item ${activePath.includes('/continue-watching') ? 'active' : ''}`} ref={continueWatchingRef} onClick={handleClick}>
-                        <FaPlay className='icon' />
-
-                        <p>Continue Watching</p>
-                    </div>
-
-                    <div className={`link-list-item ${activePath.includes('/vote') ? 'active' : ''}`} ref={votedNowRef} onClick={handleClick}>
-                        <IoArrowUp className='icon' />
-
-                        <p>Voted Now</p>
+                        <p>Videos</p>
                     </div>
                 </div>
 
             </div>
 
-            <hr />
-
-
-            <div className="pinned-category-list">
-
-                <h3>Pinned Category</h3>
-
-                <ul>
-                    <li>Dancing</li>
-                    <li>Dancing</li>
-                    <li>Dancing</li>
-                    <li>Dancing</li>
-                </ul>
-            </div>
         </div>
     )
 }

@@ -1,0 +1,105 @@
+.mawahib{
+    &-form-control{
+
+
+    }
+
+    &-select-input{
+
+        min-width: 150px;
+        border: 1px solid $text-color2;
+        border-radius: 6px;
+        box-sizing: border-box;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 300ms ease-in-out;
+        cursor: pointer;
+        user-select: none;
+        color: $text-color2;
+        position: relative;
+
+        &:focus{
+            border-color: $color-secondary;
+            ul{
+                display: flex;
+            }
+        }
+
+        div.image{
+            width: 30px;
+            height: 30px;
+            background-color: #9C9C9C;
+            border-radius: 50%;
+        }
+
+        img{
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        p{
+            margin: 0;
+            font-family: $font-medium;
+            font-size: 14px;
+            color: $text-color;
+        }
+
+        ul{
+            display: none;
+            // display: flex;
+            position: absolute;
+            top: 100%;
+            z-index: 500;
+            padding: 0;
+            list-style: none;
+            flex-direction: column;
+            border-radius: 6px;
+            border: 1px solid $color-secondary;
+            left: 0;
+            width: 100%;
+            // padding: 5px;
+            box-sizing: border-box;
+            max-height: 300px;
+            overflow: auto;
+            background-color: $box-color2;
+
+            li{
+                user-select: none;
+                box-sizing: border-box;
+                width: 100%;
+                min-height: 30px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 5px 10px;
+
+                img{
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+
+                div.image{
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    background-color: #9C9C9C;
+                }
+
+                p{
+                    color: $text-color2;
+                    margin-left: 15px;
+                }
+
+                &:hover{
+                    background-color: $box-color;
+                }
+            }
+        }
+    }
+}

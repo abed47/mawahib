@@ -1,11 +1,13 @@
-import { Navigate, Outlet, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useRoutes } from 'react-router-dom';
 import StorageService from '../services/store';
 import Layout from '../../components/layout';
-import React, { useEffect } from 'react';
 import LoginPage from '../../pages/auth/login';
 import CategoriesPage from '../../pages/categories';
+import VideoListing from '../../pages/videos/listing';
+import VideoUpload from '../../pages/videos/upload';
 
-const routes = (isLoggedIn?: any) => {
+const Routes: React.FC = props => {
 
     const checkAuth = () => {
         let user = StorageService.getItem('currentUser');
@@ -14,19 +16,24 @@ const routes = (isLoggedIn?: any) => {
         if(user && token) return true;
         return false;
     }
-    return [
+    
+    let el = useRoutes([
         {
-            path: '/',
-            element: checkAuth() ? <Layout /> : <Navigate to="/login" />,
+            path: '',
+            element: checkAuth() ? <><Layout/></> : <Navigate to="/login" />,
             children: [
                 { path: 'categories', element: <CategoriesPage /> },
+                { path: '/videos', element: <VideoListing />},
+                { path: '/videos/upload', element: <VideoUpload />}
             ]
         },
         {
             path: 'login',
             element: <LoginPage />
         }
-    ];
+    ]);
+
+    return el;
 }
 
-export default routes;
+export default Routes;

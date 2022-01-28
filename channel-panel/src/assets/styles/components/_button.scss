@@ -1,6 +1,10 @@
 .btn{
 
-    .secondary-gradient{}
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
 
     &.primary-gradient{
         height: 36px;
@@ -16,4 +20,15 @@
         opacity: 1;
     }
     
+    &.secondary{
+        &:hover{
+            background-color: $color-primary;
+        }
+        background-color: $color-secondary;
+        color: $text-color;
+        border-radius: 6px;
+        min-width: 120px;
+        font-family: $font-bold;
+        font-size: 16px;
+    }
 }
