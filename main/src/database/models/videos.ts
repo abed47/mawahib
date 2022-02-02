@@ -26,26 +26,6 @@ const Video = db.define('video', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    q_144:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    q_240:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    q_320:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    q_720:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
-    q_1080:{
-        type: DataTypes.STRING,
-        allowNull: true
-    },
     thumbnail:{
         type: DataTypes.STRING,
         allowNull: true
@@ -62,6 +42,26 @@ const Video = db.define('video', {
     tags:{
         type: DataTypes.STRING,
         allowNull: true
+    },
+    kids: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+    },
+    mysterious: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
+    has_promotion: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
+    visible: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
     },
     status:{
         /**

@@ -12,8 +12,8 @@ const Routes: React.FC = props => {
     const checkAuth = () => {
         let user = StorageService.getItem('currentUser');
         let token = StorageService.getItem('token');
-        console.log('check auth')
-        if(user && token) return true;
+        let channel = StorageService.getItem('channel');
+        if(user && token && channel) return true;
         return false;
     }
     

@@ -40,7 +40,7 @@ app.use('/api/v1/user', upload(), UserRoutes);
 app.use('/api/v1', SubscriptionRoutes);
 app.use('/api/v1/channel', upload(), ChannelRoutes);
 app.use('/api/v1/like', LikeRoutes);
-app.use('/api/v1/video', upload(), VideoRoutes);
+app.use('/api/v1/video', VideoRoutes);
 app.use('/api/v1/comment', CommentRoutes);
 app.use('/api/v1/category', upload(), CategoryRoutes);
 app.use('/api/v1/playlist', PlaylistRoutes);

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Video, View } from "../../database/models";
-import { returnErrResponse } from "../../utils";
+import { returnErrResponse, successResponse } from "../../utils";
 import * as securePin from 'secure-pin';
 import { Op } from "sequelize";
 
@@ -24,53 +24,15 @@ export const view = async (req: Request, res: Response) => {
     }
 }
 export const create = async (req: Request, res: Response) => {
-    let { title, description, channel_id, user_id, category_id, tags, video_type} = req.body;
+    let { title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail} = req.body;
 
-    if(!title || !description || !channel_id || !user_id || !video_type) return returnErrResponse(res, 'all fields are required', 400);
-
-    if(!req.files.thumb || !req.files.video) return returnErrResponse(res, 'no files to upload', 400);
+    if(!title || !description || !channel_id || !user_id) return returnErrResponse(res, 'all fields are required', 400);
 
     try{
 
-        if(!tags) tags = "";
-        if(!category_id) category_id = 1;
+        await Video.create({title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail});
+        return successResponse(res, 200, 'created successfully', null);
 
-        let video: any = req.files.video;
-        let thumb: any = req.files.thumb;
-        video_type = video_type.match(/([^\/]+$)/ig)[0];
-        
-        //thumbnail name
-        let thumbnail = 'thumb-' + securePin.generatePinSync(5) + '.png';
-        //video file name
-        let url = 'video-' + securePin.generatePinSync(5) + '-' + channel_id + '.' + video_type;
-
-        video.mv('./uploads/videos/' + url, videoErr => {
-            
-            if(videoErr) return returnErrResponse(res, videoErr.message || videoErr, 500);
-
-            thumb.mv('./uploads/images/' + thumbnail, async thumbErr => {
-
-                if(thumbErr) return returnErrResponse(res, thumbErr.message || thumbErr, 500);
-                
-                try{
-                    
-                    let v: any = await Video.create({title, description, channel_id, user_id, thumbnail, category_id, tags, url});
-
-                    res.status(200).json({
-                        status: true,
-                        type: 'success',
-                        data: v,
-                        message: 'uploaded successfully'
-                    });
-
-                }catch(err){
-                    return returnErrResponse(res, err.message || 'unknown error', 500);
-                }
-
-            })
-        })
-
-        
     }catch(err){
         returnErrResponse(res, err.message || 'unknown error', 500);
     }

@@ -15,7 +15,9 @@ const Layout: React.FC = (props) => {
         if(!ctx.loggedIn){
             let user = StorageService.getItem('currentUser');
             let token = StorageService.getItem('token');
-            if(!user || !token){
+            let channel = StorageService.getItem('channel');
+            
+            if(!user || !token || !channel){
                 ctx.setCurrentUser(null);
                 ctx.setLoggedIn(false);
                 ctx.setToken('');
@@ -25,6 +27,7 @@ const Layout: React.FC = (props) => {
             ctx.setToken(token);
             ctx.setLoggedIn(true);
             ctx.setCurrentUser(user);
+            ctx.setChannel(channel);
         }
     }, [])
     
