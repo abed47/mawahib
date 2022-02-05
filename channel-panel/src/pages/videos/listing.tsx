@@ -19,6 +19,22 @@ const VideoListing: React.FC = props => {
             </header>
 
             <hr />
+
+            <main>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <td><input type="checkbox" /></td>
+                            <td>Video</td>
+                            <td>Visibility</td>
+                            <td>Views</td>
+                            <td>Comments</td>
+                            <td>Likes</td>
+                        </tr>
+                    </thead>
+                </table>
+            </main>
         </div>
     );
 }

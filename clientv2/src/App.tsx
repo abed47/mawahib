@@ -10,7 +10,7 @@ import LoginPage from './pages/auth/login';
 import SignUpPage from './pages/auth/signup';
 import { LinkedInCallback } from 'react-linkedin-login-oauth2';
 import CreateChannel from './pages/channel/create';
-
+import WatchScreen from './pages/videos/watch';
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/linkedin" element={<LinkedInCallback />} />
             <Route path="/create/channel" element={<CreateChannel />} />
+            <Route path="/watch/:id" element={<WatchScreen />} />
           </Routes>
         </Layout>
       </MainContextProvider>

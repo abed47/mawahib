@@ -1,21 +1,41 @@
 import { Request, Response } from "express";
-import { Video, View } from "../../database/models";
+import { Channel, Like, Playlist, Subscription, User, Video, View } from "../../database/models";
 import { returnErrResponse, successResponse } from "../../utils";
 import * as securePin from 'secure-pin';
 import { Op } from "sequelize";
+import Comment from "../../database/models/comments";
+import Category from "../../database/models/category";
 
 export const view = async (req: Request, res: Response) => {
     let {user_id, video_id} = req.body;
 
     try{
-
+        if(!user_id) user_id = 0;
         let v: any = await View.create({user_id, video_id});
-
+        let video = await Video.findOne({where: { id: video_id}, include: [
+            { model: Channel , include: [
+                {
+                    model: Subscription,
+                    required: false,
+                },
+                {
+                    model: Playlist,
+                    required: false,
+                },
+                {
+                    model: Category,
+                    required: false
+                }
+            ]},
+            { model: View, required: false },
+            { model: Like, required: false },
+            { model: Category, required: false}
+        ]})
         
         res.status(200).json({
             status: true,
             type: 'success',
-            data: null,
+            data: video,
             message: 'view created successfully'
         });
 
@@ -23,6 +43,7 @@ export const view = async (req: Request, res: Response) => {
         returnErrResponse(res, err.message || 'unknown error', 500);
     }
 }
+
 export const create = async (req: Request, res: Response) => {
     let { title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail} = req.body;
 

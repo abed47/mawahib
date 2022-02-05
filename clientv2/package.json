@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cloudflare/stream-react": "^1.5.0",
     "@doopage/react-facebook-login": "^0.0.7",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
