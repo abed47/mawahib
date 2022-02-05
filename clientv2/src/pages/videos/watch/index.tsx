@@ -3,8 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCtx } from '../../../utils/context';
 import { VideoRequests } from '../../../utils/services/request';
 import ChannelBar from './components/ChannelBar';
+import ExtraInfoTabs from './components/ExtraInfoTabs';
 import VideoWrapper from './components/Video';
-
+//@ts-ignore
 const WatchScreen: React.FC = props => {
 
     const [videoDetails, setVideoDetails] = useState<any>(null);
@@ -40,6 +41,7 @@ const WatchScreen: React.FC = props => {
         <div className="watch-video-page">
             <VideoWrapper url={videoDetails?.url} />
             <ChannelBar channel={ videoDetails?.channel } video={ videoDetails } />
+            <ExtraInfoTabs data={videoDetails} />
         </div>
     );
 }

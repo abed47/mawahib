@@ -10,6 +10,7 @@ const VideoWrapper: React.FC<any> = props => {
         console.log(s)
         return s;
     }
+    
     return (
         <div className="video-wrapper">
             <div className="video">

@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/custom.d.ts"
+    ],
     "lib": [
       "dom",
       "dom.iterable",

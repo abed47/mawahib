@@ -3,7 +3,7 @@ import './assets/styles/styles.scss'
 import {  Route, Routes } from 'react-router-dom';
 import Layout from './components/layout';
 import MainContextProvider from './utils/context';
-
+import { Lines } from 'react-preloaders2';
 import DiscoverPage from './pages/discover';
 import CategoriesPage from './pages/categories';
 import LoginPage from './pages/auth/login';
@@ -15,6 +15,7 @@ import WatchScreen from './pages/videos/watch';
 function App() {
   return (
     <div className="App">
+      <Lines />
       <MainContextProvider>
         <Layout>
           <Routes>
