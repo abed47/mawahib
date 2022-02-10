@@ -22,6 +22,7 @@ html, body{
     width: 100%;
     padding: 0;
     margin: 0;
+    scroll-behavior: smooth;
 }
 
 html, body, #app, #root, .App, #app>div , .Mui-root{

@@ -42,7 +42,7 @@ const ExtraInfoTabs: React.FC<any> = props => {
                 </div>
 
                 <div className={` ${currentTab === 0 ? 'active' : ''} tab-content`}>
-                    <RelatedVideos videoId={props.videoId}  />
+                    {props?.data?.category_id ? <RelatedVideos category={props?.data?.category_id}  /> : null } 
                 </div>
                 
                 <div className={` ${currentTab === 1 ? 'active' : ''} tab-content`}>

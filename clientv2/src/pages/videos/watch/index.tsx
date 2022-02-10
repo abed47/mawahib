@@ -29,7 +29,6 @@ const WatchScreen: React.FC = props => {
             }
             let res = await VideoRequests.viewVideo(body);
             ctx.hidePreloader();
-            console.log(res);
             setVideoDetails(res.data);
         }catch(err: any){
             ctx.hidePreloader();

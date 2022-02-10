@@ -157,6 +157,60 @@
             .progress{
                 color: $color-secondary;
             }
+
+            .item-list{
+                width: 100%;
+                // height: 100%;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                align-items: center;
+
+                .item{
+                    // width: 200px;
+                    // height: 100px;
+                    margin: 10px;
+
+                    img{
+                        width: 290px;
+                        height: 170px;
+                        object-fit: cover;
+                        border-radius: 16px;
+                    }
+
+                    .info{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        
+                        p{
+                            margin: 0;
+                        }
+
+                        .name{
+                            font-size: 15px;
+                            font-family: $font-medium;
+                            color: $text-color;
+                            text-transform: capitalize;
+                        }
+
+                        .views{
+                            font-size: 12px;
+                            font-family: $font-base;
+                            color: $text-color2;
+                        }
+                    }
+                    
+                    .channel{
+                        margin: 0;
+                        font-size: 12px;
+                        font-family: $font-base;
+                        text-transform: capitalize;
+                        color: $color-secondary;
+                    }
+                }
+            }
         }
     }
 }
@@ -188,6 +242,8 @@
                 color: $text-color2;
                 margin: 5px 15px;
                 transition: all 300ms ease-in-out;
+                user-select: none;
+                cursor: pointer;
                 
                 &.active{
                     color: $color-secondary;

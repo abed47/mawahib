@@ -7,7 +7,6 @@ const VideoWrapper: React.FC<any> = props => {
         let s = v || '';
         s = s.replace(/https:\/\/videodelivery\.net\//ig,"");
         s = s.replace(/\/manifest\/video\.m3u8/ig, "")
-        console.log(s)
         return s;
     }
     

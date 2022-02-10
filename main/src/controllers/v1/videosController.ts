@@ -60,6 +60,7 @@ export const create = async (req: Request, res: Response) => {
 }
 
 export const filter = async (req: Request, res: Response) => {
+    //TODO: enhance - convert to promise
     let {fields, exact, pagination} = req.body;
     let videoCount: any;
 
@@ -76,6 +77,7 @@ export const filter = async (req: Request, res: Response) => {
         if(fields.user_id) filters.push({user_id: fields.user_id});
         if(fields.banner) filters.push({banner: fields.banner});
         if(fields.video_id) filters.push({id: fields.video_id});
+        if(fields.category_id) filters.push({category_id: fields.category_id});
 
         
 
@@ -83,7 +85,11 @@ export const filter = async (req: Request, res: Response) => {
             where:{
                 [exact ? Op.and : Op.or]: filters
             },
-            order:[['createdAt', 'DESC']]
+            order:[['createdAt', 'DESC']],
+            include: [
+                { model: Channel, required: false },
+                { model: View, require: false }
+            ]
         }
 
         if(pagination){

@@ -1,15 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress } from '@mui/material';
-const RelatedVideos: React.FC<{videoId: number}> = props => {
+import { useCtx } from '../../../../utils/context';
+import { VideoRequests } from '../../../../utils/services/request';
 
-    const [processing, setProcessing] = useState(true);
-    const [dataList, setDataList] = useState<any[]>([])
+const RelatedVideos: React.FC<{category: number}> = props => {
+
+    const [processing, setProcessing] = useState(false);
+    const [dataList, setDataList] = useState<any[]>([]);
+    const [totalRows, setTotalRows] = useState<number>(0);
+
+    const ctx = useCtx();
 
     useEffect(() => {
         loadData();
-    }, [props.videoId]);
+        
+        return () => {
+            setDataList([])
+        }
+    }, [props.category]);
 
-    const loadData = async () => {}
+    const loadData = async () => {
+        if(!props?.category) return;
+        try{
+            setProcessing(true);
+            let res: any = await VideoRequests.getRelatedVideos({
+                fields: { category_id: props.category },
+                pagination: { limit: 6, offset: dataList.length }
+            });
+            setProcessing(false);
+            
+            if(res && res?.status){
+                setDataList(res.data);
+            }
+        }catch(err: any){
+            setProcessing(false);
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
 
     return (
         <div className="related-videos">
@@ -17,9 +44,9 @@ const RelatedVideos: React.FC<{videoId: number}> = props => {
                 <CircularProgress className='progress' /> : 
                 <div className="item-list">
                     {
-                        dataList.map((item, index) => {
+                        dataList?.length ? dataList.map((item, index) => {
                             return (
-                                <div className="item">
+                                <div className="item" key={`related-video-list-item-${index}`}>
                                     <img src={item.thumbnail} alt="thumbnail" />
                                     <div className="info">
                                         <p className="name">{item?.title}</p>
@@ -28,7 +55,7 @@ const RelatedVideos: React.FC<{videoId: number}> = props => {
                                     <p className="channel">{item?.channel?.name}</p>
                                 </div>
                             );
-                        })
+                        }) : null
                     }
                 </div> }
         </div>
