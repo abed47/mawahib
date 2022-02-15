@@ -36,6 +36,33 @@ const VideoApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        like: async (body: {user_id: number, video_id: number}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/like', body, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
+        },
+        unlike: async (body: {user_id: number, video_id: number}) => {
+            try{
+                let { data } = await axios.delete(host + 'v1/like',{
+                    data: body,
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }

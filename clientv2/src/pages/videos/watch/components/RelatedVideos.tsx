@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgress } from '@mui/material';
 import { useCtx } from '../../../../utils/context';
-import { VideoRequests } from '../../../../utils/services/request';
+import { getVideoThumb, VideoRequests } from '../../../../utils/services/request';
+import { useNavigate } from 'react-router-dom';
 
 const RelatedVideos: React.FC<{category: number}> = props => {
 
@@ -10,6 +11,7 @@ const RelatedVideos: React.FC<{category: number}> = props => {
     const [totalRows, setTotalRows] = useState<number>(0);
 
     const ctx = useCtx();
+    const navigation = useNavigate();
 
     useEffect(() => {
         loadData();
@@ -38,6 +40,15 @@ const RelatedVideos: React.FC<{category: number}> = props => {
         }
     }
 
+    const handleItemClick = (item: any) => {
+        navigation("/watch/" + item.id)
+    }
+
+    const handleThumbnail = (url: string) => {
+        if(url?.match(/https/ig)?.length) return url;
+        return getVideoThumb(url);
+    }
+
     return (
         <div className="related-videos">
             { processing ? 
@@ -46,8 +57,8 @@ const RelatedVideos: React.FC<{category: number}> = props => {
                     {
                         dataList?.length ? dataList.map((item, index) => {
                             return (
-                                <div className="item" key={`related-video-list-item-${index}`}>
-                                    <img src={item.thumbnail} alt="thumbnail" />
+                                <div onClick={() => handleItemClick(item)} className="item" key={`related-video-list-item-${index}`}>
+                                    <img src={handleThumbnail(item.thumbnail)} alt="thumbnail" />
                                     <div className="info">
                                         <p className="name">{item?.title}</p>
                                         <p className="views">{item?.views?.length || 0} views</p>

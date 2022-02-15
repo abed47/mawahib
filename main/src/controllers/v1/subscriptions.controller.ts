@@ -23,13 +23,13 @@ export const subscribe = async (req: Request, res: Response) => {
 }
 
 export const unsubscribe = async (req: Request, res: Response) => {
-    let {subscription_id} = req.body;
+    let {subscription_id, user_id, channel_id} = req.body;
 
-    if(!subscription_id) return returnErrResponse(res, 'all fields are required', 400);
+    if(!subscription_id && (!user_id || !channel_id)) return returnErrResponse(res, 'all fields are required', 400);
 
     try {
-        await Subscription.destroy({where: {id: subscription_id}});
-
+        if(subscription_id) await Subscription.destroy({where: {id: subscription_id}});
+        if(!subscription_id) await Subscription.destroy({where: {channel_id, user_id}});
         res.status(200).json({
             status: true,
             type: 'success',

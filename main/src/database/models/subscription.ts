@@ -12,7 +12,7 @@ const Subscription = db.define('subscription', {
     },
     channel_name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     channel_photo:{
         type: DataTypes.INTEGER,

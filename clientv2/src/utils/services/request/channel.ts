@@ -17,6 +17,32 @@ const ChannelApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        subscribe: async (body: {channel_id: number, user_id: number}) => {
+            try{
+                const { data } = await axios.post(host + 'v1/channel/subscribe', body, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
+        },
+        unsubscribe: async (body: {channel_id: number, user_id: number}) => {
+            try{
+                const { data } = await axios.post(host + 'v1/channel/unsubscribe', body, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }

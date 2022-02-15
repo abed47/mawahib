@@ -12,7 +12,7 @@ export const view = async (req: Request, res: Response) => {
     try{
         if(!user_id) user_id = 0;
         let v: any = await View.create({user_id, video_id});
-        let video = await Video.findOne({where: { id: video_id}, include: [
+        let video: any = await Video.findOne({where: { id: video_id}, include: [
             { model: Channel , include: [
                 {
                     model: Subscription,
@@ -30,12 +30,37 @@ export const view = async (req: Request, res: Response) => {
             { model: View, required: false },
             { model: Like, required: false },
             { model: Category, required: false}
-        ]})
+        ]});
+        
+        let liked = false;
+        let likeCount = 0;
+        let subscribed = false;
+        let subscribeCount = null;
+        let likeCheck = null;
+        let subCheck = null;
+
+        if(user_id){
+            likeCheck = await Like.findAll({where: {video_id, user_id}});
+            subCheck = await Subscription.findAll({where: { channel_id: video?.channel?.id, user_id}});
+        }
+
+        if(likeCheck?.length) liked = true;
+        if(subCheck?.length) subscribed = true;
+        likeCount = video.likes?.length || 0;
+        subscribeCount =  video?.channel?.subscriptions?.count || 0;
+
+        let results = {
+            ...video.dataValues,
+            liked,
+            likeCount,
+            subscribed,
+            subscribeCount
+        }
         
         res.status(200).json({
             status: true,
             type: 'success',
-            data: video,
+            data: results,
             message: 'view created successfully'
         });
 

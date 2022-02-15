@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Stream } from '@cloudflare/stream-react';
 
 const VideoWrapper: React.FC<any> = props => {
+
+    const streamRef = useRef<any>(null);
+
+    useEffect(() => {
+        console.log(streamRef)
+    }, [])
 
     const formatVidId = (v: string) => {
         let s = v || '';
@@ -9,11 +15,15 @@ const VideoWrapper: React.FC<any> = props => {
         s = s.replace(/\/manifest\/video\.m3u8/ig, "")
         return s;
     }
+
+    const getStream = () => {
+        return <Stream responsive={true} className="video-player" controls src={formatVidId(props.url)}/>
+    }
     
     return (
         <div className="video-wrapper">
             <div className="video">
-                <Stream responsive={true} className="video-player" controls src={formatVidId(props.url)}/>
+                {getStream()}
             </div>
         </div>
     );
