@@ -4,6 +4,7 @@ import StorageService from '../store';
 
 const VideoApis = (host: string) => {
     let token = StorageService.getItem('token');
+
     const cachedHttp = axios.create({
         baseURL: host,
         headers: { 'Cache-Control': 'no-cache'},
@@ -58,6 +59,31 @@ const VideoApis = (host: string) => {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
                         }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
+        },
+        searchComments: async (body: {fields?:{user_id?: number, video_id?: number, content?: string}, exact?:boolean, pagination?: any}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/comment/search', body, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err:any){
+                return err;
+            }
+        },
+        createComment: async (body: {user_id: number, video_id: number, content: string}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/comment', body, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
                 return data;
             }catch(err){

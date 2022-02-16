@@ -19,6 +19,10 @@ const UtilsApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        getPhotoUrl: (url: string) => {
+            if(url.includes('http')) return url;
+            return host + 'v1/uploads/' + url;
         }
     }
 }

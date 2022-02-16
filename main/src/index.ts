@@ -10,7 +10,7 @@ import ChannelRoutes from './routes/v1/channel.routes';
 import SubscriptionRoutes from './routes/v1/subscriptions.routes';
 import VideoRoutes from './routes/v1/video.routes';
 import LikeRoutes from './routes/v1/like.routes';
-import CommentRoutes from './routes/v1/like.routes';
+import CommentRoutes from './routes/v1/comment.routes';
 import CategoryRoutes from './routes/v1/category.routes';
 import PlaylistRoutes from './routes/v1/playlist.routes';
 

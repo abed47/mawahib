@@ -12,6 +12,7 @@ const ChannelBar: React.FC<any> = props => {
     const [liked, setLiked] = useState(false);
     const [subscribed, setSubscribed] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
+    const [subscribeCount, setSubscribeCount] = useState(0);
 
     const ctx = useCtx();
 
@@ -25,6 +26,7 @@ const ChannelBar: React.FC<any> = props => {
         setLiked(props?.video?.liked);
         setSubscribed(props?.video?.subscribed);
         setLikeCount(props?.video?.likeCount);
+        setSubscribeCount(props?.video?.subscribeCount);
     }
 
     const handleLike = async () => {
@@ -76,11 +78,13 @@ const ChannelBar: React.FC<any> = props => {
 
             if(res?.status){
                 setSubscribed(true);
+                setSubscribeCount(subscribeCount + 1)
                 return;
             }
 
             if(res?.status === false){
                 ctx.showSnackbar(res.message, res.type);
+                
                 return
             }
             ctx.showSnackbar(res?.message || 'server error', 'error')
@@ -95,6 +99,7 @@ const ChannelBar: React.FC<any> = props => {
 
             if(res?.status){
                 setSubscribed(false);
+                setSubscribeCount(subscribeCount - 1);
                 return;
             }
 
@@ -126,7 +131,7 @@ const ChannelBar: React.FC<any> = props => {
                     <h1 className='title'>{videoInfo?.title}</h1>
                     <span className='more' >
                         <span>
-                            <FiUsers /> <p>{channelInfo?.subscriptions?.length || 0}</p>
+                            <FiUsers /> <p>{subscribeCount || 0}</p>
                         </span>
                         <span>
                             <BsCollectionPlay /> <p>{channelInfo?.playlists?.length || 0}</p>
@@ -141,9 +146,9 @@ const ChannelBar: React.FC<any> = props => {
                         <AiOutlineLike />
                         <p>{likeCount || 0} like</p>
                     </Button> :
-                    <Button className='btn' onClick={handleUnlike}>
-                        <AiOutlineDislike />
-                        <p>{likeCount || 0} like</p>
+                    <Button className='btn active' onClick={handleUnlike}>
+                        <AiOutlineLike />
+                        <p>{likeCount || 0} liked</p>
                     </Button>
                 }
 

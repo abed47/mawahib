@@ -35,7 +35,7 @@ export const view = async (req: Request, res: Response) => {
         let liked = false;
         let likeCount = 0;
         let subscribed = false;
-        let subscribeCount = null;
+        let subscribeCount = 0;
         let likeCheck = null;
         let subCheck = null;
 
@@ -47,7 +47,7 @@ export const view = async (req: Request, res: Response) => {
         if(likeCheck?.length) liked = true;
         if(subCheck?.length) subscribed = true;
         likeCount = video.likes?.length || 0;
-        subscribeCount =  video?.channel?.subscriptions?.count || 0;
+        subscribeCount =  video?.channel?.subscriptions?.length || 0;
 
         let results = {
             ...video.dataValues,

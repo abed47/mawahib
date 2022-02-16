@@ -4,6 +4,11 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 
+//Time ago initialization
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
+TimeAgo.addDefaultLocale(en);
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

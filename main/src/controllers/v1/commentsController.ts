@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Comments } from "../../database/models";
+import { Comments, User } from "../../database/models";
 import { returnErrResponse } from "../../utils";
 import { Op } from 'sequelize';
 
@@ -41,7 +41,8 @@ export const filter = async (req: Request, res: Response) => {
             where:{
                 [exact ? Op.and : Op.or]: filters
             },
-            order:[['createdAt', 'DESC']]
+            order:[['createdAt', 'DESC']],
+            include: [User]
         }
 
         if(pagination){
