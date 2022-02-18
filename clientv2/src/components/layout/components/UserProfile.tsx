@@ -66,7 +66,7 @@ const UserProfile: React.FC = props => {
                     {ctx?.currentUser?.name || ''}
                 </h4>
 
-                <div className="menu-item s">
+                <div className="menu-item s" onClick={() => navigateTo('/wallet')}>
                     <div className="icon">
                         <BsCreditCardFill />
                     </div>
@@ -77,7 +77,7 @@ const UserProfile: React.FC = props => {
 
                     <div className="amount">
                         <GiTwoCoins />
-                        <p>999,999</p>
+                        <p>{ctx.currentUser?.wallet?.amount || 0}</p>
                     </div>
 
                     <FiChevronRight />
