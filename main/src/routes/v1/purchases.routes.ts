@@ -5,5 +5,6 @@ import { verifyJwtToken } from "../../middlewares/authmiddleware";
 const router = Router();
 
 router.get('/wallet-info', verifyJwtToken, controller.getWalletInfo);
+router.get('/product-list', controller.productListing);
 router.get('/checkout', controller.createCheckoutPage);
 export default router;
