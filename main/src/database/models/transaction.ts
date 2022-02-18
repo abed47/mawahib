@@ -22,6 +22,15 @@ const Transaction = db.define('transaction', {
         type: DataTypes.INTEGER,
         allowNull: true, 
         defaultValue: 1//1 = pending, 2 = verifying, 3 = approved, 4 = rejected
+    },
+    paid_amount: {
+        type: DataTypes.DECIMAL(20,2),
+        allowNull: true,
+        defaultValue: 0.00
+    },
+    product_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     }
 }, { timestamps: true });
 

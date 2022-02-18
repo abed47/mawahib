@@ -10,6 +10,7 @@ import Playlist from "./playlist";
 import PlayListItem from "./playlist-item";
 import Wallet from "./wallet";
 import Transaction from './transaction';
+import Product from "./products";
 
 //category associations
 // Category.hasMany(Video, {foreignKey: 'category_id'});
@@ -64,6 +65,7 @@ User.hasOne(Wallet, { foreignKey: 'user_id', onUpdate: 'cascade', onDelete: 'cas
 Wallet.belongsTo(User, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade'});
 Wallet.hasMany(Transaction, {foreignKey: 'wallet_id', onDelete: 'cascade', onUpdate: 'cascade'});
 User.hasMany(Transaction, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade'});
+Product.hasOne(Transaction, { foreignKey: 'product_id'})
 
 export {
     User, 
@@ -74,5 +76,8 @@ export {
     Comments, 
     Like,
     PlayListItem,
-    Playlist
+    Playlist,
+    Wallet,
+    Product,
+    Transaction
 }

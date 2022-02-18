@@ -1,4 +1,4 @@
-import Wallet from "../../database/models/wallet";
+import {Wallet, Product, Transaction} from "../../database/models";
 import { errorResponse, returnErrResponse, successResponse } from "../../utils";
 import { ControllerFunction } from "../../utils/types";
 
@@ -17,4 +17,13 @@ export const getWalletInfo: ControllerFunction = async (req, res) => {
 
 export const createCheckoutPage: ControllerFunction = (req, res) => {
 
+}
+
+export const productListing: ControllerFunction = async (req, res) => {
+    try{
+        let results = await Product.findAll();
+        return successResponse(res, 200, 'retrieved successfully', results);
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
 }
