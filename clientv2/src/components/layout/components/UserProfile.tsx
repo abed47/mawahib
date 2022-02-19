@@ -108,7 +108,7 @@ const UserProfile: React.FC = props => {
                         )
                     }
                     <hr />
-                    <div className="menu-item">
+                    <div className="menu-item" onClick={() => navigateTo('/account-settings')}>
                         <div className="icon">
                             <FaCog />
                         </div>

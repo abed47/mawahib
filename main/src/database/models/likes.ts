@@ -10,6 +10,6 @@ const Like = db.define('like', {
         type: DataTypes.INTEGER,
         allowNull: true
     }
-}, {paranoid: true, timestamps: true});
+}, {timestamps: true});
 
 export default Like;

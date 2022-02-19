@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useCtx } from '../../utils/context';
 import { useNavigate } from 'react-router-dom';
 import CheerIcon from '../../assets/icons/cheer.png';
-import { PurchasesRequests, getVideoThumb, getServerPhoto } from '../../utils/services/request';
+import { PurchasesRequests, getServerPhoto } from '../../utils/services/request';
 import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Wallet: React.FC = props => {
 
@@ -25,12 +26,13 @@ const Wallet: React.FC = props => {
             let walletInfo = await PurchasesRequests.walletInfo();
             ctx.hidePreloader();
             setProductList(prods.data);
-            setBalance(walletInfo.balance);
+            setBalance(walletInfo.data[0].balance);
         }catch(err: any){
             ctx.hidePreloader();
             ctx.showSnackbar(err?.message || 'server error', 'error')
         }
     }
+
     return (
         <div className="wallet-page">
 
@@ -56,7 +58,7 @@ const Wallet: React.FC = props => {
 
                                         <div className="purchase-button">
                                             <h5>${item.price}</h5>
-                                            <Button className="btn">Add</Button>
+                                            <Button className="btn" onClick={() => navigate('/checkout/' + item?.id)}>Add</Button>
                                         </div>
                                     </li>
                                 );
@@ -72,6 +74,10 @@ const Wallet: React.FC = props => {
                     </div>
                 </div>
             </main>
+
+            <div className="transactions">
+                 <p>View your <Link to={'/transaction-history'}>transactions</Link> history</p>
+            </div>
         </div>
     );
 }

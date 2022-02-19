@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import Category from "../../database/models/category";
-import { returnErrResponse } from "../../utils";
+import { errorResponse, returnErrResponse, successResponse } from "../../utils";
 import * as securePin from 'secure-pin';
+import { ControllerFunction } from "../../utils/types";
+import { QueryTypes, literal} from "sequelize";
+import { db } from "../../database";
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -133,5 +136,65 @@ export const destroy = async (req: Request, res: Response) => {
 
     }catch(err){
         return returnErrResponse(res, err.message || 'unknown error', 500);
+    }
+}
+
+export const getMostViewed: ControllerFunction = async (req, res) => {
+    try{
+        let results = await db.query(`
+            SELECT 
+            c.id,
+            c.name,
+            COUNT(*) AS view_count
+            FROM categories c
+            LEFT JOIN videos v ON v.category_id = c.id
+            LEFT JOIN views vw ON vw.video_id = v.id
+            GROUP BY c.id
+            ORDER BY view_count DESC
+            LIMIT 10
+        `, { raw: true, type: QueryTypes.SELECT});
+        return successResponse(res, 200, 'retrieved successfully', results)
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const getPopular: ControllerFunction = async (req, res) => {
+    try{
+        let results = await db.query(`
+            SELECT 
+            c.id,
+            c.name,
+            COUNT(vw) AS like_count
+            FROM categories c
+            LEFT JOIN videos v ON v.category_id = c.id
+            LEFT JOIN views vw ON vw.video_id = v.id
+            GROUP BY c.id
+            ORDER BY like_count DESC
+            LIMIT 10
+        `, { raw: true, type: QueryTypes.SELECT});
+        return successResponse(res, 200, 'retrieved successfully', results)
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const getHasNewVideo: ControllerFunction = async (req, res) => {
+    try{
+        let results = await db.query(`
+            SELECT 
+            c.id,
+            c.name,
+            COUNT(vw) AS like_count
+            FROM categories c
+            LEFT JOIN videos v ON v.category_id = c.id
+            LEFT JOIN views vw ON vw.video_id = v.id
+            GROUP BY c.id
+            ORDER BY like_count DESC
+            LIMIT 10
+        `, { raw: true, type: QueryTypes.SELECT});
+        return successResponse(res, 200, 'retrieved successfully', results)
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
     }
 }

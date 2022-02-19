@@ -27,7 +27,7 @@
         width: 100%;
 
         .s2{
-            width: 30%;
+            width: 40%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -68,7 +68,7 @@
         }
 
         .s1{
-            width: 70%;
+            width: 60%;
 
             .title{
                 color: $color-secondary;
@@ -95,6 +95,10 @@
                     padding: 20px 20px;
                     box-sizing: border-box;
                     margin: 10px 0;
+
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
 
                     &:first-child{
                         margin-top: 0;
@@ -157,6 +161,174 @@
                             border-radius: 6px;
                         }
                     }
+                }
+            }
+        }
+    }
+
+    .transactions{
+        p{
+            margin: 0;
+            color: $text-color2;
+            font-size: 12px;
+            font-family: $font-base;
+
+            a{
+                color: $color-secondary;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.checkout-page{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .checkout-form-container{
+
+        form{
+            width: 300px;
+            background-color: $box-color;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .card-el{
+                width: 100%;
+                background-color: white;
+                padding: 8px 10px;
+                box-sizing: border-box;
+                border-radius: 3px;
+                margin: 10px 0;
+            }
+
+            .btn{
+                background-color: $color-primary;
+                color: white;
+            }
+
+            .product-preview{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                p{
+                    font-family: $font-medium;
+                    color: $text-color2;
+                    margin: 10px 0;
+                }
+
+                img{
+                    width: 35px;
+                }
+            }
+
+            input[type=text], input[type=password]{
+                height: 30px;
+                box-sizing: border-box;
+                width: 100%;
+                border-radius: 5px;
+                border: none;
+                margin: 9px 0;
+                padding: 17px 12px;
+                outline: none;
+                transition: all 300ms ease-in-out;
+                border: 2px solid $box-color;
+
+                &::placeholder{
+                    color: #9C9C9C;
+                    font-size: 12px;
+                    font-family: $font-base;
+                }
+                
+                &:focus{
+                    border: 2px solid $color-secondary;
+                }
+
+                &.error-active{
+                    border: 2px solid $danger;
+                }
+            }
+        }
+    }
+}
+
+.transactions-page{
+    width: 100%;
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    h1{
+        font-size: 24px;
+        font-family: $font-medium;
+        color: $color-secondary;
+        font-weight: normal;
+        margin-bottom: 25px;
+    }
+
+    table{
+        width: 100%;
+
+        thead tr th{
+            color: $text-color2;
+            font-size: 16px;
+            text-align: left;
+            font-family: $font-bold;
+        }
+
+        tbody tr td {
+            min-width: 100px;
+        }
+
+        tbody tr td{
+            text-align: left;
+            color: $text-color;
+            font-weight: normal;
+            font-family: $font-base;
+            font-size: 16px;
+
+            img{
+                width: 15px;
+            }
+
+            .status-pill-1, .status-pill-2, .status-pill-3, .status-pill-4{
+                font-size: 12px;
+                font-weight: normal;
+                color: $text-color;
+                padding: 2px 12px;
+                width: 60px;
+                border-radius: 5px;
+                text-align: center;
+            }
+
+            .status-pill-{
+                &1{
+                    background-color: $yellow;
+                }
+
+                &2{
+                    background-color: $orange;
+                }
+
+                &3{
+                    background-color: $success;
+                }
+
+                &4{
+                    background-color: $danger;
                 }
             }
         }

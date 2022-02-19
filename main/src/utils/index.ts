@@ -28,7 +28,7 @@ export const errorResponse: (res: Response, code: number, message: string) => vo
     })
 }
 
-export const successResponse: (res: Response, code: number, message: string, data: any, type?: string) => void = (res, code, message, data, type = 'success') => {
+export const successResponse: (res: Response, code: number, message: string, data?: any, type?: string) => void = (res, code, message, data, type = 'success') => {
     res.status(code).json({
         status: true,
         type,
