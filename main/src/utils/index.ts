@@ -19,11 +19,11 @@ export const returnErrResponse = (res: Response, message: string, code: number, 
     })
 }
 
-export const errorResponse: (res: Response, code: number, message: string) => void = (res, code, message) => {
+export const errorResponse: (res: Response, code: number, message: string, data?: any) => void = (res, code, message, data = null) => {
     return res.status(code).json({
         status: false,
         type: 'error',
-        data: null,
+        data,
         message
     })
 }

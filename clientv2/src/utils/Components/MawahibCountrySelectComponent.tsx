@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 //@ts-ignore
 import * as CList from 'country-codes-list';
-import { FaFlag, FaChevronRight } from 'react-icons/fa';
+import { FaChevronRight } from 'react-icons/fa';
 
 interface ComponentProps {
     value: any;
@@ -25,13 +25,12 @@ const CountrySelectComponent: React.FC<ComponentProps> = props => {
     }
 
     const handleChange = (e: any) => {
-        props.onChange(e.countryNameEn)
+        props.onChange(e)
         if(elRef.current?.blur) elRef.current.blur();
     }
 
     return (
         <div ref={elRef} className="mawahib-country-select input" tabIndex={3}>
-            <FaFlag />
             {
                 props.value ? 
                 <p className="value">{props.value}</p> :

@@ -1,11 +1,28 @@
 import { Request, Response } from "express";
 import { Channel, Subscription, User } from "../../database/models";
-import { returnErrResponse } from "../../utils";
-import { Model } from "sequelize";
+import { errorResponse, returnErrResponse, successResponse } from "../../utils";
+import { Model, Op } from "sequelize";
 import * as securePin from 'secure-pin';
+import { ControllerFunction } from "../../utils/types";
+import * as jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 interface ChannelAttributes {
     id: string | number
+}
+
+export const me: ControllerFunction = async (req, res) => {
+    try{
+        //@ts-ignore
+        let u = req.user;
+        let user: any = await User.findOne({where: { id: u.id}});
+        let token = jwt.sign(user.dataValues ,process.env.JWT_SECRET);
+        return successResponse(res, 200, 'retrieved successfully', { token, user});
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
 }
 
 export const getOne = async (req: Request, res: Response) => {
@@ -38,6 +55,31 @@ export const update = async (req: Request, res: Response) => {
     if(Object.keys(data).length < 1) return returnErrResponse(res, 'no data to update', 400);
 
     try{
+
+        if(data?.username){
+            let usernameCheck = await User.findAll({where: { [Op.and]: [
+                { username: { [Op.eq]: data.username}},
+                { id: { [Op.ne]: userId}}
+            ] }});
+            if(usernameCheck.length) return errorResponse(res, 400, 'username already taken')
+        }
+
+        if(data?.email){
+            let emailCheck = await User.findAll({where: { [Op.and]: [
+                { email: { [Op.eq]: data.email}},
+                { id: { [Op.ne]: userId}}
+            ] }});
+            if(emailCheck.length) return errorResponse(res, 400, 'email already taken')
+        }
+
+        if(data?.phone){
+            let phoneCheck = await User.findAll({where: { [Op.and]: [
+                { phone: { [Op.eq]: data.phone}},
+                { id: { [Op.ne]: userId}}
+            ] }});
+            if(phoneCheck.length) return errorResponse(res, 400, 'phone already taken')
+        }
+
         await User.update(data, {where: {id: userId}});
 
         res.status(200).json({

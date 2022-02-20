@@ -31,7 +31,7 @@ const User = db.define('user',{
         allowNull: true
     },
     dob:{
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true
     },
     otp:{

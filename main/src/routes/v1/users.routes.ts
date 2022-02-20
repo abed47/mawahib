@@ -9,5 +9,5 @@ route.get('/:id', verifyJwtToken, userController.getOne);
 route.post('/update-user-profile', verifyJwtToken, userController.updateUserProfile);
 route.put('/:id', verifyJwtToken,  userController.update);
 route.get('/:id/channel', verifyJwtToken, userController.getUserChannel);
-
+route.post('/me', verifyJwtToken, userController.me);
 export default route;
