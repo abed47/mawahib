@@ -19,7 +19,7 @@ const CategoryListing: React.FC = props => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [id]);
 
     const loadData = async () => {
         try{

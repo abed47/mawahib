@@ -7,7 +7,7 @@ const VideoWrapper: React.FC<any> = props => {
 
     useEffect(() => {
         console.log(streamRef)
-    }, [])
+    }, [props])
 
     const formatVidId = (v: string) => {
         let s = v || '';
@@ -23,7 +23,7 @@ const VideoWrapper: React.FC<any> = props => {
     return (
         <div className="video-wrapper">
             <div className="video">
-                {getStream()}
+                {props.url ? getStream() : null}
             </div>
         </div>
     );
