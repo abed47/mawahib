@@ -182,16 +182,11 @@ export const getPopular: ControllerFunction = async (req, res) => {
 export const getHasNewVideo: ControllerFunction = async (req, res) => {
     try{
         let results = await db.query(`
-            SELECT 
-            c.id,
-            c.name,
-            COUNT(vw) AS like_count
-            FROM categories c
-            LEFT JOIN videos v ON v.category_id = c.id
-            LEFT JOIN views vw ON vw.video_id = v.id
-            GROUP BY c.id
-            ORDER BY like_count DESC
-            LIMIT 10
+            SELECT DISTINCT
+            v.category_id as c_id
+            FROM videos v
+            LEFT JOIN categories c ON c.id = v.category_id
+            ORDER BY 'createdAt' DESC
         `, { raw: true, type: QueryTypes.SELECT});
         return successResponse(res, 200, 'retrieved successfully', results)
     }catch(err){
