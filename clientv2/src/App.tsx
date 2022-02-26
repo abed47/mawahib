@@ -15,6 +15,7 @@ import WalletPage from './pages/wallet';
 import CheckoutPage from './pages/wallet/checkout';
 import TransactionsPage from './pages/wallet/Transactions-Page';
 import AccountSettings from './pages/user/AccountSettings';
+import CategoryListing from './pages/categories/category';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<DiscoverPage />} />
             <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/category/:id" element={<CategoryListing />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/linkedin" element={<LinkedInCallback />} />

@@ -12,6 +12,18 @@ const VideoApis = (host: string) => {
     });
 
     return {
+        searchVideos: async (body: {fields: any, pagination: { limit: number, offset: number}}) => {
+            try{
+                let { data } = await cachedHttp.post('v1/video/search', body, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
+        },
         getRelatedVideos: async (body: { fields: {category_id: number}, pagination: {limit: number, offset: number}}) => {
             try{
                 let { data: res } = await cachedHttp.post('v1/video/search', body, {

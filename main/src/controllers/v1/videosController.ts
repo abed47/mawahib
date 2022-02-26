@@ -87,7 +87,7 @@ export const create = async (req: Request, res: Response) => {
 export const filter = async (req: Request, res: Response) => {
     //TODO: enhance - convert to promise
     let {fields, exact, pagination} = req.body;
-    let videoCount: any;
+    let videoCount: any = 0;
 
     console.log(req.body)
     if(!fields || !Object.keys(fields)) return returnErrResponse(res, 'all fields are required', 400);
@@ -118,7 +118,7 @@ export const filter = async (req: Request, res: Response) => {
         }
 
         if(pagination){
-            videoCount = await Video.count(filtersObj);
+            videoCount = await Video.count({...filtersObj, include: []});
         }
 
         if(pagination?.offset) filtersObj['offset'] = pagination.offset;
