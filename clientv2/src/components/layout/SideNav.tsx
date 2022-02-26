@@ -5,7 +5,7 @@ import { BiCalendarMinus } from 'react-icons/bi';
 import { HiClipboardList } from 'react-icons/hi';
 import { FaPlay } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useCtx } from '../../utils/context';
 const SideNav: React.FC = () => {
 
     const [bgTop, setBgTop] = useState<number>(0);
@@ -19,9 +19,10 @@ const SideNav: React.FC = () => {
     const continueWatchingRef = useRef<HTMLDivElement>(null);
     const votedNowRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
-
+    
     const location = useLocation();
     const navigate = useNavigate();
+    const ctx = useCtx();
 
     useEffect(() => {
         handleCurrentPage('/')
@@ -105,10 +106,11 @@ const SideNav: React.FC = () => {
                 <h3>Pinned Category</h3>
 
                 <ul>
-                    <li>Dancing</li>
-                    <li>Dancing</li>
-                    <li>Dancing</li>
-                    <li>Dancing</li>
+                    {
+                        ctx.pinnedCategories.map((item, index) => {
+                            return <li key={`side-nav-pinned-category-item-${index}`} onClick={() => navigate('/category/' + item.id)}>{item.name}</li>
+                        })
+                    }
                 </ul>
             </div>
         </div>

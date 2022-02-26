@@ -112,6 +112,8 @@
                 box-sizing: border-box;
                 border-radius: 5px;
                 font-size: 15px;
+                user-select: none;
+                cursor: pointer;
             }
         }
     }

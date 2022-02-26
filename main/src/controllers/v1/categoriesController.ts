@@ -145,7 +145,8 @@ export const getMostViewed: ControllerFunction = async (req, res) => {
             SELECT 
             c.id,
             c.name,
-            COUNT(*) AS view_count
+            COUNT(*) AS view_count,
+            c.photo AS photo
             FROM categories c
             LEFT JOIN videos v ON v.category_id = c.id
             LEFT JOIN views vw ON vw.video_id = v.id
@@ -165,7 +166,8 @@ export const getPopular: ControllerFunction = async (req, res) => {
             SELECT 
             c.id,
             c.name,
-            COUNT(vw) AS like_count
+            COUNT(vw) AS like_count,
+            c.photo AS photo
             FROM categories c
             LEFT JOIN videos v ON v.category_id = c.id
             LEFT JOIN views vw ON vw.video_id = v.id

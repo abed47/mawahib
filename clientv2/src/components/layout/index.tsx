@@ -15,6 +15,9 @@ const Layout: React.FC = (props) => {
         if(!ctx.loggedIn){
             let user: any = StorageService.getItem('currentUser');
             let token: any = StorageService.getItem('token');
+            let pinnedCats: any = StorageService.getItem('pinnedCategories');
+            console.log(pinnedCats)
+
             if(!user || !token){
                 ctx.setCurrentUser(null);
                 ctx.setLoggedIn(false);
@@ -26,6 +29,7 @@ const Layout: React.FC = (props) => {
             ctx.setLoggedIn(true);
             ctx.setCurrentUser(user);
             ctx.setUserChannel(user?.channel || null);
+            ctx.setPinnedCategories(pinnedCats && pinnedCats.length ? JSON.parse(pinnedCats) : []);
         }
     }, [])
     

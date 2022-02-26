@@ -10,6 +10,13 @@
         display: flex;
         justify-content: space-between;
 
+        .left-side{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
         .title{
             top: 100px;
             left: 293px;
@@ -27,6 +34,8 @@
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            margin-left: 30px;
 
             .tab{
                 color: $text-color2;
@@ -35,22 +44,34 @@
                 margin: 0 10px;
                 user-select: none;
                 cursor: pointer;
+                transition: all 300ms ease-in-out;
+
+                &.active{
+                    color: $color-secondary;
+                    font-family: $font-bold;
+                }
             }
 
             .underLine{
                 min-width: 25px;
-                height: 2px;
+                height: 3px;
                 background-color: $color-secondary;
                 position: absolute;
                 transition: all 300ms ease-in-out;
+            }
+        }
+
+        .actions{
+            .btn{
+                margin: 0 5px;
             }
         }
         
     }
 
     main{
-        .tabs{
-            background-color: $box-color;
+        margin-top: 25px;
+        .category-tabs{
             border-radius: 10px;
             padding: 20px;
             width: 100%;
@@ -58,6 +79,19 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            box-sizing: border-box;
+
+            .loader{
+                .progress{
+                    color: $color-secondary !important;
+                }
+
+                display: none;
+
+                &.active{
+                    display: flex;
+                }
+            }
         
             .tabs-header{
                 width: 100%;
@@ -102,11 +136,63 @@
             .tab-content{
                 display: none;
                 animation: 2s tab-out;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                align-items: center;
+
+                .category-card{
+                    width: 300px;
+                    height: 180px;
+                    border-radius: 15px;
+                    overflow: hidden;
+                    margin: 10px;
+                    position: relative;
+                    user-select: none;
+                    cursor: pointer;
+
+                    .mawahib-checkbox-1{
+                        position: absolute;
+                        top: 5px;
+                        right: 5px;
+                        z-index: 3;
+                    }
+
+                    img{
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .title{
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 100%;
+                        height: 50%;
+                        background: rgb(0,0,0);
+                        background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(160,160,160,0) 100%);
+                        display: flex;
+                        flex-direction: row;
+                        align-items: flex-end;
+                        justify-content: flex-start;
+                        box-sizing: border-box;
+                        padding-left: 15px;
+                        padding-bottom: 5px;
+
+                        p{
+                            color: $text-color;
+                            font-size: 16px;
+                            font-family: $font-medium;
+                            margin: 0;
+                        }
+                    }
+                }
         
                 &.active{
-                    display: flex;
+                    display: flex !important;
                     width: 100%;
-                    margin-top: 20px;
+                    // margin-top: 20px;
         
                     animation: 2s tab-in;
                 }
