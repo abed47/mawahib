@@ -1,0 +1,130 @@
+.channel-view-page{
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    // padding: 20px;
+    box-sizing: border-box;
+    
+    header{
+        width: 100%;
+        background-color: $box-color2;
+
+        .cover{
+            height: 290px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .info{
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .l{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+
+                img{
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    border: 2px solid $color-secondary;
+                    margin-right: 15px;
+                }
+
+                .channel-category{
+                    margin: 0;
+                    color: $text-color2;
+                    font-size: 12px;
+                    font-family: $font-base;
+                }
+
+                .title{
+                    margin: 0;
+                    color: $color-secondary;
+                    font-family: $font-bold;
+                    font-size: 28px;
+
+                    .icon{
+                        margin-left: 5px;
+                    }
+                }
+
+                .more{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: start;
+
+                    span{
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: start;
+                        align-items: center;
+                        margin-right: 20px;
+                        font-size: 12px;
+                        font-family: $font-base;
+                        color: $text-color2;
+
+                        p{
+                            margin: 0;
+                            margin-left: 10px;
+                        }
+                    }
+                }
+            }
+
+            .r{
+                
+
+                .edit-btn{
+                    background-color: $color-secondary;
+                    padding: 5px 20px;
+                    font-size: 16px;
+                    font-family: $font-base;
+                    text-transform: capitalize;
+                    color: $text-color;
+                    border-radius: 7px;
+
+                    .icon{
+                        margin-right: 10px;
+                    }
+                }
+
+                .controls{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .icon-btn{
+                        color: $text-color2;
+                        font-size: 25px;
+                        text-transform: capitalize;
+                        font-family: $font-base;
+                        margin-left: 10px;
+                    }
+
+                    .btn-outlined{
+                        border: 1px solid $text-color2;
+                        border-radius: 7px;
+                        padding: 5px 20px;
+                        color: $text-color2;
+                        font-size: 16px;
+                        text-transform: capitalize;
+                        font-family: $font-base;
+                        
+                        &.secondary{
+                            border-color: $color-secondary;
+                            color: $color-secondary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

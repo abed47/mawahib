@@ -65,7 +65,9 @@ User.hasOne(Wallet, { foreignKey: 'user_id', onUpdate: 'cascade', onDelete: 'cas
 Wallet.belongsTo(User, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade'});
 Wallet.hasMany(Transaction, {foreignKey: 'wallet_id', onDelete: 'cascade', onUpdate: 'cascade'});
 User.hasMany(Transaction, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate: 'cascade'});
-Product.hasOne(Transaction, { foreignKey: 'product_id'})
+Product.hasOne(Transaction, { foreignKey: 'product_id'});
+
+Transaction.hasOne(Channel, { foreignKey: 'channel_id' });
 
 export {
     User, 

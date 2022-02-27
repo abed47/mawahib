@@ -18,6 +18,18 @@ const ChannelApis = (host: string) => {
                 return err;
             }
         },
+        view: async (id: number | string) => {
+            try{
+                let { data } = await axios.get(host + 'v1/channel/view/' + id, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err: any){
+                return err;
+            }
+        },
         subscribe: async (body: {channel_id: number, user_id: number}) => {
             try{
                 const { data } = await axios.post(host + 'v1/channel/subscribe', body, {

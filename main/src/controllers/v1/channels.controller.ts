@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { Op, Sequelize } from "sequelize";
-import { Channel, Subscription, User } from "../../database/models";
-import { returnErrResponse } from "../../utils";
+import {Channel, Playlist, Subscription, User} from "../../database/models";
+import {errorResponse, returnErrResponse, successResponse} from "../../utils";
+import {ControllerFunction} from "../../utils/types";
+import Category from "../../database/models/category";
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -71,6 +73,7 @@ export const create = async (req: Request, res: Response) => {
     }
 }
 
+//TODO:create an update for admin - another for channel owner
 export const update = async (req: Request, res: Response) => {
     let user = req['user'];
     let updateObj = req.body;
@@ -134,5 +137,41 @@ export const destroy = async (req: Request, res: Response) => {
 
     } catch (err) {
         returnErrResponse(res, err.message || 'unknown error', 500);
+    }
+}
+
+export const view: ControllerFunction = async (req, res) => {
+    try{
+        let { id } = req.params;
+        let { user_id } = req.body;
+        let subscribed = false;
+
+        if(user_id){
+            let subscribedCheck = await Subscription.findOne({where: { channel_id: id, user_id: user_id }});
+            if(subscribedCheck) subscribed = true;
+        }
+
+        //TODO: get listen for notifications
+
+        let c = await Channel.findOne({where: { id },
+            attributes: {
+                include: [ "id", "createdAt", "updatedAt",
+                    [Sequelize.fn("COUNT", Sequelize.col("subscriptions.id")), "subscriptions_count"],
+                    [Sequelize.fn("COUNT", Sequelize.col("playlists.id")), "playlists_count"]
+                ],
+
+            },
+            include: [
+                { model: Category, required: false },
+                { model: Subscription, required: false, attributes: []},
+                {model: Playlist, required: false, attributes: []}
+
+            ],
+            group: ['channel.id', 'category.id']
+        });
+        if(!c) return errorResponse(res, 404, 'channel does not exist');
+        return successResponse(res, 200, 'retrieved successfully', c);
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
     }
 }

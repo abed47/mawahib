@@ -43,6 +43,11 @@ const Channel = db.define('channel', {
         type: DataTypes.BOOLEAN,
         allowNull: true,
         defaultValue: false
+    },
+    verified: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
     }
 }, {
     timestamps: true,

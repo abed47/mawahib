@@ -8,5 +8,6 @@ route.get('/:id', channelController.getOne);
 route.post('/', verifyJwtToken, channelController.create);
 route.put('/:id', verifyJwtToken, channelController.update);
 route.delete('/:id', verifyJwtToken, channelController.destroy);
+route.get('/view/:id', channelController.view);
 
 export default route;

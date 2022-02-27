@@ -31,6 +31,10 @@ const Transaction = db.define('transaction', {
     product_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
+    },
+    channel_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, { timestamps: true });
 

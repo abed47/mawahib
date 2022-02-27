@@ -16,6 +16,7 @@ import CheckoutPage from './pages/wallet/checkout';
 import TransactionsPage from './pages/wallet/Transactions-Page';
 import AccountSettings from './pages/user/AccountSettings';
 import CategoryListing from './pages/categories/category';
+import ChannelViewPage from './pages/channel/channel';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/checkout/:id" element={<CheckoutPage />} />
             <Route path="/transaction-history" element={<TransactionsPage />} />
             <Route path="/account-settings" element={<AccountSettings />} />
+            <Route path="/channel/:id" element={<ChannelViewPage />} />
           </Routes>
         </Layout>
       </MainContextProvider>
