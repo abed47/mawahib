@@ -18,9 +18,9 @@ const ChannelApis = (host: string) => {
                 return err;
             }
         },
-        view: async (id: number | string) => {
+        view: async (id: number | string, body: any) => {
             try{
-                let { data } = await axios.get(host + 'v1/channel/view/' + id, {
+                let { data } = await axios.post(host + 'v1/channel/view/' + id, body, {
                     headers: {
                         'Content-Type': 'application/json'
                     }

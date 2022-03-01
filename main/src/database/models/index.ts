@@ -68,6 +68,7 @@ User.hasMany(Transaction, { foreignKey: 'user_id', onDelete: 'cascade', onUpdate
 Product.hasOne(Transaction, { foreignKey: 'product_id'});
 
 Transaction.hasOne(Channel, { foreignKey: 'channel_id' });
+Transaction.belongsTo(User, { foreignKey: 'user_id' })
 
 export {
     User, 

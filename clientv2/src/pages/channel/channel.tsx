@@ -2,22 +2,25 @@ import { Button } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
-import { ChannelRequests, getServerPhoto } from '../../utils/services/request';
+import { ChannelRequests, handlePhotoUrl } from '../../utils/services/request';
 import { FiEdit3, FiUsers } from 'react-icons/fi';
 import { BsCollectionPlay, BsFillCheckCircleFill } from 'react-icons/bs';
 import { IoMdNotificationsOff, IoMdNotifications } from 'react-icons/io';
+import * as store from '../../utils/services/store';
+import ChannelHome from './ChannelHome';
 
 const ChannelView: React.FC = props => {
 
     const [channel, setChannel] = useState<any>(null);
     const [subscribeCount, setSubscribeCount] = useState(0);
+    const [subscribed, setSubscribed] = useState(false);
     const [currentTab, setCurrentTab] = useState(0);
 
     const ctx = useCtx();
     const navigate = useNavigate();
     const params = useParams<{id: string}>();
     const bottomLineRef = useRef<HTMLDivElement>(null);
-    const firstTabRef = useRef<HTMLDivElement>(null);
+    const firstElRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         loadData();
@@ -28,14 +31,16 @@ const ChannelView: React.FC = props => {
         try{
             let { id } = params;
             if(!id) throw Error('Channel Not Found');
+            let currentUser: any = store.getItem('currentUser');
             
             ctx.showPreloader();
-            let c = await ChannelRequests.view(id);
+            let c = await ChannelRequests.view(id, { user_id: currentUser?.id });
             ctx.hidePreloader();
 
             if(c && c?.status){
                 setChannel(c.data);
-                setSubscribeCount(c?.data?.subscriptions_count || 0)
+                setSubscribeCount(c?.data?.subscriptions_count || 0);
+                setSubscribed(c.data.subscribed);
                 return;
             }
             
@@ -51,15 +56,84 @@ const ChannelView: React.FC = props => {
         }
     }
 
-    const handleMount = () => {}
+    const handleMount = () => {
+        if(bottomLineRef?.current?.style) bottomLineRef.current.style.left = firstElRef.current?.offsetLeft + 'px';
+        if(bottomLineRef?.current?.style && firstElRef?.current) bottomLineRef.current.style.top = (firstElRef.current?.offsetTop  + firstElRef.current?.clientHeight + 3) + 'px';
+        if(bottomLineRef?.current?.style) bottomLineRef.current.style.width = firstElRef.current?.clientWidth + 'px';
+        setCurrentTab(0)
+    }
+
+    const handleTabChange = (e: React.MouseEvent<HTMLHeadingElement, MouseEvent>, i: number) => {
+        if(bottomLineRef?.current) bottomLineRef.current.style.left = e.currentTarget.offsetLeft + 'px';
+        if(bottomLineRef?.current) bottomLineRef.current.style.width = e.currentTarget.clientWidth + 'px';
+        if(bottomLineRef?.current) bottomLineRef.current.style.top = (e.currentTarget.offsetTop + e.currentTarget.clientHeight + 3 )+ 'px'
+        setCurrentTab(i)
+    }
+
+    const handleSubscribe = async () => {
+        try{
+            let currentUser: any = ctx.currentUser || store.getItem('currentUser');
+            
+            ctx.showPreloader();
+            let res = await ChannelRequests.subscribe({channel_id: channel.id, user_id: currentUser?.id});
+            ctx.hidePreloader();
+            
+            if(res && res?.status){
+                loadData();
+                return
+            }
+
+            if(res && res?.status === false){
+                ctx.showSnackbar(res?.message, 'error');
+                return;
+            }
+
+            if(res?.response?.data?.status){
+                ctx.showSnackbar(res.response.data.message, 'error');
+            }
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
+
+    const handleUnsubscribe = async () => {
+        try{
+            let currentUser: any = ctx.currentUser || store.getItem('currentUser');
+            
+            ctx.showPreloader();
+            let res = await ChannelRequests.unsubscribe({channel_id: channel.id, user_id: currentUser?.id});
+            ctx.hidePreloader();
+            
+            if(res && res?.status){
+                loadData();
+                return
+            }
+
+            if(res && res?.status === false){
+                ctx.showSnackbar(res?.message, 'error');
+                return;
+            }
+
+            if(res?.response?.data?.status){
+                ctx.showSnackbar(res.response.data.message, 'error');
+            }
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
+
+    const handleEditChannel = () => {}
     
     return (
         <div className="channel-view-page">
             <header>
-                <img className="cover" src={getServerPhoto('/uploads/' + channel?.cover)} alt="cover" />
+                <img className="cover" src={handlePhotoUrl(channel?.cover)} alt="cover" />
+                
                 <div className="info">
                     <div className="l">
-                        <img src={getServerPhoto('/uploads/' +channel?.photo)} alt="" />
+                        <img src={handlePhotoUrl(channel?.photo)} alt="" />
                         <div className="texts">
                             <p className="channel-category">{channel?.category?.name}</p>
                             <p className="title">{channel?.name} {channel?.verified ? <BsFillCheckCircleFill className='icon' /> : ''}</p>
@@ -75,18 +149,57 @@ const ChannelView: React.FC = props => {
                     </div>
                     <div className="r">
                         {
-                            ctx?.userChannel?.id === 7 ? 
+                            ctx?.userChannel?.id ? 
                             <Button className="btn secondary edit-btn"> <FiEdit3 className='icon' /> Edit Channel</Button> :
                             <div className="controls">
-                                <Button className='btn-outlined'>Follow</Button>
+                                {
+                                    subscribed ? 
+                                    <Button className='btn-outlined secondary' onClick={handleUnsubscribe}>Following</Button> : 
+                                    <Button className='btn-outlined' onClick={handleSubscribe}>Follow</Button>
+                                }
                                 <Button className='icon-btn'><IoMdNotifications /></Button>
                             </div> 
                         }
                     </div>
                 </div>
-                {/* <div className="tabs"></div> */}
+
+                <div className="bottom">
+                    <div className="channel-tabs-header">
+                        <div className="titles">
+                            <h1 ref={firstElRef} className={`${currentTab === 0 ? 'active' : ''}`} onClick={e => handleTabChange(e, 0)} >Home</h1>
+                            <h1 className={`${currentTab === 1 ? 'active' : ''}`} onClick={e => handleTabChange(e, 1)} >About</h1>
+                        </div>
+                        <div ref={bottomLineRef} className="bottom-bar"></div>
+                    </div>
+
+                    <div className="top-fans">
+                        <p className="title">Top fans</p>
+                        <div className="top-fans-list">
+                            {
+                                channel?.top_fans?.length ? channel.top_fans?.map((item: any, index: number) => {
+                                    return (
+                                        <div className="top-fans-list-item" key={`top-fans-list-item-${index}`}>
+                                            <img src={handlePhotoUrl(item.photo, 1)} alt="user" />
+                                            <p>{item.name}</p>
+                                        </div>
+                                    );
+                                }) : null
+                            }
+                        </div>
+                    </div>
+                </div>
             </header>
-            <main></main>
+            <main>
+                <div className={`tab-content ${currentTab === 0 ? 'active' : ''}`}>
+                    <ChannelHome 
+                        channel_id={channel?.id} 
+                        latestVideos={channel?.latest_videos || []} 
+                        scheduledVideos={channel?.scheduled || []} />
+                </div>
+                <div className={`tab-content ${currentTab === 1 ? 'active' : ''}`}>
+                    <p className='channel-description'>{channel?.description}</p>
+                </div>
+            </main>
         </div>
     );
 }

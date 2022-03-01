@@ -5,6 +5,8 @@ import VideoApis from './Video';
 import PurchasesApis from './purchases';
 import UserApis from './user';
 import CategoryApis from './category';
+import UserPlaceholder from '../../../assets/images/user-placeholder.png';
+import VideoPlaceholder from '../../../assets/images/video-placeholder.png';
 
 //DEPLOY: change to server url
 const host = 'http://localhost:4000/api/';
@@ -23,4 +25,13 @@ export const getVideoThumb = (u: string) => {
 
 export const getServerPhoto = (u: string) => {
     return host + 'v1' + u;
+}
+
+export const handlePhotoUrl = (u: string | null | undefined, placeholder_type?: number) => {
+    if(u?.length && u.includes('http')) return u;
+    if(u?.length && (u.includes('\\uploads') || u.includes('/uploads'))) return host + 'v1' + u;
+    if(u?.length) return host + 'v1/uploads/' + u;
+    if(placeholder_type === 1) return UserPlaceholder;
+    if(placeholder_type === 2) return VideoPlaceholder;
+    return 'null';
 }

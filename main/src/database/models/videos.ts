@@ -63,6 +63,11 @@ const Video = db.define('video', {
         allowNull: true,
         defaultValue: false
     },
+    premier: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
     status:{
         /**
          * 1 = pending

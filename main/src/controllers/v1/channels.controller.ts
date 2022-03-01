@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { Op, Sequelize } from "sequelize";
-import {Channel, Playlist, Subscription, User} from "../../database/models";
+import {Channel, Playlist, Subscription, Transaction, User, Video, View} from "../../database/models";
 import {errorResponse, returnErrResponse, successResponse} from "../../utils";
 import {ControllerFunction} from "../../utils/types";
 import Category from "../../database/models/category";
+import { db } from "../../database";
+import * as moment from 'moment';
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -151,9 +153,38 @@ export const view: ControllerFunction = async (req, res) => {
             if(subscribedCheck) subscribed = true;
         }
 
-        //TODO: get listen for notifications
+        //get channel's top fans
+        let top_fans: any = await db.query(`SELECT u.name as name, 
+            u.id as id, 
+            u.photo as photo, 
+            SUM(t.amount) as amount_given 
+            FROM users u LEFT JOIN transactions t ON t.user_id = u.id 
+            WHERE t.channel_id = 1 
+            GROUP BY u.id ORDER BY amount_given DESC LIMIT 3`, { raw: true })
 
-        let c = await Channel.findOne({where: { id },
+        // let latest_videos = await Video.findAll({
+        //     where: {
+        //         channel_id: id,
+        //         [Op.or]: [{premier: null}, {premier: {[Op.gt]: moment().format('YYYY-MM-DDThh:mm:ss')}}]
+        //     },
+        //     attributes: ['id', 'createdAt', 'category_id', 'title', 'thumbnail', [Sequelize.fn('COUNT', Sequelize.col('views.id')), 'view_count']],
+        //     include: [{ model: View, attributes: [], required: false}, { model: Category, required: false}],
+        //     limit: 4,
+        //     group: ['video.id', 'category.id'],
+        //     order: [['createdAt', 'DESC']]
+        // })
+        let latest_videos = await Video.findAll({
+            where: {
+                channel_id: id,
+                [Op.or]: [{premier: null}, {premier: {[Op.gt]: moment().format('YYYY-MM-DDThh:mm:ss')}}]
+            },
+            attributes: [[Sequelize.fn("COUNT", Sequelize.col("views.id")), "view_count"], 'id', 'title', 'thumbnail', 'category_id'],
+            include: [ { model: View, required: false, attributes: [] }, { model: Category, required: false, attributes: ['id', 'name']}],
+            group: ['video.id', 'category.id'],
+            order: [['createdAt', 'DESC']]
+        })
+        //TODO: get listen for notifications
+        let c: any = await Channel.findOne({where: { id },
             attributes: {
                 include: [ "id", "createdAt", "updatedAt",
                     [Sequelize.fn("COUNT", Sequelize.col("subscriptions.id")), "subscriptions_count"],
@@ -170,7 +201,7 @@ export const view: ControllerFunction = async (req, res) => {
             group: ['channel.id', 'category.id']
         });
         if(!c) return errorResponse(res, 404, 'channel does not exist');
-        return successResponse(res, 200, 'retrieved successfully', c);
+        return successResponse(res, 200, 'retrieved successfully', {...c.dataValues, subscribed, top_fans: top_fans[0], latest_videos});
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
