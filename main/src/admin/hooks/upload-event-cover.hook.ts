@@ -1,7 +1,6 @@
 import { After, Before } from "adminjs"
 import * as path from 'path';
 import * as fs from 'fs';
-import * as faker from 'faker';
 import * as chance from 'chance';
 
 const before: Before = async (request, context) => {

@@ -124,7 +124,12 @@ const ChannelView: React.FC = props => {
         }
     }
 
-    const handleEditChannel = () => {}
+    const navigateTo = (url: string, redirect:boolean = false, includeToken: boolean = false) => {
+        if(includeToken) url += '/login?tok=' + store.getItem('token');
+        if(redirect) return window.open(url, '_blank')
+        navigate(url);
+    }
+
     
     return (
         <div className="channel-view-page">
@@ -150,7 +155,7 @@ const ChannelView: React.FC = props => {
                     <div className="r">
                         {
                             ctx?.userChannel?.id ? 
-                            <Button className="btn secondary edit-btn"> <FiEdit3 className='icon' /> Edit Channel</Button> :
+                            <Button className="btn secondary edit-btn" onClick={() => navigateTo('http://localhost:5000', true, true)}> <FiEdit3 className='icon' /> Edit Channel</Button> :
                             <div className="controls">
                                 {
                                     subscribed ? 
