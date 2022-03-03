@@ -3,8 +3,10 @@ import * as AdminJsExpress from '@adminjs/express';
 import * as AdminJSSequelize from '@adminjs/sequelize';
 import * as CategoryHooks from './hooks/upload-category-image.hook';
 import * as ProductHooks from './hooks/upload-product-image.hook';
+import * as EventPhotoHooks from './hooks/upload-product-image.hook';
+import * as EventCoverHooks from './hooks/upload-event-cover.hook';
 import Category from '../database/models/category';
-import { Product } from '../database/models';
+import { Product, Event } from '../database/models';
 
 AdminJs.registerAdapter(AdminJSSequelize);
 
@@ -12,6 +14,43 @@ const initAdminPanel = (database) => {
     const adminJs = new AdminJs({
         databases:[database],
         resources: [
+            {
+                resource: Event,
+                options: {
+                    properties: {
+                        photo: {
+                            isVisible: { list: true, search: true, new: false, edit: false, view: true}
+                        },
+                        cover: {
+                            isVisible: { list: true, search: true, new: false, edit: false, view: true}
+                        },
+                        uploadImage: {
+                            components: {
+                                edit: AdminJs.bundle('./components/event-photo-upload-photo.jsx')
+                            },
+                            isVisible: { list: false, search: false, new: true, edit: true, view: false}
+                        },
+                        uploadCover: {
+                            components: {
+                                edit: AdminJs.bundle('./components/event-cover-upload-photo.jsx')
+                            },
+                            isVisible: { list: false, search: false, new: true, edit: true, view: false}
+                        }
+                    },
+                    actions: {
+                        new: {
+                            before: async (request, context) => {
+                                const modifiedReq = await EventPhotoHooks.before(request, context);
+                                return EventCoverHooks.before(modifiedReq, context);
+                            },
+                            after: async (response, request, context) => {
+                                const modifiedRes = await EventPhotoHooks.after(response, request, context);
+                                return EventCoverHooks.after(modifiedRes, request, context);
+                            }
+                        }
+                    }
+                }
+            },
             {
                 resource: Category,
                 options: {
@@ -22,7 +61,7 @@ const initAdminPanel = (database) => {
                                 edit: AdminJs.bundle('./components/category-upload-photo.jsx'),
                             },
                             isVisible: {list: false, search: false, new: true, edit: true, view: false}
-                        }
+                        },
                     },
                     actions: {
                         new: {
