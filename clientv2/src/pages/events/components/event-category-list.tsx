@@ -9,7 +9,7 @@ const EventCategoryList: React.FC<EventCategoryListComponentProps> = props => {
 
     return (
         <div className="event-category-list">
-            <h1>Explore By Category</h1>
+            <h1 className='title'>Explore By Category</h1>
             <div className="category-item-list">
                 {
                     props.dataList.map((item, i) => {

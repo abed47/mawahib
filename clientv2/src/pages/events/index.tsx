@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
 import { EventRequests } from '../../utils/services/request';
+import EventCategoryList from './components/event-category-list';
 
 const EventsHome: React.FC = props => {
 
+    const [categoryList, setCategoryList] = useState([]);
     const ctx = useCtx();
     const navigate = useNavigate();
 
@@ -19,6 +21,10 @@ const EventsHome: React.FC = props => {
             let res = await EventRequests.getHome({user_id});
             ctx.hidePreloader();
 
+            if(res && res?.status){
+                setCategoryList(res.data.event_categories);
+                return;
+            }
             console.log(res);
         }catch(err: any){
             ctx.hidePreloader();
@@ -28,7 +34,7 @@ const EventsHome: React.FC = props => {
 
     return (
         <div className="events-page home">
-            Event-home
+            <EventCategoryList dataList={categoryList} />
         </div>
     );
 }
