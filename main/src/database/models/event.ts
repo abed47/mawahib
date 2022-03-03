@@ -52,6 +52,10 @@ const Event = db.define('event', {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 1 // 2
+    },
+    category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, { timestamps: true });
 

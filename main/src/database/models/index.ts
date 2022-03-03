@@ -12,6 +12,7 @@ import Wallet from "./wallet";
 import Transaction from './transaction';
 import Product from "./products";
 import Event from "./event";
+import EventSubscription from "./event-subscription";
 
 //category associations
 // Category.hasMany(Video, {foreignKey: 'category_id'});
@@ -72,6 +73,13 @@ Transaction.hasOne(Channel, { foreignKey: 'channel_id' });
 Transaction.belongsTo(User, { foreignKey: 'user_id' });
 
 /*======================================== EVENT ASSOCIATIONS ========================================================*/
+//event associations
+Category.hasMany(Event, { foreignKey: 'category_id' });
+Event.belongsTo(Category, { foreignKey: 'category_id' });
+
+//event subscription associations
+Event.belongsToMany(User, { through: EventSubscription, foreignKey: 'event_id' });
+User.belongsToMany(Event, { through: EventSubscription, foreignKey: 'user_id' });
 
 export {
     User, 
@@ -86,5 +94,7 @@ export {
     Wallet,
     Product,
     Transaction,
-    Event
+    Event,
+    EventSubscription,
+    Category
 }
