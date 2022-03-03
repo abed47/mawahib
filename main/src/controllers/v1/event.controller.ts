@@ -21,13 +21,18 @@ export const home: ControllerFunction = async (req, res) => {
 
         ongoing_events = await Event.findAll({ where: {
             [Op.and]: [
-                { start_date: { [Op.lt]: today } },
+                { start_date: { [Op.lte]: today } },
                 { end_date: { [Op.gt]: today}}
             ]
             }});
 
+        upcoming_events = await Event.findAll({ where: { start_date: { [Op.gt]: today } } });
+
         return successResponse(res, 200, 'retrieved successfully', {
-            my_events
+            my_events,
+            event_categories,
+            ongoing_events,
+            upcoming_events
         })
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');

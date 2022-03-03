@@ -14,6 +14,7 @@ import CommentRoutes from './routes/v1/comment.routes';
 import CategoryRoutes from './routes/v1/category.routes';
 import PlaylistRoutes from './routes/v1/playlist.routes';
 import PurchasesRoutes from './routes/v1/purchases.routes';
+import EventRoutes from './routes/v1/event.routes';
 
 import * as path from 'path';
 import * as upload from 'express-fileupload';
@@ -46,6 +47,7 @@ app.use('/api/v1/comment', CommentRoutes);
 app.use('/api/v1/category', upload(), CategoryRoutes);
 app.use('/api/v1/playlist', PlaylistRoutes);
 app.use('/api/v1/purchases', PurchasesRoutes);
+app.use('/api/v1/event', EventRoutes);
 app.use('/api/v1/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use('/admin', adminPanel);
 // app.use('/public', express.static)
