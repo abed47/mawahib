@@ -17,6 +17,7 @@ import TransactionsPage from './pages/wallet/Transactions-Page';
 import AccountSettings from './pages/user/AccountSettings';
 import CategoryListing from './pages/categories/category';
 import ChannelViewPage from './pages/channel/channel';
+import EventsHome from './pages/events';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/transaction-history" element={<TransactionsPage />} />
             <Route path="/account-settings" element={<AccountSettings />} />
             <Route path="/channel/:id" element={<ChannelViewPage />} />
+            <Route path="/events" element={<EventsHome />} />
           </Routes>
         </Layout>
       </MainContextProvider>

@@ -5,6 +5,7 @@ import VideoApis from './Video';
 import PurchasesApis from './purchases';
 import UserApis from './user';
 import CategoryApis from './category';
+import eventsApis from './events';
 import UserPlaceholder from '../../../assets/images/user-placeholder.png';
 import VideoPlaceholder from '../../../assets/images/video-placeholder.png';
 
@@ -18,6 +19,7 @@ export const VideoRequests = VideoApis(host);
 export const PurchasesRequests = PurchasesApis(host);
 export const UserRequests = UserApis(host);
 export const CategoryRequests = CategoryApis(host);
+export const EventRequests = eventsApis(host);
 
 export const getVideoThumb = (u: string) => {
     return host + 'v1/uploads/' + u;
