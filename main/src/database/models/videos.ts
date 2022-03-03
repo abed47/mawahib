@@ -78,6 +78,11 @@ const Video = db.define('video', {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 1
+    },
+    type: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 1 // 1 = normal, 2 = event video
     }
 }, {
     paranoid: true,

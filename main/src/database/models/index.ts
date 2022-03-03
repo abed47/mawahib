@@ -11,6 +11,7 @@ import PlayListItem from "./playlist-item";
 import Wallet from "./wallet";
 import Transaction from './transaction';
 import Product from "./products";
+import Event from "./event";
 
 //category associations
 // Category.hasMany(Video, {foreignKey: 'category_id'});
@@ -70,6 +71,8 @@ Product.hasOne(Transaction, { foreignKey: 'product_id'});
 Transaction.hasOne(Channel, { foreignKey: 'channel_id' });
 Transaction.belongsTo(User, { foreignKey: 'user_id' })
 
+/*======================================== EVENT ASSOCIATIONS ========================================================*/
+
 export {
     User, 
     Channel, 
@@ -82,5 +85,6 @@ export {
     Playlist,
     Wallet,
     Product,
-    Transaction
+    Transaction,
+    Event
 }

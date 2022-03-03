@@ -173,6 +173,7 @@ export const view: ControllerFunction = async (req, res) => {
         //     group: ['video.id', 'category.id'],
         //     order: [['createdAt', 'DESC']]
         // })
+
         let latest_videos = await Video.findAll({
             where: {
                 channel_id: id,
@@ -183,6 +184,7 @@ export const view: ControllerFunction = async (req, res) => {
             group: ['video.id', 'category.id'],
             order: [['createdAt', 'DESC']]
         })
+
         //TODO: get listen for notifications
         let c: any = await Channel.findOne({where: { id },
             attributes: {
