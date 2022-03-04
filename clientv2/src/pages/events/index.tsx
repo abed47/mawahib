@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
 import { EventRequests } from '../../utils/services/request';
 import EventCategoryList from './components/event-category-list';
+import UpcomingEventsList from './components/upcoming-event-list';
 
 const EventsHome: React.FC = props => {
 
     const [categoryList, setCategoryList] = useState([]);
+    const [upcomingList, setUpcomingList] = useState([]);
+
     const ctx = useCtx();
     const navigate = useNavigate();
 
@@ -25,6 +28,7 @@ const EventsHome: React.FC = props => {
 
             if(res && res?.status){
                 setCategoryList(res.data.event_categories);
+                setUpcomingList(res.data.upcoming_events);
                 return;
             }
             console.log(res);
@@ -37,6 +41,7 @@ const EventsHome: React.FC = props => {
     return (
         <div className="events-page home">
             <EventCategoryList dataList={categoryList} />
+            <UpcomingEventsList dataList={upcomingList} />
         </div>
     );
 }
