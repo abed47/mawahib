@@ -1,29 +1,29 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import EventCard from './event-card';
-interface UpcomingEventsListProps {
+interface OngoingEventsListProps {
     dataList: any[]
 }
 
-const UpcomingEventsList: React.FC<UpcomingEventsListProps> = props => {
+const OngoingEventsList: React.FC<OngoingEventsListProps> = props => {
     return (
-        <div className="upcoming-event-list">
-            <h1 className='title' >Upcoming Events</h1>
+        <div className="ongoing-event-list">
+            <h1 className='title' >Ongoing Events</h1>
 
-            <div className="upcoming-event-item-list">
+            <div className="ongoing-event-item-list">
                 <div className="swiper-container">
                     <Swiper
-                        slidesPerView={3}
+                        slidesPerView={props?.dataList.length > 1 ? props.dataList.length : 0}
                         className="slider-wrapper"
-                        spaceBetween={50}
-                        loop={true}
+                        spaceBetween={0}
+                        loop={props?.dataList?.length ? true : false}
                         autoplay={true}
-                        
+                        noSwiping={props.dataList.length > 1 ? true : false}                        
                     >
                         {
                             props.dataList.map((item, i) => {
                                 return (
-                                    <SwiperSlide className='slide' key={`upcoming-event-list-item-${i}`}>
+                                    <SwiperSlide className='slide' key={`ongoing-event-list-item-${i}`}>
                                         <EventCard 
                                             photo={item.photo}
                                             id={item.id}
@@ -42,4 +42,4 @@ const UpcomingEventsList: React.FC<UpcomingEventsListProps> = props => {
     );
 }
 
-export default UpcomingEventsList;
+export default OngoingEventsList;

@@ -1,14 +1,15 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import EventCard from './event-card';
-interface UpcomingEventsListProps {
+
+interface SubscribedEventsListProps {
     dataList: any[]
 }
 
-const UpcomingEventsList: React.FC<UpcomingEventsListProps> = props => {
+const SubscribedEventsList: React.FC<SubscribedEventsListProps> = props => {
     return (
         <div className="upcoming-event-list">
-            <h1 className='title' >Upcoming Events</h1>
+            <h1 className='title' >My Events</h1>
 
             <div className="upcoming-event-item-list">
                 <div className="swiper-container">
@@ -42,4 +43,4 @@ const UpcomingEventsList: React.FC<UpcomingEventsListProps> = props => {
     );
 }
 
-export default UpcomingEventsList;
+export default SubscribedEventsList;

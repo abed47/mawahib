@@ -80,6 +80,8 @@ Event.belongsTo(Category, { foreignKey: 'category_id' });
 //event subscription associations
 Event.belongsToMany(User, { through: EventSubscription, foreignKey: 'event_id' });
 User.belongsToMany(Event, { through: EventSubscription, foreignKey: 'user_id' });
+EventSubscription.hasOne(Event, { foreignKey: 'event_id'});
+EventSubscription.hasOne(User, { foreignKey: 'user_id'});
 
 export {
     User, 

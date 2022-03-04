@@ -19,14 +19,22 @@ export const home: ControllerFunction = async (req, res) => {
 
         event_categories = await Category.findAll({ include: [ { model: Event, required: true }]});
 
-        ongoing_events = await Event.findAll({ where: {
+        ongoing_events = await Event.findAll({
+            where: {
             [Op.and]: [
                 { start_date: { [Op.lte]: today } },
                 { end_date: { [Op.gt]: today}}
             ]
-            }});
+            },
+            include: [ { model: Category, required: false } ]
+        });
 
-        upcoming_events = await Event.findAll({ where: { start_date: { [Op.gt]: today } } });
+        upcoming_events = await Event.findAll({
+            where: {
+                start_date: { [Op.gt]: today }
+            },
+            include: [ { model: Category, required: false } ]
+        });
 
         return successResponse(res, 200, 'retrieved successfully', {
             my_events,

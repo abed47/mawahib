@@ -5,18 +5,20 @@
         height: 100%;
         overflow: auto;
         padding: 20px 30px;
+        padding-right: 0;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
 
-        .upcoming-event-list{
+        .upcoming-event-list, .ongoing-event-list{
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
             width: 100% !important;
+            margin-bottom: 50px;
 
             .title{
                 margin: 0;
@@ -26,24 +28,94 @@
                 font-family: $font-bold;
             }
 
-            .upcoming-event-item-list, .swiper{
+            .upcoming-event-item-list, .ongoing-event-item-list{
                 width: 100%;
             }
 
-            .slider-wrapper{
+            .swiper-container{
                 width: 100%;
+                position: relative;
+                overflow: hidden;
+                height: 330px;
+                margin-top: 15px;
+            }
+
+            .swiper-wrapper{
+                align-items: center;
+            }
+
+            .slider-wrapper{
+                width: 1600px;
+                position: absolute;
+                // height: 600px;
 
 
                 .slide{
-                    width: 50px;
-                    height: 50px;
-                    
-                }
+                    width: 500px ;
+                    height: 280px;
+                    user-select: none;
+                    transition: all 300ms ease-in-out;
+                    //   width: 500px;
 
-                .slide-content{
-                    width: 50px;
-                    height: 50px;
-                    background-color: $color-secondary;
+                      &.swiper-slide-active{
+                          width: 590px !important;
+                          height: 334px;
+                      }
+
+                    .event-card{
+                        width: 100%;
+                        height: 100%;
+                        position: relative;
+                        border-radius: 20px;
+                        overflow: hidden;
+
+                        img{
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+
+                        .info{
+                            width: 100%;
+                            box-sizing: border-box;
+                            background: rgb(0,0,0);
+                            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(160,160,160,0) 100%);
+                            position: absolute;
+                            left: 0;
+                            bottom: 0;
+                            padding: 10px 20px;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            .category{
+                                font-family: $font-base;
+                                font-size: 16px;
+                                color: $text-color;
+                                margin: 0;
+                                font-weight: normal;
+                            }
+
+                            .title{
+                                font-size: 28px;
+                                font-family: $font-bold;
+                                color: $text-color;
+                            }
+
+                            .btn{
+                                color: $text-color;
+                                border-radius: 7px;
+                                font-size: 14px !important;
+                                font-family: $font-base;
+                                font-weight: normal;
+                                text-transform: capitalize;
+                                padding: 8px 20px;
+                                background: transparent linear-gradient(175deg, var(--color-3) 0%, var(--color-2) 100%) 0% 0% no-repeat padding-box;
+                                background: transparent linear-gradient(175deg, #4BBEB6 0%, #006896 100%) 0% 0% no-repeat padding-box;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -54,7 +126,9 @@
             align-items: flex-start;
             justify-content: flex-start;
             width: 100%;
-            overflow: auto;
+            // overflow: auto;
+            // overflow-x: auto;
+            // overflow-y: visible;
 
             .title{
                 margin: 0;
@@ -71,10 +145,14 @@
                 align-items: center;
                 width: 100%;
                 padding: 20px 0;
+                overflow: auto;
 
                 .category-list-item{
+                    display: block;
                     height: 190px;
+                    min-width: 145px;
                     width: 145px;
+
                     border: 3px solid $color-secondary;
                     border-radius: 11px;
                     margin-right: 25px;
