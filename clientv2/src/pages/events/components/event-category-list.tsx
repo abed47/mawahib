@@ -16,6 +16,9 @@ const EventCategoryList: React.FC<EventCategoryListComponentProps> = props => {
                         return (
                             <div className="category-list-item" key={`category-list-item-${i}`}>
                                 <img src={handlePhotoUrl(item.photo)} alt="category img" />
+                                <div className="info">
+                                    <p>{item.name}</p>
+                                </div>
                             </div>
                         );
                     })

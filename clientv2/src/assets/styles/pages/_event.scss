@@ -45,11 +45,35 @@
                     overflow: hidden;
                     cursor: pointer;
                     box-shadow: 1px 2px 20px -1px rgba($color-secondary, .35);
+                    position: relative;
 
                     img{
                         width: 100%;
                         height: 100%;
                         object-fit: cover;
+                    }
+
+                    .info{
+                        width: 100%;
+                        height: 30%;
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        margin: 0;
+                        padding: 5px;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        align-items: flex-end;
+                        background: rgb(0,0,0);
+                        background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, rgba(160,160,160,0) 100%);
+
+                        p{
+                            margin: 0;
+                            font-family: $font-medium;
+                            color: $text-color;
+                            font-size: 16px;
+                        }
                     }
                 }
             }
