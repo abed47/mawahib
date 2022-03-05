@@ -113,6 +113,10 @@
                                 padding: 8px 20px;
                                 background: transparent linear-gradient(175deg, var(--color-3) 0%, var(--color-2) 100%) 0% 0% no-repeat padding-box;
                                 background: transparent linear-gradient(175deg, #4BBEB6 0%, #006896 100%) 0% 0% no-repeat padding-box;
+
+                                &.disabled{
+                                    background: #707070;
+                                }
                             }
                         }
                     }

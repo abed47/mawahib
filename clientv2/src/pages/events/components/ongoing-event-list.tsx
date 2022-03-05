@@ -2,7 +2,8 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import EventCard from './event-card';
 interface OngoingEventsListProps {
-    dataList: any[]
+    dataList: any[];
+    reload?: () => void;
 }
 
 const OngoingEventsList: React.FC<OngoingEventsListProps> = props => {
@@ -13,9 +14,9 @@ const OngoingEventsList: React.FC<OngoingEventsListProps> = props => {
             <div className="ongoing-event-item-list">
                 <div className="swiper-container">
                     <Swiper
-                        slidesPerView={props?.dataList.length > 1 ? props.dataList.length : 0}
+                        slidesPerView={props?.dataList.length > 1 ? 3 : 0}
                         className="slider-wrapper"
-                        spaceBetween={0}
+                        spaceBetween={props?.dataList.length > 1 ? 50 : 0}
                         loop={props?.dataList?.length ? true : false}
                         autoplay={true}
                         noSwiping={props.dataList.length > 1 ? true : false}                        
@@ -28,8 +29,9 @@ const OngoingEventsList: React.FC<OngoingEventsListProps> = props => {
                                             photo={item.photo}
                                             id={item.id}
                                             title={item.title}
-                                            subscribed={false}
+                                            subscribed={item?.event_subscriptions?.length > 0 ? true : false}
                                             categoryName={item?.category?.name}
+                                            reload={props.reload}
                                         />
                                     </SwiperSlide>   
                                 );

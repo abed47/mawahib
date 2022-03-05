@@ -3,7 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import EventCard from './event-card';
 
 interface SubscribedEventsListProps {
-    dataList: any[]
+    dataList: any[],
+    reload?: () => void
 }
 
 const SubscribedEventsList: React.FC<SubscribedEventsListProps> = props => {
@@ -14,23 +15,24 @@ const SubscribedEventsList: React.FC<SubscribedEventsListProps> = props => {
             <div className="upcoming-event-item-list">
                 <div className="swiper-container">
                     <Swiper
-                        slidesPerView={3}
+                        slidesPerView={props?.dataList.length > 1 ? 3 : 0}
                         className="slider-wrapper"
-                        spaceBetween={50}
-                        loop={true}
+                        spaceBetween={props?.dataList.length > 1 ? 50 : 0}
+                        loop={props?.dataList?.length ? true : false}
                         autoplay={true}
-                        
+                        noSwiping={props.dataList.length > 1 ? true : false}                        
                     >
                         {
                             props.dataList.map((item, i) => {
                                 return (
-                                    <SwiperSlide className='slide' key={`upcoming-event-list-item-${i}`}>
+                                    <SwiperSlide className='slide' key={`my-event-list-item-${i}`}>
                                         <EventCard 
                                             photo={item.photo}
                                             id={item.id}
                                             title={item.title}
-                                            subscribed={false}
+                                            subscribed={true}
                                             categoryName={item?.category?.name}
+                                            reload={props.reload}
                                         />
                                     </SwiperSlide>   
                                 );

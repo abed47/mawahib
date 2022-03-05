@@ -46,10 +46,10 @@ const EventsHome: React.FC = props => {
 
     return (
         <div className="events-page home">
-            {myEventList?.length ? <SubscribedEventList dataList={myEventList} /> : null}
+            {myEventList?.length ? <SubscribedEventList reload={loadData} dataList={myEventList} /> : null}
             <EventCategoryList dataList={categoryList} />
-            <UpcomingEventsList dataList={upcomingList} />
-            <OngoingEventsList dataList={ongoingList} />
+            <OngoingEventsList reload={loadData} dataList={ongoingList} />
+            <UpcomingEventsList reload={loadData} dataList={upcomingList} />
         </div>
     );
 }

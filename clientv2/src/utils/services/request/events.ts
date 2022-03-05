@@ -16,6 +16,32 @@ const eventsApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        subscribe: async (body: {user_id: number | string, event_id: number | string}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/event/subscribe', body, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
+        },
+        unsubscribe: async (body: {user_id: number | string, event_id: number | string}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/event/unsubscribe', body, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }
