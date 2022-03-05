@@ -1,7 +1,8 @@
+import React from 'react';
 import { Button } from '@mui/material';
-import React, { useEffect } from 'react';
 import { useCtx } from '../../../utils/context';
 import { EventRequests, handlePhotoUrl } from '../../../utils/services/request';
+import { useNavigate } from 'react-router-dom';
 
 interface EventCardProps {
     id: number;
@@ -15,8 +16,15 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = props => {
 
     const ctx = useCtx();
+    const navigate = useNavigate();
 
-    const handleSubscribe = async () => {
+    const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        navigate('/event/' + props.id);
+    }
+
+
+    const handleSubscribe = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
         try{
             let res = await EventRequests.subscribe({user_id: ctx?.currentUser?.id, event_id: props.id});
             
@@ -35,7 +43,8 @@ const EventCard: React.FC<EventCardProps> = props => {
         }
     }
 
-    const handleUnsubscribe = async () => {
+    const handleUnsubscribe = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
         try{
             try{
                 let res = await EventRequests.unsubscribe({user_id: ctx?.currentUser?.id, event_id: props.id});
@@ -59,7 +68,7 @@ const EventCard: React.FC<EventCardProps> = props => {
     }
 
     return (
-        <div className="event-card">
+        <div className="event-card" onClick={handleCardClick}>
             <img src={handlePhotoUrl(props.photo)} alt="event thumbnail" />
             <div className="info">
                 <div className="l">
