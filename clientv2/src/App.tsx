@@ -18,6 +18,7 @@ import AccountSettings from './pages/user/AccountSettings';
 import CategoryListing from './pages/categories/category';
 import ChannelViewPage from './pages/channel/channel';
 import EventsHome from './pages/events';
+import EventPage from './pages/events/event';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/account-settings" element={<AccountSettings />} />
             <Route path="/channel/:id" element={<ChannelViewPage />} />
             <Route path="/events" element={<EventsHome />} />
+            <Route path="/event/:id" element={<EventPage />} />
           </Routes>
         </Layout>
       </MainContextProvider>

@@ -200,3 +200,17 @@
         }
     }
 }
+
+/*=============================================SINGLE EVENT PAGE==============================*/
+.event-page{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 20px 30px;
+    padding-right: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
