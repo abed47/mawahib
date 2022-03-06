@@ -42,6 +42,18 @@ const eventsApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        view: async (body: {user_id?: string | number | any, channel_id: number | string | any}, id: number | string) => {
+            try{
+                let { data } = await axios.post(host + 'v1/event/view/' + id, body, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }
