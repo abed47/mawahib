@@ -20,7 +20,7 @@ const DefaultVideoCard: React.FC<DefaultVideoCardProps> = props => {
 
     return (
         <div onClick={handleVideoClick} className={`default-video-list-item ${props?.className ? props.className : ''}`}>
-            <img src={handlePhotoUrl(props.thumbnail, 2)} alt="thumbnail"/>
+            <img src={handlePhotoUrl(props.thumbnail, "video")} alt="thumbnail"/>
             <div className="info">
                 <div className="l">
                     <h2 className='title'>{props?.title}</h2>

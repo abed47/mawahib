@@ -56,6 +56,14 @@ const Event = db.define('event', {
     category_id: {
         type: DataTypes.INTEGER,
         allowNull: true
+    },
+    sponsor_name: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    sponsor_url: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 }, { timestamps: true });
 

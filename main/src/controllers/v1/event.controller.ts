@@ -1,8 +1,9 @@
-import { Op } from 'sequelize';
+import Sequelize, { Op } from 'sequelize';
 import { ControllerFunction } from "../../utils/types";
 import {errorResponse, successResponse} from "../../utils";
 import {Category, Event, EventSubscription, User} from '../../database/models';
 import * as moment from 'moment';
+import Submission from "../../database/models/submission";
 
 export const home: ControllerFunction = async (req, res) => {
     try{
@@ -48,6 +49,32 @@ export const home: ControllerFunction = async (req, res) => {
             ongoing_events,
             upcoming_events
         })
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const view: ControllerFunction = async (req, res) => {
+    try{
+        let { id } = req.params;
+        if(typeof +id !== "number") return errorResponse(res, 400, 'unacceptable event id');
+
+
+
+        let event: any = await Event.findOne({
+            where: { id }
+        });
+
+        if(!event) return errorResponse(res, 404, 'event not found')
+
+        let subscription_count = await EventSubscription.count({ where: { event_id: id }});
+        let submission_count = await EventSubscription.count({ where: { event_id: id }});
+
+        return successResponse(res, 200, 'retrieved successfully', {
+            ...event.dataValues,
+            subscription_count: subscription_count || 0,
+            submission_count: subscription_count || 0
+        });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }

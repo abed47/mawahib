@@ -184,7 +184,7 @@ const ChannelView: React.FC = props => {
                                 channel?.top_fans?.length ? channel.top_fans?.map((item: any, index: number) => {
                                     return (
                                         <div className="top-fans-list-item" key={`top-fans-list-item-${index}`}>
-                                            <img src={handlePhotoUrl(item.photo, 1)} alt="user" />
+                                            <img src={handlePhotoUrl(item.photo, "user")} alt="user" />
                                             <p>{item.name}</p>
                                         </div>
                                     );

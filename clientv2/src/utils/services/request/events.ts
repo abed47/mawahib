@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { EventViewResponse } from '../../types';
 import StorageService from '../store';
 
 const eventsApis = (host: string) => {
@@ -45,13 +46,13 @@ const eventsApis = (host: string) => {
         },
         view: async (body: {user_id?: string | number | any, channel_id: number | string | any}, id: number | string) => {
             try{
-                let { data } = await axios.post(host + 'v1/event/view/' + id, body, {
+                let { data } = await axios.post<EventViewResponse>(host + 'v1/event/view/' + id, body, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
                 return data;
-            }catch(err){
+            }catch(err: any){
                 return err;
             }
         }

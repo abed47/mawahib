@@ -28,8 +28,6 @@ const EventsHome: React.FC = props => {
             let res = await EventRequests.getHome({user_id});
             ctx.hidePreloader();
             
-            console.log(res);
-
             if(res && res?.status){
                 setCategoryList(res.data.event_categories);
                 setUpcomingList(res.data.upcoming_events);

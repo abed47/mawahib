@@ -8,6 +8,7 @@ import CategoryApis from './category';
 import eventsApis from './events';
 import UserPlaceholder from '../../../assets/images/user-placeholder.png';
 import VideoPlaceholder from '../../../assets/images/video-placeholder.png';
+import Logo from '../../../assets/images/logo.png';
 
 //DEPLOY: change to server url
 const host = 'http://localhost:4000/api/';
@@ -29,11 +30,12 @@ export const getServerPhoto = (u: string) => {
     return host + 'v1' + u;
 }
 
-export const handlePhotoUrl = (u: string | null | undefined, placeholder_type?: number) => {
+export const handlePhotoUrl = (u: string | null | undefined, placeholder_type?: "user" | "video" | "logo") => {
     if(u?.length && u.includes('http')) return u;
     if(u?.length && (u.includes('\\uploads') || u.includes('/uploads'))) return host + 'v1' + u;
     if(u?.length) return host + 'v1/uploads/' + u;
-    if(placeholder_type === 1) return UserPlaceholder;
-    if(placeholder_type === 2) return VideoPlaceholder;
+    if(placeholder_type === "user") return UserPlaceholder;
+    if(placeholder_type === "video") return VideoPlaceholder;
+    if(placeholder_type === "logo") return Logo;
     return 'null';
 }
