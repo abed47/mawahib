@@ -31,6 +31,8 @@ export type EventViewResponseData = {
     category_id: number;
     sponsor_name: string;
     sponsor_url: string;
+    subscription_count: number;
+    submission_count: number;
 }
 
 export type EventViewResponse = RequestResponse<EventViewResponseData>

@@ -62,19 +62,41 @@ export const view: ControllerFunction = async (req, res) => {
 
 
         let event: any = await Event.findOne({
-            where: { id }
+            where: { id },
+            attributes: [
+                "id",
+                "title",
+                "photo",
+                "cover",
+                "createdAt",
+                "updatedAt",
+                "current_stage",
+                "description",
+                "end_date",
+                "start_date",
+                "limit",
+                "registration_start",
+                "registration_end",
+                "stage_count",
+                "status",
+                "category_id",
+                "sponsor_name",
+                "sponsor_url",
+                [Sequelize.fn("COUNT", Sequelize.col("event_subscriptions.id")), "subscription_count"],
+                [Sequelize.fn("COUNT", Sequelize.col("submissions.id")), "submission_count"]
+            ],
+            include: [
+                { model: Category, required: false, attributes: ["id", "name"] },
+                { model: EventSubscription, required: false, attributes: [] },
+                { model: Submission, required: false, attributes: [] }
+
+            ],
+            group: ["event.id", "category.id"]
         });
 
         if(!event) return errorResponse(res, 404, 'event not found')
 
-        let subscription_count = await EventSubscription.count({ where: { event_id: id }});
-        let submission_count = await EventSubscription.count({ where: { event_id: id }});
-
-        return successResponse(res, 200, 'retrieved successfully', {
-            ...event.dataValues,
-            subscription_count: subscription_count || 0,
-            submission_count: subscription_count || 0
-        });
+        return successResponse(res, 200, 'retrieved successfully', event);
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
