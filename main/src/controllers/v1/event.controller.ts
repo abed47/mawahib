@@ -176,3 +176,26 @@ export const participate: ControllerFunction = async (req, res) => {
         return errorResponse(res, 500, err?.message || 'server error');
     }
 }
+
+export const withdraw: ControllerFunction = async (req, res) => {
+    try{
+        let { event_id, channel_id } = req.body;
+        if(!event_id || !channel_id) return errorResponse(res, 400, 'missing required fields');
+
+        await Participation.destroy({ where: { event_id, channel_id }});
+        return successResponse(res, 200, 'withdrawal successful');
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const getOne: ControllerFunction = async (req, res) => {
+    try{
+        let { id } = req.params;
+        let r = await Event.findOne({ where: { id }});
+        if(!r) return errorResponse(res, 404, 'event not found');
+        return successResponse(res, 200, 'retrieved successfully', r);
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}

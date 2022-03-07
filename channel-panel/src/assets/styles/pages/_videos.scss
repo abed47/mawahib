@@ -61,6 +61,12 @@
             }
         }
 
+        .event-submission-notification{
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 $page-horizontal-padding;
+        }
+
         main{
             width: 100%;
             padding: 20px 40px;

@@ -13,6 +13,9 @@ import GoogleLogin from 'react-google-login';
 import { facebookLogin } from '../../utils/services/firebase/auth';
 import SnackBar from '../../components/layout/components/SnackBar';
 import PreLoader from '../../components/layout/components/Preloader';
+// import { getQe } from '../..';
+import { getQe } from '../../utils/helpers';
+import simpleCrypto from 'simple-crypto-js';
 
 const LoginPage: React.FC = props => {
 
@@ -21,7 +24,7 @@ const LoginPage: React.FC = props => {
     const [errors, setErrors] = useState<{email:boolean,password: boolean}>({email: false, password: false})
 
     const ctx = useCtx();
-    const navigation = useNavigate();
+    const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -33,10 +36,20 @@ const LoginPage: React.FC = props => {
         }
     }, []);
 
+    const decryptActions = (a: string) => {
+        let crypto = new simpleCrypto(getQe());
+        let r = crypto.decrypt(a);
+        return r;
+    }
+
     const checkParams = async () => {
         let q = new URLSearchParams(searchParams);
         let tok = q.get('tok');
         if(!tok) return;
+        let action = q.get('act');        
+        let parsedActions: any = null;
+        if(action) parsedActions = decryptActions(decodeURI(action).replace(/\ /ig, "+"));
+
         try{
             ctx.showPreloader();
             let res: any = await AuthRequests.tokenLogin({token: tok});
@@ -47,15 +60,23 @@ const LoginPage: React.FC = props => {
             StorageService.setItem('token', res.token);
             StorageService.setItem('currentUser', res.user);
             StorageService.setItem('channel', res.user.channel);
-            navigation('/');
+            if(parsedActions?.action) return handleAction(parsedActions);
+            navigate('/');
         }catch(err: any){
             ctx.hidePreloader();
             ctx.showSnackbar(err?.message || err?.error || 'server error', 'error');
         }
     }
 
+    const handleAction = (p: any) => {
+        if(p.action === 'event_submit'){
+            let url = `/videos/upload?action=${p.action}&event_id=${p.event_id}`;
+            navigate(url);
+        }
+    }
+
     const handleSignUpClick = () => {
-        navigation('/signup')
+        navigate('/signup')
     }
 
     const handleEmailChange = (e: any) => {
@@ -106,7 +127,7 @@ const LoginPage: React.FC = props => {
                 ctx.setCurrentUser(res.data.user);
                 ctx.setLoggedIn(true);
                 ctx.setToken(res.data.token);
-                navigation('/')
+                navigate('/')
                 return;
             }
 
@@ -132,7 +153,7 @@ const LoginPage: React.FC = props => {
                 ctx.setCurrentUser(res.data);
                 ctx.setLoggedIn(true);
                 ctx.setToken(res.data.token);
-                navigation('/')
+                navigate('/')
                 return;
             }
 
@@ -164,7 +185,7 @@ const LoginPage: React.FC = props => {
                         ctx.setCurrentUser(response.data);
                         ctx.setLoggedIn(true);
                         ctx.setToken(response.data.token);
-                        navigation('/')
+                        navigate('/')
                         return;
                     }
 
@@ -197,7 +218,7 @@ const LoginPage: React.FC = props => {
                 ctx.setCurrentUser(res.data);
                 ctx.setLoggedIn(true);
                 ctx.setToken(res.data.token);
-                navigation('/')
+                navigate('/')
                 return;
             }
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
+import { Alert, Button } from '@mui/material';
 import { useCtx } from '../../utils/context';
 import { extractError } from '../../utils/helpers';
-import { CategoryRequests, PlaylistRequests, UtilsRequests, VideoRequests } from '../../utils/services/request';
+import { CategoryRequests, EventRequests, PlaylistRequests, UtilsRequests, VideoRequests } from '../../utils/services/request';
 import SelectInputComponent from '../../components/SelectInputComponent';
 import DropZone from '../../components/DropZone';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -11,7 +11,7 @@ import RadioInput from '../../components/RadioInput';
 import TagInput from '../../components/TagInput';
 import LabeledSwitch from '../../components/LabeledSwitch';
 import VideoDropZone from '../../components/VideoDropZone';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const VideoUpload: React.FC = props => {
     
@@ -28,10 +28,13 @@ const VideoUpload: React.FC = props => {
     const [ hasPromotion, setHasPromotion ] = useState(false);
     const [ categoryList, setCategoryList ] = useState([]);
     const [ playlistList, setPlaylistList ] = useState([]);
+    const [ isSubmission, setIsSubmission ] = useState(false);
+    const [ event, setEvent ] = useState<any>(null);
     const [ formErrors, setFormErrors ] = useState([false, false, false, false, false]);
     
     const ctx = useCtx();
     const navigate = useNavigate();
+    const [urlSearchParams] = useSearchParams();
 
     useEffect(() => {
         loadData();
@@ -43,6 +46,7 @@ const VideoUpload: React.FC = props => {
             let pListRes = await PlaylistRequests.list();
             let catRes = await CategoryRequests.getAll();
             ctx.hidePreloader();
+            checkSearchQuery();
             
             if(pListRes?.status && catRes?.status){
                 setPlaylistList(pListRes.data);
@@ -53,6 +57,32 @@ const VideoUpload: React.FC = props => {
         }catch(err){
             ctx.hidePreloader();
             ctx.showSnackbar(extractError(err), 'error');
+        }
+    }
+
+    const checkSearchQuery = async () => {
+        let actionType = urlSearchParams.get('action');
+        if(actionType === 'event_submit'){
+            let eventId = urlSearchParams.get('event_id');
+            try{
+                ctx.showPreloader();
+                let res = await EventRequests.getEvent(eventId);
+                ctx.hidePreloader();
+                if(res && res?.status){
+                    let e = res.data;
+                    setEvent(e);
+                    setIsSubmission(true);
+                    return;
+                }
+
+                if(res && res?.status === false){
+                    ctx.showSnackbar(res?.message || 'server error', 'error');
+                }
+            }catch(err: any){
+                ctx.hidePreloader();
+                ctx.showSnackbar(err?.message || 'server error', 'error');
+            }
+            return;
         }
     }
 
@@ -157,6 +187,13 @@ const VideoUpload: React.FC = props => {
                 <h1>Upload Video</h1>
                 <Button className="btn secondary" onClick={handleUpload}>Upload</Button>
             </header>
+
+            {
+                isSubmission ?
+                <div className='event-submission-notification'>
+                    <Alert style={{width: '100%', boxSizing: 'border-box'}} severity='info'>This Video will be submitted to event: {event?.title} on stage: {event?.current_stage}</Alert>
+                </div> : null
+            }
 
             <main>
                 <div className="s1">
