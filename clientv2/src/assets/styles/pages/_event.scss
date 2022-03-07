@@ -389,5 +389,55 @@
                 margin: 0 10px;
             }
         }
+
+        
+    }
+}
+
+.participate-dialog{
+
+    .dialog-content{
+        @include init-flex(column, center, center);
+        color: $text-color !important;
+        height: auto;
+        padding: 5px;
+        padding-top: 15px;
+
+        p{
+            margin: 0;
+            font-size: 14px;
+            font-family: $font-medium;
+            margin-bottom: 10px;
+        }
+
+        small{
+            font-size: 12px;
+            font-family: $font-base;
+
+            a{
+                color: $color-secondary;
+            }
+        }
+    }
+
+    .dialog-actions{
+        @include init-flex(row, center, center);
+
+        .btn{
+            background: linear-gradient(175deg, #4BBEB6 0%, #006896 100%) 0% 0% no-repeat padding-box;
+            color: $text-color;
+            margin: 0 5px;
+            padding: 5px 50px !important;
+            font-size: 14px;
+            font-weight: normal;
+            font-family: $font-base !important;
+            text-transform: capitalize;
+            border-radius: 7px;
+
+            &.outlined{
+                background: none;
+                border: 1px solid $text-color2;
+            }
+        }
     }
 }

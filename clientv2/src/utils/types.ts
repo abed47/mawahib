@@ -5,7 +5,7 @@
 //TODO: create type for category
 //TODO: create type for comment
 
-export interface RequestResponse<T = any> {
+export interface RequestResponse<T = null | any> {
     type: string | "error" | "success";
     status: boolean;
     data: T;

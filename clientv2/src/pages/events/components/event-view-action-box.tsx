@@ -9,6 +9,7 @@ import { useCtx } from '../../../utils/context';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { EventRequests } from '../../../utils/services/request';
+import ParticipateDialog from './participate-dialog';
 interface ComponentProps {
     data: EventViewResponseData;
     status: number;
@@ -24,6 +25,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
     const [canSubmit, setCanSubmit] = useState(false);
     const [hasChannel, setHasChannel] = useState(false);
     const [subscribed, setSubscribed] = useState(false);
+    const [participateDialogOpen, setParticipateDialogOpen] = useState(false);
 
     const ctx = useCtx();
     const navigate = useNavigate();
@@ -48,9 +50,38 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
     }
 
     const handleParticipate = () => {
-        //check if registration permitted
-        //check if user is logged_in
-        //check if user has a channel
+        let user_id = ctx?.currentUser?.id;
+        let channel_id = ctx?.userChannel?.id;
+        if(!user_id) return navigate('/login');
+        if(!channel_id) return navigate('/create-channel')
+
+        setParticipateDialogOpen(true);
+    }
+
+    const participateInEvent = async () => {
+        try{
+            let event_id = data.id;
+            let channel_id = ctx?.userChannel?.id;
+            setParticipateDialogOpen(false);
+            ctx.showPreloader();
+            let res: any = await EventRequests.participate({channel_id, event_id});
+
+            if(res && res?.status){
+                if(reload) return reload();
+            }
+
+            if(res && res?.status === false){
+                ctx.showSnackbar(res?.message || 'server error', 'error');
+                return;
+            }
+
+            if(res?.response?.data?.message){
+                ctx.showSnackbar(res.response.data.message, 'error');
+            }
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'serve error', 'error');
+        }
     }
 
     const handleSubscribe = async () => {
@@ -148,6 +179,12 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
                 }
                 <Button className='btn transparent' onClick={handleShare}> <BsShareFill className='icon' /> Share</Button>
             </div>
+
+            <ParticipateDialog 
+                open={participateDialogOpen} 
+                onSuccess={participateInEvent}
+                onClose={() => setParticipateDialogOpen(false)}
+            />
         </div>
     )
 }

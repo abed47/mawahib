@@ -1,7 +1,7 @@
 import Sequelize, { Op } from 'sequelize';
 import { ControllerFunction } from "../../utils/types";
 import {errorResponse, successResponse} from "../../utils";
-import {Category, Event, EventSubscription, User} from '../../database/models';
+import {Category, Channel, Event, EventSubscription, User} from '../../database/models';
 import * as moment from 'moment';
 import Submission from "../../database/models/submission";
 import Participation from "../../database/models/participation";
@@ -146,6 +146,32 @@ export const unsubscribe: ControllerFunction = async (req, res) => {
         if(!user_id || !event_id) return successResponse(res, 400, 'missing required fields');
         await EventSubscription.destroy({ where: { user_id, event_id }});
         return successResponse(res, 200, 'success');
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const participate: ControllerFunction = async (req, res) => {
+    try{
+        let { channel_id, event_id } = req.body;
+        if(!channel_id || !event_id) return errorResponse(res, 400, 'missing required fields');
+        let e: any = await Event.findOne({ where: { id: event_id }});
+        let c: any = await Channel.findOne({ where: { id: channel_id }});
+        if(!e) return errorResponse(res, 404, 'event not found');
+        if(!c) return errorResponse(res, 404, 'channel not found');
+
+        //check if already participated
+        let rCheck = await Participation.findOne({ where: { event_id, channel_id }});
+        if(rCheck) return successResponse(res, 200, 'already subscribed');
+
+        //validate that registration is still open
+        let rStart = e.dataValues.registration_start
+        let rEnd = e.dataValues.registration_end;
+        let now = new Date();
+        if(moment(rStart, 'YYYY-MM-DDThh:mm:ddZ').isAfter(now) || moment(rEnd, 'YYYY-MM-DDThh:mm:ddZ').isBefore(now)) return errorResponse(res, 400, 'cannot register');
+
+        await Participation.create({event_id, channel_id});
+        return successResponse(res, 200, 'successfully registered');
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
