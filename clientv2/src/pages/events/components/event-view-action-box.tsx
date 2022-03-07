@@ -26,6 +26,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
     const [hasChannel, setHasChannel] = useState(false);
     const [subscribed, setSubscribed] = useState(false);
     const [participateDialogOpen, setParticipateDialogOpen] = useState(false);
+    const [withdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
 
     const ctx = useCtx();
     const navigate = useNavigate();
@@ -58,7 +59,42 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         setParticipateDialogOpen(true);
     }
 
+    const handleWithdraw = () => {
+        let user_id = ctx?.currentUser?.id;
+        let channel_id = ctx?.userChannel?.id;
+        if(!user_id) return navigate('/login');
+        if(!channel_id) return navigate('/create-channel')
+
+        setWithdrawDialogOpen(true);
+    }
+
     const participateInEvent = async () => {
+        try{
+            let event_id = data.id;
+            let channel_id = ctx?.userChannel?.id;
+            setParticipateDialogOpen(false);
+            ctx.showPreloader();
+            let res: any = await EventRequests.participate({channel_id, event_id});
+
+            if(res && res?.status){
+                if(reload) return reload();
+            }
+
+            if(res && res?.status === false){
+                ctx.showSnackbar(res?.message || 'server error', 'error');
+                return;
+            }
+
+            if(res?.response?.data?.message){
+                ctx.showSnackbar(res.response.data.message, 'error');
+            }
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'serve error', 'error');
+        }
+    }
+
+    const withdrawFromEvent = async () => {
         try{
             let event_id = data.id;
             let channel_id = ctx?.userChannel?.id;
@@ -170,6 +206,9 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
                 }
                 {
                     canSubmit && participated ? <Button className='btn' onClick={handleSubmit}>Submit</Button> : null
+                }
+                {
+                    participated ? <Button className='btn disabled' onClick={handleWithdraw}>Withdraw</Button> : null
                 }
                 <div className="vr"></div>
                 {
