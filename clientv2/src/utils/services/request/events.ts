@@ -70,6 +70,19 @@ const eventsApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        withdraw: async (body: { channel_id: entityId, event_id: entityId}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/event/withdraw', body, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }

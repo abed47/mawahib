@@ -12,6 +12,7 @@ import Logo from '../../../assets/images/logo.png';
 
 //DEPLOY: change to server url
 const host = 'http://localhost:4000/api/';
+export const getChannelPanelUrl = () => 'http://localhost:5000';
 
 export const AuthRequests = AuthApis(host);
 export const ChannelRequests = ChannelApis(host);
@@ -21,6 +22,7 @@ export const PurchasesRequests = PurchasesApis(host);
 export const UserRequests = UserApis(host);
 export const CategoryRequests = CategoryApis(host);
 export const EventRequests = eventsApis(host);
+
 
 export const getVideoThumb = (u: string) => {
     return host + 'v1/uploads/' + u;

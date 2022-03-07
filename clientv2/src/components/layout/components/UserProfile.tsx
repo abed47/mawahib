@@ -8,6 +8,7 @@ import { FaCog } from 'react-icons/fa';
 import { useCtx } from '../../../utils/context';
 import { useNavigate } from 'react-router-dom';
 import StorageService from '../../../utils/services/store';
+import { getChannelPanelUrl } from '../../../utils/services/request';
 
 const UserProfile: React.FC = props => {
 
@@ -86,7 +87,7 @@ const UserProfile: React.FC = props => {
                 <div className="combined">
                     {
                         ctx.userChannel?.id ? (
-                            <div className="menu-item" onClick={() => navigateTo('http://localhost:5000', true, true)}>
+                            <div className="menu-item" onClick={() => navigateTo(getChannelPanelUrl(), true, true)}>
                                 <div className="icon">
                                     <MdOutlineContactPage />
                                 </div>

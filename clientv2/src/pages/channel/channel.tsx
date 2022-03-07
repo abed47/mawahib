@@ -2,10 +2,10 @@ import { Button } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
-import { ChannelRequests, handlePhotoUrl } from '../../utils/services/request';
+import { ChannelRequests, getChannelPanelUrl, handlePhotoUrl } from '../../utils/services/request';
 import { FiEdit3, FiUsers } from 'react-icons/fi';
 import { BsCollectionPlay, BsFillCheckCircleFill } from 'react-icons/bs';
-import { IoMdNotificationsOff, IoMdNotifications } from 'react-icons/io';
+import { IoMdNotifications } from 'react-icons/io';
 import * as store from '../../utils/services/store';
 import ChannelHome from './ChannelHome';
 
@@ -155,7 +155,7 @@ const ChannelView: React.FC = props => {
                     <div className="r">
                         {
                             ctx?.userChannel?.id ? 
-                            <Button className="btn secondary edit-btn" onClick={() => navigateTo('http://localhost:5000', true, true)}> <FiEdit3 className='icon' /> Edit Channel</Button> :
+                            <Button className="btn secondary edit-btn" onClick={() => navigateTo(getChannelPanelUrl(), true, true)}> <FiEdit3 className='icon' /> Edit Channel</Button> :
                             <div className="controls">
                                 {
                                     subscribed ? 

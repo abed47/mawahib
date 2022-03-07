@@ -8,8 +8,12 @@ import { BsShareFill } from 'react-icons/bs';
 import { useCtx } from '../../../utils/context';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import { EventRequests } from '../../../utils/services/request';
+import { EventRequests, getChannelPanelUrl } from '../../../utils/services/request';
 import ParticipateDialog from './participate-dialog';
+import WithdrawDialog from './withdraw-dialog';
+import simpleCrypto from 'simple-crypto-js';
+import { getQe } from '../../../utils/helpers';
+
 interface ComponentProps {
     data: EventViewResponseData;
     status: number;
@@ -18,6 +22,7 @@ interface ComponentProps {
     videoProps?: any
     reload?: () => void;
 }
+
 const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) => {
 
     const [participated, setParticipated] = useState(false);
@@ -98,7 +103,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         try{
             let event_id = data.id;
             let channel_id = ctx?.userChannel?.id;
-            setParticipateDialogOpen(false);
+            setWithdrawDialogOpen(false);
             ctx.showPreloader();
             let res: any = await EventRequests.participate({channel_id, event_id});
 
@@ -181,7 +186,24 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         ctx.showSnackbar('Copied to clipboard', 'info');
     }
 
-    const handleSubmit = () => {}
+    const handleSubmit = () => {
+        let channel_id = ctx.userChannel.id;
+        let event_id = data.id;
+        let action = 'event_submit';
+
+        let s = JSON.stringify({
+            channel_id,
+            event_id,
+            action
+        });
+        
+        let crypto = new simpleCrypto(getQe());
+        let encrypted = crypto.encrypt(s);
+        console.log(encrypted)
+        let token = ctx.token;
+        let url = getChannelPanelUrl() + '/login?tok=' + token + '&act=' + encodeURI(encrypted);
+        return window.open(url, '_blank');
+    }
 
     return (
         <div className="action-box">
@@ -223,6 +245,12 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
                 open={participateDialogOpen} 
                 onSuccess={participateInEvent}
                 onClose={() => setParticipateDialogOpen(false)}
+            />
+
+            <WithdrawDialog 
+                open={withdrawDialogOpen}
+                onSuccess={withdrawFromEvent}
+                onClose={() => setWithdrawDialogOpen(false)}
             />
         </div>
     )
