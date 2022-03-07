@@ -375,6 +375,10 @@
                         margin-right: 5px;
                     }
                 }
+
+                &.disabled{
+                    background: #707070;
+                }
             }
 
             .vr{

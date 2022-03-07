@@ -54,7 +54,7 @@ const EventPage: React.FC = props => {
     return (
         <div className="event-page">
             {data?.id ? <EventViewHeader data={data} updateStatus={setEventStatus} /> : null}
-            {data?.id ? <EventViewActionBox data={data} updateStatus={setEventStatus} status={eventStatus} /> : null}
+            {data?.id ? <EventViewActionBox data={data} updateStatus={setEventStatus} status={eventStatus} reload={loadData} /> : null}
         </div>
     )
 }

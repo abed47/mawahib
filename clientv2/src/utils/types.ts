@@ -34,6 +34,7 @@ export type EventViewResponseData = {
     subscription_count: number;
     submission_count: number;
     participated: boolean;
+    subscribed: boolean;
     category: {
         name: string;
         id: number;

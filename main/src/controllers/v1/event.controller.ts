@@ -62,6 +62,7 @@ export const view: ControllerFunction = async (req, res) => {
         let { user_id, channel_id } = req.body;
         if(typeof +id !== "number") return errorResponse(res, 400, 'unacceptable event id');
         let participated = false;
+        let subscribed = false;
 
 
         if(channel_id){
@@ -72,6 +73,11 @@ export const view: ControllerFunction = async (req, res) => {
             });
 
             if(participationCheck) participated = true;
+        }
+
+        if(user_id){
+            let subscribeCheck = await EventSubscription.findOne({where: { event_id: id, user_id }});
+            if(subscribeCheck) subscribed = true;
         }
 
         let event: any = await Event.findOne({
@@ -109,7 +115,7 @@ export const view: ControllerFunction = async (req, res) => {
 
         if(!event) return errorResponse(res, 404, 'event not found')
 
-        return successResponse(res, 200, 'retrieved successfully', {...event.dataValues, participated});
+        return successResponse(res, 200, 'retrieved successfully', {...event.dataValues, participated, subscribed});
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
