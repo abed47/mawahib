@@ -298,4 +298,92 @@
             }
         }
     }
+
+    .action-box{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px;
+        @include init-flex(row, space-between, center);
+
+        .l{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            img{
+                width:  70px;
+                height: 70px;
+                border: 2px solid $color-secondary;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            .info{
+                @include init-flex(column, flex-start, flex-start);
+                margin-left: 15px;
+
+                .category{
+                    margin: 0;
+                    font-size: 12px;
+                    font-family: $font-base;
+                    color: $text-color2;
+                }
+
+                .title{
+                    margin: 0;
+                    font-size: 28px;
+                    color: $color-secondary;
+                    font-family: $font-bold;
+                }
+
+                .icons{
+                    @include init-flex(row, flex-start, flex-start);
+                    color: $text-color2;
+
+                        span{
+                            @include init-flex(row, flex-start, center);
+                            margin-right: 15px;
+                            p{
+                                margin: 0;
+                                margin-left: 10px;
+                            }
+                        }
+                }
+            }
+        }
+
+        .r{
+            @include init-flex(row, space-between, center);
+
+            .btn{
+                background: linear-gradient(175deg, #4BBEB6 0%, #006896 100%) 0% 0% no-repeat padding-box;
+                color: $text-color;
+                margin: 0 5px;
+                padding: 5px 20px !important;
+                font-size: 14px;
+                font-weight: normal;
+                font-family: $font-base !important;
+                text-transform: capitalize;
+                border-radius: 7px;
+
+                &.transparent{
+                    background: none !important;
+                    color: $text-color2;
+
+                    .icon{
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .vr{
+                background-color: $text-color2;
+                height: 35px;
+                width: 2px;
+                opacity: .7;
+                margin: 0 10px;
+            }
+        }
+    }
 }

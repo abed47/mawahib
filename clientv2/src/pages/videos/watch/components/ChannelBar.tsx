@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, IconButton } from '@mui/material';
 import { FiUsers } from 'react-icons/fi';
 import { BsCollectionPlay, BsShareFill, BsBellFill } from 'react-icons/bs';
-import { AiOutlineLike, AiOutlineDislike } from 'react-icons/ai';
+import { AiOutlineLike } from 'react-icons/ai';
 import { useCtx } from '../../../../utils/context';
 import { VideoRequests, ChannelRequests } from '../../../../utils/services/request';
 const ChannelBar: React.FC<any> = props => {

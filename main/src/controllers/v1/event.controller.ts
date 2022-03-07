@@ -4,6 +4,7 @@ import {errorResponse, successResponse} from "../../utils";
 import {Category, Event, EventSubscription, User} from '../../database/models';
 import * as moment from 'moment';
 import Submission from "../../database/models/submission";
+import Participation from "../../database/models/participation";
 
 export const home: ControllerFunction = async (req, res) => {
     try{
@@ -12,7 +13,7 @@ export const home: ControllerFunction = async (req, res) => {
         let event_categories = null;
         let ongoing_events = null;
         let upcoming_events = null;
-        let today = moment(new Date()).format('YYYY-MM-DDThh:mm:ss');
+        let today = moment(new Date()).format('YYYY-MM-DDThh:mm:ssZ');
 
         if(user_id){
             my_events = await Event.findAll({
@@ -40,7 +41,8 @@ export const home: ControllerFunction = async (req, res) => {
                 start_date: { [Op.gt]: today }
             },
             include: [ { model: Category, required: false }, { model: EventSubscription, required: false, where: { user_id: user_id || 0 }} ],
-            limit: 3
+            limit: 3,
+            order: [['createdAt', 'DESC']]
         });
 
         return successResponse(res, 200, 'retrieved successfully', {
@@ -57,9 +59,20 @@ export const home: ControllerFunction = async (req, res) => {
 export const view: ControllerFunction = async (req, res) => {
     try{
         let { id } = req.params;
+        let { user_id, channel_id } = req.body;
         if(typeof +id !== "number") return errorResponse(res, 400, 'unacceptable event id');
+        let participated = false;
 
 
+        if(channel_id){
+            let participationCheck = await Participation.findOne({
+                where: {
+                    channel_id, event_id: id
+                }
+            });
+
+            if(participationCheck) participated = true;
+        }
 
         let event: any = await Event.findOne({
             where: { id },
@@ -96,7 +109,7 @@ export const view: ControllerFunction = async (req, res) => {
 
         if(!event) return errorResponse(res, 404, 'event not found')
 
-        return successResponse(res, 200, 'retrieved successfully', event);
+        return successResponse(res, 200, 'retrieved successfully', {...event.dataValues, participated});
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
