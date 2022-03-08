@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
-import { VideoRequests, handlePhotoUrl } from '../../utils/services/request';
+import { VideoRequests, handlePhotoUrl, ChannelRequests } from '../../utils/services/request';
 import moment from 'moment';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -32,8 +32,8 @@ const VideoListing: React.FC = props => {
         try{
             let channelId = ctx.channel?.id;
             ctx.showPreloader();
-            let res = await VideoRequests.searchVideos({
-                fields: {channel_id: channelId}, 
+            let res = await ChannelRequests.getChannelVideo({
+                channel_id: channelId,
                 pagination:{limit: rowsPerPage, offset: 0}});
             ctx.hidePreloader();
 
@@ -110,7 +110,10 @@ const VideoListing: React.FC = props => {
                                         }
                                         </td>    
                                         <td>
-                                            <p className='text f-16 c-1 f-base m0'>{shortenNumber(item.views?.length)}</p>
+                                            <p className='text f-16 c-1 f-base m0'>{shortenNumber(item.view_count)}</p>
+                                        </td>    
+                                        <td>
+                                            <p className='text f-16 c-1 f-base m0'>{shortenNumber(item.comment_count)}</p>
                                         </td>    
                                     </tr>
                                 );

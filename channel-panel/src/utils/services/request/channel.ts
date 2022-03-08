@@ -17,6 +17,18 @@ const ChannelApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        getChannelVideo: async (body: any) => {
+            try{
+                let { data } = await axios.post(host + 'v1/channel/get-videos', body, {
+                    headers:{
+                        "Content-Type": "application/json"
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }

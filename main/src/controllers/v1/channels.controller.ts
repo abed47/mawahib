@@ -238,6 +238,7 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
                 'thumbnail',
                 'createdAt',
                 [Sequelize.literal('(SELECT COUNT(id) FROM comments WHERE video_id = "video"."id")'), 'comment_count'],
+                [Sequelize.literal('(SELECT COUNT(id) FROM likes WHERE video_id = "video"."id")'), 'like count'],
                 [Sequelize.fn('COUNT', Sequelize.col('views.id')), 'view_count'],
             ],
             include: [
