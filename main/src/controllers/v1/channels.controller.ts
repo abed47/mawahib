@@ -252,7 +252,7 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
             type: 'success',
             status: true,
             data: videos,
-            pagination: {totalRows},
+            pagination: {totalRows: 50},
             message: 'retrieved successfully'
         })
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@mui/material';
+import { Button, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
 import { VideoRequests, handlePhotoUrl, ChannelRequests } from '../../utils/services/request';
@@ -11,7 +11,7 @@ import { shortenNumber } from '../../utils/helpers';
 const VideoListing: React.FC = props => {
 
     const [dataList, setDataList] = useState<any[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const [totalRows, setTotalRows] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -22,11 +22,6 @@ const VideoListing: React.FC = props => {
     useEffect(() => {
         loadData();
     }, []);
-
-    const getOffset = (n: number) => {
-        if(n === 1) return 0;
-        if(n > 1) return n / rowsPerPage
-    }
 
     const loadData = async () => {
         try{
@@ -41,6 +36,8 @@ const VideoListing: React.FC = props => {
 
             if(res && res?.status){
                 setDataList(res.data);
+                setTotalRows(res.pagination.totalRows);
+                setTotalPages(Math.ceil(res.pagination.totalRows / rowsPerPage))
             }
         }catch(err: any){
             ctx.hidePreloader();
@@ -48,11 +45,38 @@ const VideoListing: React.FC = props => {
         }
     }
 
-    const handleLoadMore = () => {}
+    const handleChangePage = (e: any, v: any) => {
+        setCurrentPage(v);
+        loadMore(v * rowsPerPage, rowsPerPage);
+    }
 
-    const handleNext = () => {}
+    const handleChangeRowsPerPage = (e: any) => {
+        let v = e.target.value;
+        setRowsPerPage(v);
+        loadMore(currentPage, v);
+    }
 
-    const handlePrevious = () => {}
+    const loadMore = async (offset: any, limit: any) => {
+        try{
+            let channelId = ctx.channel?.id;
+            ctx.showPreloader();
+            let res = await ChannelRequests.getChannelVideo({
+                channel_id: channelId,
+                pagination:{limit: limit, offset}});
+            ctx.hidePreloader();
+
+            console.log(res);
+
+            if(res && res?.status){
+                setDataList(res.data);
+                setTotalRows(res.pagination.totalRows);
+                setTotalPages(Math.ceil(res.pagination.totalRows / rowsPerPage))
+            }
+        }catch(err: any){
+            ctx.hidePreloader();
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
 
     const navigateTo = (url: string) => {
         navigation(url);
@@ -73,12 +97,12 @@ const VideoListing: React.FC = props => {
                 <table>
                     <thead>
                         <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Video</td>
-                            <td>Visibility</td>
-                            <td>Views</td>
-                            <td>Comments</td>
-                            <td>Likes</td>
+                            {/* <td><input type="checkbox" /></td> */}
+                            <td className='text f-14 c-2'>Video</td>
+                            <td className='text f-14 c-2'>Visibility</td>
+                            <td className='text f-14 c-2'>Views</td>
+                            <td className='text f-14 c-2'>Comments</td>
+                            <td className='text f-14 c-2'>Likes</td>
                         </tr>
                     </thead>
 
@@ -87,7 +111,7 @@ const VideoListing: React.FC = props => {
                             dataList.map((item, i) => {
                                 return (
                                     <tr className="table-row" key={`video-list-item-key-${i}`}>
-                                        <td><input type="checkbox" /></td>   
+                                        {/* <td><input type="checkbox" /></td>    */}
                                         <td className='video'>
                                             <img src={handlePhotoUrl(item.thumbnail, "video")} alt="" />
                                             <div className="info">
@@ -104,7 +128,7 @@ const VideoListing: React.FC = props => {
                                                 </div>
                                                 : 
                                                 <div className="icon-ize">
-                                                    <RemoveRedEyeIcon className='icon active' />
+                                                    <VisibilityOffIcon className='icon active' />
                                                     <p>Private</p>
                                                 </div>
                                         }
@@ -115,6 +139,9 @@ const VideoListing: React.FC = props => {
                                         <td>
                                             <p className='text f-16 c-1 f-base m0'>{shortenNumber(item.comment_count)}</p>
                                         </td>    
+                                        <td>
+                                            <p className='text f-16 c-1 f-base m0'>{shortenNumber(item.like_count)}</p>
+                                        </td>    
                                     </tr>
                                 );
                             })
@@ -122,6 +149,18 @@ const VideoListing: React.FC = props => {
                     </tbody>
                 </table>
             </main>
+
+            <footer>
+                <TablePagination
+                    className='pagination'
+                    component="div"
+                    count={totalRows}
+                    page={currentPage}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+            </footer>
         </div>
     );
 }
