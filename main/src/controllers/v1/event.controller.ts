@@ -33,7 +33,7 @@ export const home: ControllerFunction = async (req, res) => {
             ]
             },
             include: [ { model: Category, required: false }, { model: EventSubscription, required: false, where: { user_id: user_id || 0 }} ],
-            limit: 3
+            limit: 4
         });
 
         upcoming_events = await Event.findAll({
@@ -41,7 +41,7 @@ export const home: ControllerFunction = async (req, res) => {
                 start_date: { [Op.gt]: today }
             },
             include: [ { model: Category, required: false }, { model: EventSubscription, required: false, where: { user_id: user_id || 0 }} ],
-            limit: 3,
+            limit: 4,
             order: [['createdAt', 'DESC']]
         });
 

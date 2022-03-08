@@ -83,6 +83,14 @@ const Video = db.define('video', {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 1 // 1 = normal, 2 = event video
+    },
+    event_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    stage_number: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {
     paranoid: true,

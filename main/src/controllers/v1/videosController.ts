@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { Channel, Like, Playlist, Subscription, User, Video, View } from "../../database/models";
-import { returnErrResponse, successResponse } from "../../utils";
+import {errorResponse, returnErrResponse, successResponse} from "../../utils";
 import * as securePin from 'secure-pin';
 import { Op } from "sequelize";
 import Comment from "../../database/models/comments";
 import Category from "../../database/models/category";
+import Submission from "../../database/models/submission";
+import Participation from "../../database/models/participation";
 
 export const view = async (req: Request, res: Response) => {
     let {user_id, video_id} = req.body;
@@ -70,13 +72,26 @@ export const view = async (req: Request, res: Response) => {
 }
 
 export const create = async (req: Request, res: Response) => {
-    let { title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail} = req.body;
+    let { title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail, event_id, type, stage_number} = req.body;
 
     if(!title || !description || !channel_id || !user_id) return returnErrResponse(res, 'all fields are required', 400);
 
-    try{
 
-        await Video.create({title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail});
+    try{
+        let participation: any = null;
+
+        //check if user is participated in the event
+        if(type === 2){
+            participation = await Participation.findOne({where: { channel_id, event_id }});
+            if(!participation) return errorResponse(res, 400, 'you are not participating in this event');
+        }
+
+        let v:any = await Video.create({title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail, event_id, type, stage_number});
+
+        if(stage_number && event_id && type === 2){
+            await Submission.create({event_id, stage_number, channel_id, video_id: v.id, participation_id: participation.id});
+        }
+
         return successResponse(res, 200, 'created successfully', null);
 
     }catch(err){

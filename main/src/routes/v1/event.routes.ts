@@ -11,4 +11,5 @@ router.post('/view/:id', controller.view);
 router.post('/participate', verifyJwtToken, controller.participate);
 router.post('/withdraw', verifyJwtToken, controller.withdraw);
 router.get('/:id', controller.getOne);
+
 export default router;

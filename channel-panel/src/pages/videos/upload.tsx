@@ -138,7 +138,10 @@ const VideoUpload: React.FC = props => {
             has_promotion: hasPromotion,
             channel_id: ctx.channel.id,
             user_id: ctx.currentUser.id,
-            url: ''
+            url: '',
+            type: isSubmission ? 2 : 1,
+            event_id: isSubmission ? event?.id : null,
+            stage_number: isSubmission ? event?.current_stage : null
         }
 
         try{
