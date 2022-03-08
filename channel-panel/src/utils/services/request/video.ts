@@ -4,6 +4,18 @@ import StorageService from "../store";
 const VideoApis = (host: string) =>  {
     let token = StorageService.getItem('token');
     return {
+        searchVideos: async (body: {fields: any, pagination: { limit: number, offset: number}}) => {
+            try{
+                let { data } = await axios.post(host + 'v1/video/search', body, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
+        },
         createVideo: async (body: any) => {
             try{
                 let { data } = await axios.post(host + 'v1/video/upload', body, {
