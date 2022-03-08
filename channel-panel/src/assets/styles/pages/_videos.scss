@@ -9,6 +9,7 @@
         align-items: flex-start;
         width: 100%;
         height: 100%;
+        box-sizing: border-box;
 
 
         header{
@@ -30,6 +31,95 @@
         hr{
             width: 100%;
             margin: 0;
+        }
+
+        main{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            box-sizing: border-box;
+
+            table{
+                width: 100%;
+                max-width: 800px;
+                border-collapse: collapse;
+
+                thead{
+                    tr td{
+                        border-bottom: 1px solid $text-color2;
+                        padding: 5px 0;
+                    }
+                }
+
+                tbody{
+                    tr{
+                        td{ 
+                            padding: 10px 0;
+                        }
+
+                        td.video{
+                            display: flex;
+                            flex-direction: row;
+                            align-items: flex-start;
+                            justify-content: center;
+                            width: 300px;
+                            
+                            img{
+                                width: 170px;
+                                height: 90px;
+                                object-fit: cover;
+                            }
+
+                            .info{
+                                margin-left: 15px;
+                                width: calc(100% - 185px);
+
+                                .title{
+                                    margin: 0;
+                                    color: $text-color;
+                                    font-family: $font-medium;
+                                    font-size: 16px;
+                                    margin-bottom: 5px;
+                                }
+
+                                .date{
+                                    margin: 0;
+                                    color: $text-color2;
+                                    font-family: $font-base;
+                                    font-size: 14px;
+                                }
+                            }
+                        }
+
+                        td.visibility{
+                            .icon-ize{
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: flex-start;
+                                align-items: center;
+
+                                .icon{
+                                    color: $text-color2;
+
+                                    &.active{
+                                        color: $color-secondary;
+                                    }
+                                }
+
+                                p{
+                                    margin: 0;
+                                    margin-left: 15px;
+                                    font-family: $font-medium;
+                                    font-size: 16px;
+                                    color: $text-color;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     

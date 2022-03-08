@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
-import { VideoRequests } from '../../utils/services/request';
+import { VideoRequests, handlePhotoUrl } from '../../utils/services/request';
+import moment from 'moment';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { shortenNumber } from '../../utils/helpers';
 
 const VideoListing: React.FC = props => {
 
@@ -36,7 +40,7 @@ const VideoListing: React.FC = props => {
             console.log(res);
 
             if(res && res?.status){
-
+                setDataList(res.data);
             }
         }catch(err: any){
             ctx.hidePreloader();
@@ -77,6 +81,42 @@ const VideoListing: React.FC = props => {
                             <td>Likes</td>
                         </tr>
                     </thead>
+
+                    <tbody>
+                        {
+                            dataList.map((item, i) => {
+                                return (
+                                    <tr className="table-row" key={`video-list-item-key-${i}`}>
+                                        <td><input type="checkbox" /></td>   
+                                        <td className='video'>
+                                            <img src={handlePhotoUrl(item.thumbnail, "video")} alt="" />
+                                            <div className="info">
+                                                <p className="title">{item.title}</p>
+                                                <p className="date">{moment(item.createdAt, 'YYYY-MM-DDThh:mm:ssZ').format('MMM DD, YYYY')}</p>    
+                                            </div>
+                                        </td>    
+                                        <td className='visibility'>
+                                            {
+                                            item.visible ? 
+                                                <div className="icon-ize">
+                                                    <RemoveRedEyeIcon className='icon active' />
+                                                    <p>Public</p>
+                                                </div>
+                                                : 
+                                                <div className="icon-ize">
+                                                    <RemoveRedEyeIcon className='icon active' />
+                                                    <p>Private</p>
+                                                </div>
+                                        }
+                                        </td>    
+                                        <td>
+                                            <p className='text f-16 c-1 f-base m0'>{shortenNumber(item.views?.length)}</p>
+                                        </td>    
+                                    </tr>
+                                );
+                            })
+                        }
+                    </tbody>
                 </table>
             </main>
         </div>

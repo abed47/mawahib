@@ -6,6 +6,7 @@ import {ControllerFunction} from "../../utils/types";
 import Category from "../../database/models/category";
 import { db } from "../../database";
 import * as moment from 'moment';
+import Comment from "../../database/models/comments";
 
 export const getAll = async (req: Request, res: Response) => {
     
@@ -205,6 +206,56 @@ export const view: ControllerFunction = async (req, res) => {
         if(!c) return errorResponse(res, 404, 'channel does not exist');
         return successResponse(res, 200, 'retrieved successfully', {...c.dataValues, subscribed, top_fans: top_fans[0], latest_videos});
     }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const getChannelVideos: ControllerFunction = async (req, res) => {
+    let { pagination, channel_id } = req.body;
+    let filters = {
+        where: {
+            channel_id
+        },
+        order: [['createdAt', 'DESC']]
+    };
+
+    if(pagination && pagination?.limit && pagination?.offset >= 0){
+        filters['offset'] = pagination.offset;
+        filters['limit'] = pagination.limit;
+    }
+
+    try{
+
+        let totalRows = await Video.count({ where: { channel_id }});
+
+        let videos: any = await Video.findAll({
+            where: {
+                channel_id
+            },
+            attributes: [
+                'id',
+                'title',
+                'thumbnail',
+                'createdAt',
+                [Sequelize.literal('(SELECT COUNT(id) FROM comments WHERE video_id = "video"."id")'), 'comment_count'],
+                [Sequelize.fn('COUNT', Sequelize.col('views.id')), 'view_count'],
+            ],
+            include: [
+                { model: View, required: false, attributes: []},
+            ],
+            group: ['video.id'],
+            order: [['createdAt', 'DESC']]
+        });
+
+        return res.status(200).json({
+            type: 'success',
+            status: true,
+            data: videos,
+            pagination: {totalRows},
+            message: 'retrieved successfully'
+        })
+
+    }catch (err) {
         return errorResponse(res, 500, err?.message || 'server error');
     }
 }
