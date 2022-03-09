@@ -15,7 +15,7 @@ const Event = db.define('event', {
         allowNull: true
     },
     description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
     },
     limit: {
@@ -63,6 +63,22 @@ const Event = db.define('event', {
     },
     sponsor_url: {
         type: DataTypes.STRING,
+        allowNull: true
+    },
+    first_prize_amount: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    second_prize_amount: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    third_prize_amount: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    prize_pool_description: {
+        type: DataTypes.TEXT,
         allowNull: true
     }
 }, { timestamps: true });

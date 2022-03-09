@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
 import { EventRequests, handlePhotoUrl } from '../../utils/services/request';
 import { EventViewResponseData, EventViewResponse } from '../../utils/types';
+import EventTabs from './components/event-tabs';
 import EventViewActionBox from './components/event-view-action-box';
 
 import EventViewHeader from './components/event-view-header';
@@ -55,6 +56,7 @@ const EventPage: React.FC = props => {
         <div className="event-page">
             {data?.id ? <EventViewHeader data={data} updateStatus={setEventStatus} /> : null}
             {data?.id ? <EventViewActionBox data={data} updateStatus={setEventStatus} status={eventStatus} reload={loadData} /> : null}
+            {data?.id ? <EventTabs data={data} /> : null}
         </div>
     )
 }

@@ -392,6 +392,128 @@
 
         
     }
+
+    .event-tabs{
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px;
+        @include init-flex(column, space-between, center);
+
+        .tool-bar{
+            @include init-flex(row, space-between, center);
+            background-color: $color-primary;
+            width: 100%;
+            padding: 15px 25px;
+            box-sizing: border-box;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            
+            .event-tabs-buttons{
+                @include init-flex(row, space-between, center);
+                max-width: 500px;
+                
+                .tab-title{
+                    padding: 10px 25px;
+                    color: $text-color;
+                    font-family: $font-medium;
+                    font-size: 16px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: all 300ms ease-in-out;
+                    margin: 0 15px;
+    
+                    &.active{
+                        font-family: $font-bold;
+                        background-color: $box-color;
+                    }
+                }
+            }
+
+            .search-box{
+                background-color: $box-color2;
+                border-radius: 10px;
+                height: 40px;
+                min-width: 200px;
+                width: 300px;
+                @include init-flex(row, flex-start, center);
+                overflow: hidden;
+                
+                input[type=text]{
+                    background-color: none;
+                    background: none;
+                    border: none;
+                    outline: none;
+                    width: 80%;
+                    padding: 5px 12px;
+                    box-sizing: border-box;
+                }
+
+                .btn{
+                    width: 20%;
+                    color: $text-color2;
+                    border-left: 1px solid $text-color2;
+                    height: 100%;
+                }
+            }
+        }
+
+        .tabs-contents{
+            padding: 15px 25px;
+            box-sizing: border-box;
+            min-height: 150px;
+            width: 100%;
+            background-color: $box-color;
+            display: flex;
+            transition: all 300ms ease-in-out;
+            @include init-flex(row, center, center);
+
+            .tab-content{
+                display: none;
+                animation: 2s tab-out ease-in-out;
+                width: 100%;
+    
+                &.active{
+                    display: flex;
+                    width: 100%;
+                    margin-top: 20px;
+                    animation: 2s tab-in ease-in-out;
+                }
+
+                .info{
+                    p{
+                        color: $text-color;
+                        font-size: 16px;
+                        font-family: $font-base;
+                    }
+
+                    h1{
+                        color: $color-secondary;
+                        text-transform: capitalize;
+                        font-size: 16px;
+                        font-family: $font-bold;
+                    }
+
+                    .rewards{
+                        width: 100%;
+                        @include init-flex(row, space-between, center);
+                        margin-top: 30px;
+
+                        .reward{
+                            @include init-flex(column, center, center);
+                            img{
+                                width: 200px;
+                            }
+                            p{
+                                font-size: 24px;
+                                font-family: $font-medium;
+                                margin: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .participate-dialog{

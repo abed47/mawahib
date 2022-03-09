@@ -18,6 +18,24 @@ const initAdminPanel = (database) => {
                 resource: Event,
                 options: {
                     properties: {
+                        prize_pool_description: {
+                            type: 'richtext',
+                            props: {
+                                borderless: false,
+                                quill: {
+                                    bounds: 'string'
+                                }
+                            }
+                        },
+                        description: {
+                            type: 'richtext',
+                            props: {
+                                borderless: false,
+                                quill: {
+                                    bounds: 'string'
+                                }
+                            }
+                        },
                         photo: {
                             isVisible: { list: true, search: true, new: false, edit: false, view: true}
                         },

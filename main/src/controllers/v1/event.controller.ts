@@ -101,6 +101,10 @@ export const view: ControllerFunction = async (req, res) => {
                 "category_id",
                 "sponsor_name",
                 "sponsor_url",
+                "first_prize_amount",
+                "second_prize_amount",
+                "third_prize_amount",
+                "prize_pool_description",
                 [Sequelize.fn("COUNT", Sequelize.col("event_subscriptions.id")), "subscription_count"],
                 [Sequelize.fn("COUNT", Sequelize.col("submissions.id")), "submission_count"]
             ],

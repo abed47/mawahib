@@ -20,7 +20,7 @@ export type EventViewResponseData = {
     createdAt: string;
     updatedAt: string;
     current_stage: number;
-    description: string;
+    description: string | any;
     end_date: string;
     start_date: string;
     limit: number;
@@ -38,7 +38,11 @@ export type EventViewResponseData = {
     category: {
         name: string;
         id: number;
-    }
+    },
+    first_prize_amount: number | null;
+    second_prize_amount: number | null;
+    third_prize_amount: number | null;
+    prize_pool_description: string | null;
 }
 
 export type EventViewResponse = RequestResponse<EventViewResponseData>
