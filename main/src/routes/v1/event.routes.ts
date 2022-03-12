@@ -10,6 +10,13 @@ router.post('/unsubscribe', verifyJwtToken, controller.unsubscribe);
 router.post('/view/:id', controller.view);
 router.post('/participate', verifyJwtToken, controller.participate);
 router.post('/withdraw', verifyJwtToken, controller.withdraw);
-router.get('/:id', controller.getOne);
 
+//TODO: add admin middleware
+router.get('/:id', controller.getOne);
+router.post('/admin-display', controller.eventAdminView);
+router.post('/activate-voting', controller.activateVotes);
+router.post('/deactivate-voting', controller.deactivateVotes);
+router.post('/stage', controller.createStage);
+router.post('/stage-publish', controller.publishStage);
+router.post('/stage-unpublish', controller.unpublishStage);
 export default router;

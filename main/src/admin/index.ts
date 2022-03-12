@@ -17,7 +17,14 @@ const initAdminPanel = (database) => {
             {
                 resource: Event,
                 options: {
+                    showProperties: ['voting'],
                     properties: {
+                        voting: {
+                            isVisible: {show: true, search: false, edit: false, new: false},
+                            components: {
+                                show: AdminJs.bundle('./components/event-view-component.jsx')
+                            }
+                        },
                         prize_pool_description: {
                             type: 'richtext',
                             props: {

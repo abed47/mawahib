@@ -1,7 +1,7 @@
 import Sequelize, { Op } from 'sequelize';
 import { ControllerFunction } from "../../utils/types";
 import {errorResponse, successResponse} from "../../utils";
-import {Category, Channel, Event, EventSubscription, User} from '../../database/models';
+import {Category, Channel, Event, EventStage, EventSubscription, User} from '../../database/models';
 import * as moment from 'moment';
 import Submission from "../../database/models/submission";
 import Participation from "../../database/models/participation";
@@ -111,15 +111,31 @@ export const view: ControllerFunction = async (req, res) => {
             include: [
                 { model: Category, required: false, attributes: ["id", "name"] },
                 { model: EventSubscription, required: false, attributes: [] },
-                { model: Submission, required: false, attributes: [] }
-
+                { model: Submission, required: false, attributes: [] },
             ],
             group: ["event.id", "category.id"]
         });
-
+        
         if(!event) return errorResponse(res, 404, 'event not found')
 
-        return successResponse(res, 200, 'retrieved successfully', {...event.dataValues, participated, subscribed});
+        let stages: any = await EventStage.findAll({ where: {
+            [Op.and]: [
+                { event_id: id },
+                { stage_number: { [Op.lte]: event?.dataValues?.current_stage}},
+                { status: 2}
+            ]
+        }});
+
+        let can_submit: any = await EventStage.findOne({ where: { 
+            [Op.and]: [
+                { event_id: id },
+                { stage_number: { [Op.lte]: event?.dataValues?.current_stage}},
+                { submission_start: { [Op.lte]: new Date()}},
+                { submission_end: { [Op.gt]: new Date()}}
+            ]
+         }});
+        
+        return successResponse(res, 200, 'retrieved successfully', {...event.dataValues, participated, subscribed, stages, can_submit});
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
@@ -196,9 +212,105 @@ export const withdraw: ControllerFunction = async (req, res) => {
 export const getOne: ControllerFunction = async (req, res) => {
     try{
         let { id } = req.params;
-        let r = await Event.findOne({ where: { id }});
+        let r = await Event.findOne({ where: { id }, include: [{model: EventStage, required: false}]});
         if(!r) return errorResponse(res, 404, 'event not found');
         return successResponse(res, 200, 'retrieved successfully', r);
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+
+//TODO: create middleware for admin requests
+export const eventAdminView: ControllerFunction = async (req, res) => {
+    try{
+        let { event_id } = req.body;
+        if(!event_id) return errorResponse(res, 400, 'missing required fields');
+
+        //event, event subscription count, event registration count
+        let ev = await Event.findOne({
+            where: { id: event_id },
+            attributes: [
+                'id',
+                'title',
+                'stage_count',
+                'current_stage',
+                'can_vote',
+                [Sequelize.literal('(SELECT COUNT(id) FROM event_subscriptions WHERE event_id = "event"."id")'), 'subscription_count'],
+                [Sequelize.literal('(SELECT COUNT(id) FROM participations WHERE event_id = "event"."id")'), 'participants_count'],
+            ],
+            include: [
+                { model: EventStage, required: false}
+            ]
+        })
+
+        if(!ev) return errorResponse(res, 404, 'event not found');
+        return successResponse(res, 200, 'retrieved successfully', ev);
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const createStage: ControllerFunction = async (req, res) => {
+    try{
+        let {stage_number, title, submission_start, submission_end, status, event_id } = req.body;
+        if(!stage_number || !title || !submission_end || !submission_start || !status || !event_id) return errorResponse(res, 400, 'mission required fields');
+        
+        await EventStage.create({title, submission_end, submission_start, event_id, status, stage_number});
+
+        return successResponse(res, 200, 'created successfully');
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const activateVotes: ControllerFunction = async (req, res) => {
+    try{
+        let { event_id } = req.body;
+        if(!event_id) return errorResponse(res, 400, 'missing required fields');
+
+        await Event.update({ can_vote: true }, {where: { id: event_id }});
+
+        return successResponse(res, 200, 'updated successfully')
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const deactivateVotes: ControllerFunction = async (req, res) => {
+    try{
+        let { event_id } = req.body;
+        if(!event_id) return errorResponse(res, 400, 'missing required fields');
+
+        await Event.update({ can_vote: false }, {where: { id: event_id }});
+
+        return successResponse(res, 200, 'updated successfully')
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const publishStage: ControllerFunction = async (req, res) => {
+    try{
+        let { stage_id } = req.body;
+        if(!stage_id) return errorResponse(res, 400, 'missing required fields');
+
+        await EventStage.update({ status: 2 }, { where: { id: stage_id } });
+
+        return successResponse(res, 200, 'updated successfully')
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const unpublishStage: ControllerFunction = async (req, res) => {
+    try{
+        let { stage_id } = req.body;
+        if(!stage_id) return errorResponse(res, 400, 'missing required fields');
+
+        await EventStage.update({ status: 1 }, { where: { id: stage_id } });
+
+        return successResponse(res, 200, 'updated successfully')
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }

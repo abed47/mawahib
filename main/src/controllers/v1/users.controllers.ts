@@ -17,9 +17,11 @@ export const me: ControllerFunction = async (req, res) => {
     try{
         //@ts-ignore
         let u = req.user;
-        let user: any = await User.findOne({where: { id: u.id}});
-        let token = jwt.sign(user.dataValues ,process.env.JWT_SECRET);
-        return successResponse(res, 200, 'retrieved successfully', { token, user});
+        let user: any = await User.findOne({where: { id: u.id}, include: [{ model: Channel, required: false }]});
+        let obj = user.dataValues;
+        if(obj?.password) delete obj.password;
+        let token = jwt.sign(obj ,process.env.JWT_SECRET);
+        return successResponse(res, 200, 'retrieved successfully', { token, user: obj});
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }

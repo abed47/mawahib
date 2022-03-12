@@ -80,6 +80,11 @@ const Event = db.define('event', {
     prize_pool_description: {
         type: DataTypes.TEXT,
         allowNull: true
+    },
+    can_vote: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
     }
 }, { timestamps: true });
 

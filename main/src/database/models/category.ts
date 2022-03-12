@@ -26,7 +26,7 @@ const Category = db.define('category', {
     }
 }, {
     timestamps: true,
-    paranoid: true
+    paranoid: false
 });
 
 export default Category;
