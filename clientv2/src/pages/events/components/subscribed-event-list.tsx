@@ -27,7 +27,7 @@ const SubscribedEventsList: React.FC<SubscribedEventsListProps> = props => {
                                 return (
                                     <SwiperSlide className='slide' key={`my-event-list-item-${i}`}>
                                         <EventCard 
-                                            photo={item.photo}
+                                            photo={item.cover}
                                             id={item.id}
                                             title={item.title}
                                             subscribed={true}

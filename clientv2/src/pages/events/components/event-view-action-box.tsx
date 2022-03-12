@@ -44,10 +44,9 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         //if registered
         const p = data.participated;
         //check if can upload
-        const canU = moment(data.start_date).isBefore(moment(new Date()));
+        const canU = typeof data?.can_submit?.id === "string" || typeof data?.can_submit?.id === "number";
         //check if can register
         const canR = moment(data.registration_start).isBefore(moment(new Date())) && moment(data.registration_end).isAfter(moment(new Date()))
-        
         setParticipated(p);
         setCanSubmit(canU);
         setCanRegister(canR);
@@ -59,7 +58,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         let user_id = ctx?.currentUser?.id;
         let channel_id = ctx?.userChannel?.id;
         if(!user_id) return navigate('/login');
-        if(!channel_id) return navigate('/create-channel')
+        if(!channel_id) return navigate('/create/channel')
 
         setParticipateDialogOpen(true);
     }
@@ -68,7 +67,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         let user_id = ctx?.currentUser?.id;
         let channel_id = ctx?.userChannel?.id;
         if(!user_id) return navigate('/login');
-        if(!channel_id) return navigate('/create-channel')
+        if(!channel_id) return navigate('/create/channel')
 
         setWithdrawDialogOpen(true);
     }

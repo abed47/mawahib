@@ -20,7 +20,7 @@ const VideoListing: React.FC = props => {
     const ctx = useCtx();
     
     useEffect(() => {
-        loadData();
+        // loadData();
     }, []);
 
     const loadData = async () => {
@@ -31,8 +31,6 @@ const VideoListing: React.FC = props => {
                 channel_id: channelId,
                 pagination:{limit: rowsPerPage, offset: 0}});
             ctx.hidePreloader();
-
-            console.log(res);
 
             if(res && res?.status){
                 setDataList(res.data);

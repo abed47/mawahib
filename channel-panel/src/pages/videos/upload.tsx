@@ -12,6 +12,7 @@ import TagInput from '../../components/TagInput';
 import LabeledSwitch from '../../components/LabeledSwitch';
 import VideoDropZone from '../../components/VideoDropZone';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import moment from 'moment';
 
 const VideoUpload: React.FC = props => {
     
@@ -72,6 +73,7 @@ const VideoUpload: React.FC = props => {
                     let e = res.data;
                     setEvent(e);
                     setIsSubmission(true);
+                    handleEventVerification(e);
                     return;
                 }
 
@@ -84,6 +86,21 @@ const VideoUpload: React.FC = props => {
             }
             return;
         }
+    }
+
+    const handleEventVerification = (e: any) => {
+        let stages = e.event_stages;
+        if(!stages || stages?.length < 1) {
+            // ctx.showSnackbar('Cannot Submit', 'warn');
+            navigate('/videos');
+            return false;
+        }
+
+        let cStage = stages.filter((item: any) => item.stage_number === e.current_stage);
+
+        if(cStage?.length < 1) return navigate('/videos');
+        if(!moment(new Date()).isAfter(cStage[0].submission_start) || !moment(new Date()).isBefore(cStage[0].submission_end)) navigate('/videos')
+
     }
 
     const isValid: () => boolean = () => {

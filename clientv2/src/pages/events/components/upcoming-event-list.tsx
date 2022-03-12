@@ -26,7 +26,7 @@ const UpcomingEventsList: React.FC<UpcomingEventsListProps> = props => {
                                 return (
                                     <SwiperSlide className='slide' key={`upcoming-event-list-item-${i}`}>
                                         <EventCard 
-                                            photo={item.photo}
+                                            photo={item.cover}
                                             id={item.id}
                                             title={item.title}
                                             subscribed={item?.event_subscriptions?.length > 0 ? true : false}

@@ -103,7 +103,7 @@ const UserProfile: React.FC = props => {
                                 </div>
 
                                 <p className="title">
-                                    Creat Channel
+                                    Create Channel
                                 </p>
                             </div>
                         )

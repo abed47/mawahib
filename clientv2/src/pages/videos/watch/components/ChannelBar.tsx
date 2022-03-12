@@ -4,7 +4,7 @@ import { FiUsers } from 'react-icons/fi';
 import { BsCollectionPlay, BsShareFill, BsBellFill } from 'react-icons/bs';
 import { AiOutlineLike } from 'react-icons/ai';
 import { useCtx } from '../../../../utils/context';
-import { VideoRequests, ChannelRequests } from '../../../../utils/services/request';
+import { VideoRequests, ChannelRequests, handlePhotoUrl } from '../../../../utils/services/request';
 const ChannelBar: React.FC<any> = props => {
 
     const [channelInfo, setChannelInfo] = useState<any>(null);
@@ -125,7 +125,7 @@ const ChannelBar: React.FC<any> = props => {
     return (
         <div className="channel-bar">
             <div className="l">
-                <img src={'http://localhost:4000/api/v1/uploads/' + channelInfo?.photo} alt="s" />
+                <img src={handlePhotoUrl(channelInfo?.photo, "user")} alt="s" />
                 <div className="in">
                     <p className='category'>{channelInfo?.category?.title || videoInfo?.category?.name}</p>
                     <h1 className='title'>{videoInfo?.title}</h1>

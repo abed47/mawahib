@@ -26,7 +26,7 @@ const OngoingEventsList: React.FC<OngoingEventsListProps> = props => {
                                 return (
                                     <SwiperSlide className='slide' key={`ongoing-event-list-item-${i}`}>
                                         <EventCard 
-                                            photo={item.photo}
+                                            photo={item.cover}
                                             id={item.id}
                                             title={item.title}
                                             subscribed={item?.event_subscriptions?.length > 0 ? true : false}

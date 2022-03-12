@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Switch } from '@mui/material';
 import PlaceHolder from '../../assets/images/user-placeholder.png';
 import SelectComponentV2 from '../../components/SelectComponentV2';
 import { imageToBase64 } from '../../utils/helpers';
 import { useCtx } from '../../utils/context';
-import { ChannelRequests, UtilsRequests } from '../../utils/services/request';
+import { ChannelRequests, UserRequests, UtilsRequests } from '../../utils/services/request';
+import StorageService from '../../utils/services/store';
+import { useNavigate } from 'react-router-dom';
 
 const CreateChannel: React.FC = props => {
 
@@ -19,6 +21,20 @@ const CreateChannel: React.FC = props => {
     const [ name, setName ] = useState('');
 
     const ctx = useCtx();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    const loadData = async () => {
+        try{
+            let res = await UserRequests.getUserInfo();
+            console.log(res);
+        }catch(err: any){
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let f = e?.target?.files?.[0];
@@ -72,7 +88,8 @@ const CreateChannel: React.FC = props => {
             ctx.hidePreloader();
 
             if(res && res?.status === true){
-                
+                handleCreatedSuccessfully();
+                return;
             }
 
             if(res && res?.response && typeof res?.response?.status === 'number'){
@@ -85,9 +102,49 @@ const CreateChannel: React.FC = props => {
             }
             
         }catch(err: any){
-            console.log(err.response)
             ctx.hidePreloader();
             ctx.showSnackbar(err?.message || err?.error || 'server error', 'error');
+        }
+    }
+
+    const handleCreatedSuccessfully = async () => {
+        //go get the current user
+        //update context
+        //update localstorage
+        //go to channel/page
+        try{
+            ctx.showPreloader();
+            let res = await UserRequests.getUserInfo();
+            ctx.hidePreloader();
+
+            if(res && res?.status === true){
+                let data = res.data;
+                let u = data.user;
+                let c = data?.user?.channel;
+                let t = data.token;
+
+                ctx.setCurrentUser(u);
+                ctx.setToken(t);
+                ctx.setUserChannel(c);
+                StorageService.setItem('channel', c);
+                StorageService.setItem('currentUser', u);
+                StorageService.setItem('token', t);
+                navigate('/');
+                return;
+            }
+
+            StorageService.clear();
+            ctx.setCurrentUser(null);
+            ctx.setUserChannel(null);
+            ctx.setToken('');
+            navigate('/login');
+
+        }catch(err: any){
+            StorageService.clear();
+            ctx.setCurrentUser(null);
+            ctx.setUserChannel(null);
+            ctx.setToken('');
+            navigate('/login');
         }
     }
 

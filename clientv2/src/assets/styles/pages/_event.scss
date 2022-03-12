@@ -410,17 +410,17 @@
             
             .event-tabs-buttons{
                 @include init-flex(row, space-between, center);
-                max-width: 500px;
+                // max-width: 500px;
                 
                 .tab-title{
-                    padding: 10px 25px;
+                    padding: 10px 10px;
                     color: $text-color;
                     font-family: $font-medium;
                     font-size: 16px;
                     border-radius: 10px;
                     cursor: pointer;
                     transition: all 300ms ease-in-out;
-                    margin: 0 15px;
+                    margin: 0 5px;
     
                     &.active{
                         font-family: $font-bold;
@@ -480,13 +480,14 @@
                 }
 
                 .info{
+                    width: 100%;
                     p{
                         color: $text-color;
                         font-size: 16px;
                         font-family: $font-base;
                     }
 
-                    h1{
+                    h1, h2, h3, h4,h5, h6{
                         color: $color-secondary;
                         text-transform: capitalize;
                         font-size: 16px;

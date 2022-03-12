@@ -24,7 +24,7 @@ const EventInfoTab: React.FC<ComponentProps> = props => {
                         props.data.first_prize_amount ?
                         <div className="reward">
                             <img src={FirstPlaceImage} alt="prize logo" />
-                            <p>{props.data.first_prize_amount} Cheer</p>
+                            <p>{props.data.first_prize_amount.toLocaleString()} Cheer</p>
                         </div>
                         : null
                     }
@@ -32,7 +32,7 @@ const EventInfoTab: React.FC<ComponentProps> = props => {
                         props.data.second_prize_amount ?
                         <div className="reward">
                             <img src={SecondPlaceImage} alt="prize logo" />
-                            <p>{props.data.second_prize_amount} Cheer</p>
+                            <p>{props.data.second_prize_amount.toLocaleString()} Cheer</p>
                         </div>
                         : null
                     }
@@ -40,7 +40,7 @@ const EventInfoTab: React.FC<ComponentProps> = props => {
                         props.data.third_prize_amount ?
                         <div className="reward">
                             <img src={ThirdPlaceImage} alt="prize logo" />
-                            <p>{props.data.third_prize_amount} Cheer</p>
+                            <p>{props.data.third_prize_amount.toLocaleString()} Cheer</p>
                         </div>
                         : null
                     }

@@ -46,7 +46,7 @@
 
             table{
                 width: 100%;
-                max-width: 800px;
+                max-width: 1200px;
                 border-collapse: collapse;
 
                 thead{
@@ -85,6 +85,10 @@
                                     font-family: $font-medium;
                                     font-size: 16px;
                                     margin-bottom: 5px;
+                                    max-width: 185px;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
                                 }
 
                                 .date{

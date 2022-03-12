@@ -77,6 +77,7 @@ const LoginPage: React.FC = props => {
                 StorageService.setItem('currentUser', res.data.user);
                 StorageService.setItem('loggedIn', true);
                 StorageService.setItem('token', res.data.token);
+                if(res.data?.channel) StorageService.setItem('channel', res.data?.channel);
                 ctx.setCurrentUser(res.data.user);
                 ctx.setUserChannel(res.data?.channel || null)
                 ctx.setLoggedIn(true);
@@ -118,6 +119,7 @@ const LoginPage: React.FC = props => {
             ctx.showSnackbar(err?.message || 'request error', 'error');
         }
     };
+    
     const handleGoogleFailure = (err: any) => {
         ctx.showSnackbar(err?.message || 'error occurred', 'error');
     }
