@@ -90,6 +90,12 @@ User.hasMany(EventSubscription, { foreignKey: 'user_id' });
 //event submissions associations
 Event.hasMany(Submission, { foreignKey: 'event_id' });
 Submission.belongsTo(Event, { foreignKey: 'event_id' });
+Channel.hasMany(Submission, { foreignKey: 'channel_id'});
+Submission.belongsTo(Channel, { foreignKey: 'channel_id'});
+Submission.hasOne(Video, { foreignKey: 'video_id'});
+Video.belongsTo(Submission, { foreignKey: 'video_id'});
+EventStage.hasMany(Submission, { foreignKey: 'stage_id'});
+Submission.belongsTo(EventStage, { foreignKey: 'stage_id'});
 
 //event stage associations
 Event.hasMany(EventStage, { foreignKey: 'event_id' });

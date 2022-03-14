@@ -1,7 +1,7 @@
 import Sequelize, { Op } from 'sequelize';
 import { ControllerFunction } from "../../utils/types";
 import {errorResponse, successResponse} from "../../utils";
-import {Category, Channel, Event, EventStage, EventSubscription, User} from '../../database/models';
+import {Category, Channel, Event, EventStage, EventSubscription, User, Video} from '../../database/models';
 import * as moment from 'moment';
 import Submission from "../../database/models/submission";
 import Participation from "../../database/models/participation";
@@ -134,8 +134,31 @@ export const view: ControllerFunction = async (req, res) => {
                 { submission_end: { [Op.gt]: new Date()}}
             ]
          }});
+
+        let performances = await EventStage.findAll({
+            where: {
+                [Op.and]: [
+                    { event_id: id },
+                    { status: 2 }
+                ]
+            },
+            include: [
+                { model: Submission, required: false, include: [
+                        { model: Video, required: false },
+                        { model: Channel, required: false },
+                    ] }
+            ],
+            order: [['stage_number', 'DESC']]
+        })
         
-        return successResponse(res, 200, 'retrieved successfully', {...event.dataValues, participated, subscribed, stages, can_submit});
+        return successResponse(res, 200, 'retrieved successfully', {
+            ...event.dataValues,
+            participated,
+            subscribed,
+            stages,
+            can_submit,
+            performances
+        });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }

@@ -21,6 +21,10 @@ const Submission = db.define('submission', {
     stage_number: {
         type: DataTypes.INTEGER,
         allowNull: true
+    },
+    stage_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, { timestamps: true });
 

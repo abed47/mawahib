@@ -155,7 +155,7 @@ const linkedInLogin = async (req: Request, res: Response) => {
                 client_id: process.env.LINKEDIN_CLIENT_ID,
                 client_secret: process.env.LINKEDIN_CLIENT_SECRET,
                 grant_type: 'authorization_code',
-                redirect_uri: 'https://localhost:4001/linkedin',
+                redirect_uri: 'https://localhost:4000/linkedin',
                 code: req.body.token
             }),
             {
