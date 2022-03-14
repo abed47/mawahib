@@ -158,7 +158,8 @@ const VideoUpload: React.FC = props => {
             url: '',
             type: isSubmission ? 2 : 1,
             event_id: isSubmission ? event?.id : null,
-            stage_number: isSubmission ? event?.current_stage : null
+            stage_number: isSubmission ? event?.current_stage : null,
+            stage_id: isSubmission ? event?.event_stages?.filter((item: any) => item.stage_number === event.current_stage)?.[0]?.id : null
         }
 
         try{
