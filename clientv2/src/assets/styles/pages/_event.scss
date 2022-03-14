@@ -512,6 +512,28 @@
                         }
                     }
                 }
+
+                .participants{
+                    width: 100%;
+                    @include init-flex(row, flex-start, flex-start);
+                    flex-wrap: wrap;
+                    
+                    .participant{
+                        @include init-flex(column);
+                        cursor: pointer;
+                        margin: 0 15px;
+                        img{
+                            width: 70px;
+                            height: 70px;
+                            border-radius: 50%;
+                        }
+
+                        p{
+                            margin: 5px;
+                            color: $color-secondary;
+                        }
+                    }
+                }
             }
         }
     }

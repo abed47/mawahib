@@ -45,6 +45,7 @@ export type EventViewResponseData = {
     prize_pool_description: string | null;
     can_submit: any;
     stages: any;
+    participants: any[];
 }
 
 export type EventViewResponse = RequestResponse<EventViewResponseData>

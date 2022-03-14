@@ -15,6 +15,7 @@ import Event from "./event";
 import EventSubscription from "./event-subscription";
 import Submission from "./submission";
 import EventStage from "./event-stage";
+import Participation from "./participation";
 
 //category associations
 // Category.hasMany(Video, {foreignKey: 'category_id'});
@@ -100,6 +101,12 @@ Submission.belongsTo(EventStage, { foreignKey: 'stage_id'});
 //event stage associations
 Event.hasMany(EventStage, { foreignKey: 'event_id' });
 EventStage.belongsTo(Event, { foreignKey: 'event_id' });
+
+//event participation associations
+Participation.belongsTo(Event, { foreignKey: 'event_id' });
+Event.hasMany(Participation, { foreignKey: 'event_id' });
+Participation.belongsTo(Channel, { foreignKey: 'channel_id' });
+Channel.hasMany(Participation, { foreignKey: 'channel_id' });
 
 export {
     User, 

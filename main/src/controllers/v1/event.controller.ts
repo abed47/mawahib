@@ -149,6 +149,11 @@ export const view: ControllerFunction = async (req, res) => {
                     ] }
             ],
             order: [['stage_number', 'DESC']]
+        });
+
+        let participants = await Participation.findAll({
+            where: { event_id: id },
+            include: [Channel]
         })
         
         return successResponse(res, 200, 'retrieved successfully', {
@@ -157,7 +162,8 @@ export const view: ControllerFunction = async (req, res) => {
             subscribed,
             stages,
             can_submit,
-            performances
+            performances,
+            participants
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
