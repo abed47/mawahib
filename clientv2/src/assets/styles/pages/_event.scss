@@ -215,9 +215,37 @@
 
     header{
         width: 100%;
-        height: 60%;
-        // overflow: hidden;
+        height: 80% !important;
+        min-height: 60%;
         position: relative;
+
+        .submission-player{
+            height: 100%;
+            width: 100%;
+            position: relative;
+
+            .close-btn{
+                position: absolute;
+                right: 25px;
+                top: 25px;
+                z-index: 999;
+                background-color: rgba($color: #000000, $alpha: .25);
+                .icon{
+                    color: white;
+                }
+            }
+
+            .player-wrapper{
+                height: 100%;
+                max-height: 100%;
+
+                .video-player{
+                    width: 100%;
+                    height: 100%;
+                    padding: 0 !important;
+                }
+            }
+        }
         
         .cover{
             width: 100%;
@@ -393,6 +421,94 @@
         
     }
 
+    @mixin event-performances(){
+        .event-performances{
+            width: 100%;
+            @include init-flex(column, flex-start, flex-start);
+            
+            .tabs-titles{
+                width: 100%;
+                @include init-flex(row, flex-start, flex-start);
+                position: relative;
+
+                p{
+                    margin: 0;
+                    font-size: 16px;
+                    font-family: $font-medium;
+                    color: $text-color;
+                    margin-right: 15px;
+                    transition: all 300ms ease-in-out;
+                    user-select: none;
+                    cursor: pointer;
+
+                    &.active{
+                        color: $color-secondary;
+                        font-family: $font-bold;
+                    }
+                }
+
+                .bottom-line{
+                    position: absolute;
+                    width: 50px;
+                    height: 2px;
+                    background-color: $color-secondary;
+                    border-radius: 50%;
+                    transition: all 300ms ease-in-out;
+                }
+            }
+            
+            &-tab-contents{
+                width: 100%;
+                padding-top: 15px;
+
+                .event-performances-tab-content{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    flex-wrap: wrap;
+                    
+                    .submission-list-item{
+                        position: relative;
+                        overflow: hidden;
+                        margin-right: 20px;
+                        user-select: none;
+                        cursor: pointer;
+                        
+                        
+                        img{
+                            border-radius: 8px;
+                            width: 190px;
+                            height: 100px;
+                            object-fit: cover;
+                        }
+
+                        .info{
+                            width: 100%;
+                            @include init-flex(row, space-between);
+
+                            .l{
+                                p{
+                                    margin: 0;
+
+                                    &:first-child{
+                                         font-size: 12px;
+                                         color: $text-color;
+                                    }
+
+                                    &:last-child{
+                                        font-size: 10px;
+                                        color: $color-secondary;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     .event-tabs{
         width: 100%;
         box-sizing: border-box;
@@ -465,19 +581,22 @@
             background-color: $box-color;
             display: flex;
             transition: all 300ms ease-in-out;
-            @include init-flex(row, center, center);
+            @include init-flex(row, flex-start, flex-start);
 
             .tab-content{
                 display: none;
                 animation: 2s tab-out ease-in-out;
                 width: 100%;
+                
     
                 &.active{
                     display: flex;
                     width: 100%;
-                    margin-top: 20px;
+                    // margin-top: 20px;
                     animation: 2s tab-in ease-in-out;
                 }
+
+                @include event-performances();
 
                 .info{
                     width: 100%;

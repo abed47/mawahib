@@ -5,6 +5,7 @@ import {Category, Channel, Event, EventStage, EventSubscription, User, Video} fr
 import * as moment from 'moment';
 import Submission from "../../database/models/submission";
 import Participation from "../../database/models/participation";
+import Vote from "../../database/models/vote";
 
 export const home: ControllerFunction = async (req, res) => {
     try{
@@ -135,6 +136,7 @@ export const view: ControllerFunction = async (req, res) => {
             ]
          }});
 
+
         let performances = await EventStage.findAll({
             where: {
                 [Op.and]: [
@@ -144,7 +146,7 @@ export const view: ControllerFunction = async (req, res) => {
             },
             include: [
                 { model: Submission, required: false, include: [
-                        { model: Video, required: false },
+                        { model: Video },
                         { model: Channel, required: false },
                     ] }
             ],
@@ -170,6 +172,7 @@ export const view: ControllerFunction = async (req, res) => {
     }
 }
 
+/*=================================================Event Interactions=================================================*/
 export const subscribe: ControllerFunction = async (req, res) => {
     try{
         let { user_id, event_id } = req.body;
@@ -237,6 +240,26 @@ export const withdraw: ControllerFunction = async (req, res) => {
         return errorResponse(res, 500, err?.message || 'server error');
     }
 }
+
+export const createVote: ControllerFunction = async (req, res) => {
+    try{
+        let { user_id, submission_id, stage_number, participation_id, event_id } = req.body;
+        if(!user_id || !submission_id || !stage_number || !participation_id || event_id) return errorResponse(res, 400, 'missing required fields');
+
+        let voteCheck: any = await Vote.findOne({ where: { user_id, submission_id, stage_number, participation_id, event_id }});
+        if(voteCheck?.id || voteCheck?.dataValues?.id) return errorResponse(res, 400, 'already voted');
+
+        let canVoteCheck: any = await Event.findOne({ where: { id: event_id }});
+        if(canVoteCheck.can_vote === false || canVoteCheck.can_vote === false) return errorResponse(res,400, 'votes not open')
+
+        await Vote.create({ user_id, submission_id, stage_number, participation_id, event_id });
+        return successResponse(res, 200, 'voted successfully');
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+
 
 export const getOne: ControllerFunction = async (req, res) => {
     try{

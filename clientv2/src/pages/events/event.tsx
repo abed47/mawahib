@@ -14,12 +14,24 @@ const EventPage: React.FC = props => {
     const [eventEnded, setEventEnded] = useState(false);
     const [eventStatus, setEventStatus] = useState(1);
 
+    //video related states
+    const [playingVideo, setPlayingVideo] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('');
+    const [playingVideoData, setPlayingVideoData] = useState<any>(null);
+
     const ctx = useCtx();
     const navigate = useNavigate();
     const params = useParams<{id: string}>();
 
     useEffect(() => {
         loadData();
+
+        return () => {
+            setVideoUrl('');
+            setPlayingVideo(false);
+            setPlayingVideoData(null);
+        }
+
     }, [ctx?.currentUser]);
 
     const loadData = async () => {
@@ -50,13 +62,18 @@ const EventPage: React.FC = props => {
         }
     }
 
-
+    const handleVideoSelected = (e: any) => {
+        console.log(e)
+        setVideoUrl(e.video.url);
+        setPlayingVideo(true);
+        setPlayingVideoData(e);
+    }
 
     return (
         <div className="event-page">
-            {data?.id ? <EventViewHeader data={data} updateStatus={setEventStatus} /> : null}
-            {data?.id ? <EventViewActionBox data={data} updateStatus={setEventStatus} status={eventStatus} reload={loadData} /> : null}
-            {data?.id ? <EventTabs data={data} /> : null}
+            {data?.id ? <EventViewHeader data={data} updateStatus={setEventStatus} playerUrl={videoUrl} showPlayer={playingVideo} hidePlayer={setPlayingVideo} /> : null}
+            {data?.id ? <EventViewActionBox videoProps={playingVideoData} videoPlaying={playingVideo} data={data} updateStatus={setEventStatus} status={eventStatus} reload={loadData} /> : null}
+            {data?.id ? <EventTabs data={data} setPlayerUrl={handleVideoSelected} playerUrl={videoUrl} showPlayer={playingVideo} hidePlayer={setPlayingVideo} /> : null}
         </div>
     )
 }

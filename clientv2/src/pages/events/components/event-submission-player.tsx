@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { Stream } from '@cloudflare/stream-react';
+import { IconButton } from '@mui/material';
+import { AiOutlineClose } from 'react-icons/ai';
 
-const VideoWrapper: React.FC<any> = props => {
+interface ComponentProps {
+    url: string | any;
+    hidePlayer: (e: boolean) => void;
+}
+
+const SubmissionPlayer: React.FC<ComponentProps> = props => {
 
     const streamRef = useRef<any>(null);
 
@@ -19,13 +26,15 @@ const VideoWrapper: React.FC<any> = props => {
     const getStream = () => {
         return <Stream responsive={true} className="video-player" controls src={formatVidId(props.url)}/>
     }
-    
+
     return (
-        <div className="video-wrapper">
-            <div className="video">
-                {props.url ? getStream() : null}
+        <div className="submission-player">
+            <IconButton onClick={() => props.hidePlayer(false)} className='close-btn'> <AiOutlineClose className='icon' /> </IconButton>
+            <div className="player-wrapper">
+                {getStream()}
             </div>
         </div>
-    );
+    )
 }
-export default VideoWrapper;
+
+export default SubmissionPlayer;

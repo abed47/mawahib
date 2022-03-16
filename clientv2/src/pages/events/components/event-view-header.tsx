@@ -3,12 +3,17 @@ import moment from 'moment';
 import Countdown from 'react-countdown';
 import { handlePhotoUrl } from '../../../utils/services/request';
 import { EventViewResponseData } from '../../../utils/types';
+import SubmissionPlayer from './event-submission-player';
 
 interface ComponentProps {
-    data: EventViewResponseData,
-    updateStatus?: (e: any) => void
+    data: EventViewResponseData;
+    updateStatus?: (e: any) => void;
+    showPlayer: boolean;
+    hidePlayer: (e: boolean) => void;
+    playerUrl: string
 }
-const EventViewHeader: React.FC<ComponentProps> = ({data}) => {
+
+const EventViewHeader: React.FC<ComponentProps> = ({data, showPlayer, hidePlayer, playerUrl}) => {
 
     const getEventBadge = (status: number) => { 
         if(status > 0 && status < 3) return <div className="badge">upcoming</div>
@@ -78,13 +83,19 @@ const EventViewHeader: React.FC<ComponentProps> = ({data}) => {
 
     return (
         <header>
-                <img src={handlePhotoUrl(data?.cover)} alt="Event cover" className='cover' />
-                <div className="info">
-                    {
-                        getCountDownEl()
-                    }
-                </div>
-            </header>
+            {
+                showPlayer && playerUrl ?
+                <SubmissionPlayer hidePlayer={hidePlayer} url={playerUrl} /> :
+                <>
+                    <img src={handlePhotoUrl(data?.cover)} alt="Event cover" className='cover' />
+                    <div className="info">
+                        {
+                            getCountDownEl()
+                        }
+                    </div>
+                </>
+            }
+        </header>
     );
 }
 

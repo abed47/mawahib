@@ -23,7 +23,7 @@ interface ComponentProps {
     reload?: () => void;
 }
 
-const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) => {
+const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, videoPlaying, videoProps}) => {
 
     const [participated, setParticipated] = useState(false);
     const [canRegister, setCanRegister] = useState(false);
@@ -204,6 +204,28 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
         return window.open(url, '_blank');
     }
 
+    const handleVote = async () => {
+        console.log(videoProps)
+
+        let body = {
+            event_id: videoProps.event_id,
+            submission_id: videoProps.id,
+            participation_id: videoProps.participation_id,
+            stage_number: videoProps.stage_number,
+            user_id: ctx?.currentUser?.id
+        }
+
+        try{
+            ctx.showPreloader();
+            let res = await EventRequests.vote(body);
+            ctx.hidePreloader();
+
+            if(res && res?.status){}
+        }catch(err){
+            ctx.showSnackbar(err?.message || 'server error', 'error');
+        }
+    }
+
     return (
         <div className="action-box">
             <div className="l">
@@ -222,6 +244,9 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload}) =>
                 </div>
             </div>
             <div className="r">
+                {
+                    videoPlaying ? <Button className="btn" onClick={handleVote}>Vote</Button> : null
+                }
                 {
                     canRegister && !participated ? <Button className='btn' onClick={handleParticipate}>participate</Button> : null
                 }

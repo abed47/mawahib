@@ -16,6 +16,7 @@ import EventSubscription from "./event-subscription";
 import Submission from "./submission";
 import EventStage from "./event-stage";
 import Participation from "./participation";
+import Vote from "./vote";
 
 //category associations
 // Category.hasMany(Video, {foreignKey: 'category_id'});
@@ -80,6 +81,16 @@ Transaction.belongsTo(User, { foreignKey: 'user_id' });
 Category.hasMany(Event, { foreignKey: 'category_id' });
 Event.belongsTo(Category, { foreignKey: 'category_id' });
 
+//event vote associations
+Vote.belongsTo(Event, { foreignKey: 'event_id' });
+Event.hasMany(Vote, { foreignKey: 'event_id' });
+Vote.belongsTo(Submission, { foreignKey: 'submission_id' });
+Submission.hasMany(Vote, { foreignKey: 'submission_id' });
+Vote.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Vote, { foreignKey: 'user_id' });
+Vote.belongsTo(Participation, { foreignKey: 'participation_id' });
+Participation.hasMany(Vote, { foreignKey: 'participation_id' });
+
 //event subscription associations
 Event.belongsToMany(User, { through: EventSubscription, foreignKey: 'event_id' });
 User.belongsToMany(Event, { through: EventSubscription, foreignKey: 'user_id' });
@@ -91,10 +102,15 @@ User.hasMany(EventSubscription, { foreignKey: 'user_id' });
 //event submissions associations
 Event.hasMany(Submission, { foreignKey: 'event_id' });
 Submission.belongsTo(Event, { foreignKey: 'event_id' });
+
 Channel.hasMany(Submission, { foreignKey: 'channel_id'});
 Submission.belongsTo(Channel, { foreignKey: 'channel_id'});
-Submission.hasOne(Video, { foreignKey: 'video_id'});
-Video.belongsTo(Submission, { foreignKey: 'video_id'});
+
+// Submission.hasOne(Video, { foreignKey: 'video_id'});
+// Video.belongsTo(Submission, { foreignKey: 'video_id'});
+Submission.belongsTo(Video, { foreignKey: 'video_id' });
+Video.hasOne(Submission, { foreignKey: 'video_id'})
+
 EventStage.hasMany(Submission, { foreignKey: 'stage_id'});
 Submission.belongsTo(EventStage, { foreignKey: 'stage_id'});
 

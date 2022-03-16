@@ -4,9 +4,15 @@ import { FaSearch } from 'react-icons/fa';
 import { handlePhotoUrl } from '../../../utils/services/request';
 import { EventViewResponseData } from '../../../utils/types';
 import EventInfoTab from './event-info-tab';
+import EventPerformances from './event-performances';
 
 interface ComponentProps {
     data: EventViewResponseData | any
+    // updateStatus:  
+    playerUrl: string;
+    showPlayer: boolean;
+    hidePlayer: (e: boolean) => void;
+    setPlayerUrl: (e: any) => void;
 }
 
 const EventTabs: React.FC<ComponentProps> = props => {
@@ -49,7 +55,9 @@ const EventTabs: React.FC<ComponentProps> = props => {
                         }
                     </div>
                 </div>
-                <div className={`tab-content ${currentTab === 2 ? 'active' : ''}`}>Tab 1</div>
+                <div className={`tab-content ${currentTab === 2 ? 'active' : ''}`}>
+                    <EventPerformances setPlayerUrl={props.setPlayerUrl} data={props.data.performances} />
+                </div>
                 <div className={`tab-content ${currentTab === 3 ? 'active' : ''}`}>Tab 1</div>
             </div>
         </div>

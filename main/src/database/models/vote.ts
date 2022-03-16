@@ -22,6 +22,10 @@ const Vote = db.define('vote', {
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 1
+    },
+    submission_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, { timestamps: true });
 
