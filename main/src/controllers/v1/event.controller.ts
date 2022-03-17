@@ -108,8 +108,8 @@ export const view: ControllerFunction = async (req, res) => {
                 "third_prize_amount",
                 "prize_pool_description",
                 "can_vote",
-                [Sequelize.fn("COUNT", Sequelize.col("event_subscriptions.id")), "subscription_count"],
-                [Sequelize.fn("COUNT", Sequelize.col("submissions.id")), "submission_count"]
+                [Sequelize.literal('(SELECT COUNT(id) FROM event_subscriptions WHERE event_id = "event"."id")'), "subscription_count"],
+                [Sequelize.literal('(SELECT COUNT(id) FROM submissions WHERE event_id = "event"."id")'), "submission_count"]
             ],
             include: [
                 { model: Category, required: false, attributes: ["id", "name"] },

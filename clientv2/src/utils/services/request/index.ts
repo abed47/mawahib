@@ -11,8 +11,8 @@ import VideoPlaceholder from '../../../assets/images/video-placeholder.png';
 import Logo from '../../../assets/images/logo.png';
 
 //DEPLOY: change to server url
-const host = 'http://localhost:4000/api/';
-export const getChannelPanelUrl = () => 'http://localhost:5000';
+const host = 'http://192.168.0.112:4000/api/';
+export const getChannelPanelUrl = () => 'http://192.168.0.112:5000';
 
 export const AuthRequests = AuthApis(host);
 export const ChannelRequests = ChannelApis(host);
