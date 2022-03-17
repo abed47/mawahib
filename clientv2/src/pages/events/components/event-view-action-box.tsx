@@ -13,6 +13,7 @@ import ParticipateDialog from './participate-dialog';
 import WithdrawDialog from './withdraw-dialog';
 import simpleCrypto from 'simple-crypto-js';
 import { getQe } from '../../../utils/helpers';
+import ConfirmationDialog from './confirmation-dialog';
 
 interface ComponentProps {
     data: EventViewResponseData;
@@ -32,6 +33,8 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
     const [subscribed, setSubscribed] = useState(false);
     const [participateDialogOpen, setParticipateDialogOpen] = useState(false);
     const [withdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
+    const [confirmVoteDialogOpen, setConfirmVoteDialogOpen] = useState(false);
+    const [canVote, setCanVote] = useState(false);
 
     const ctx = useCtx();
     const navigate = useNavigate();
@@ -52,6 +55,8 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
         setCanRegister(canR);
         if(ctx.userChannel) setHasChannel(true);
         setSubscribed(data.subscribed);
+        setCanVote(data.can_vote);
+        console.log(data);
     }
 
     const handleParticipate = () => {
@@ -205,8 +210,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
     }
 
     const handleVote = async () => {
-        console.log(videoProps)
-
+        setConfirmVoteDialogOpen(false);
         let body = {
             event_id: videoProps.event_id,
             submission_id: videoProps.id,
@@ -220,8 +224,19 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
             let res = await EventRequests.vote(body);
             ctx.hidePreloader();
 
-            if(res && res?.status){}
-        }catch(err){
+            if(res && res?.status){
+                // ctx.showSnackbar(res.messgae)
+                setCanVote(false);
+            }
+
+            if(res && res?.status === false){
+                ctx.showSnackbar(res?.message || 'server error', 'error');
+            }
+
+            if(res?.response?.data?.status === false){
+                ctx.showSnackbar(res.response.data?.message || 'server error', 'error')
+            }
+        }catch(err: any){
             ctx.showSnackbar(err?.message || 'server error', 'error');
         }
     }
@@ -245,7 +260,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
             </div>
             <div className="r">
                 {
-                    videoPlaying ? <Button className="btn" onClick={handleVote}>Vote</Button> : null
+                    videoPlaying && data.user_vote && canVote ? <Button className="btn" onClick={() => setConfirmVoteDialogOpen(true)}>Vote</Button> : null
                 }
                 {
                     canRegister && !participated ? <Button className='btn' onClick={handleParticipate}>participate</Button> : null
@@ -275,6 +290,13 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
                 open={withdrawDialogOpen}
                 onSuccess={withdrawFromEvent}
                 onClose={() => setWithdrawDialogOpen(false)}
+            />
+
+            <ConfirmationDialog 
+                open={confirmVoteDialogOpen}
+                onSuccess={handleVote}
+                onClose={() => setConfirmVoteDialogOpen(false)}
+                message={"once you vote you cannot revoke your vote or vote for anyone else during the current event Stage"}
             />
         </div>
     )

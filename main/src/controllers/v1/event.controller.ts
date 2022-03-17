@@ -64,6 +64,7 @@ export const view: ControllerFunction = async (req, res) => {
         if(typeof +id !== "number") return errorResponse(res, 400, 'unacceptable event id');
         let participated = false;
         let subscribed = false;
+        let user_vote = false;
 
 
         if(channel_id){
@@ -106,6 +107,7 @@ export const view: ControllerFunction = async (req, res) => {
                 "second_prize_amount",
                 "third_prize_amount",
                 "prize_pool_description",
+                "can_vote",
                 [Sequelize.fn("COUNT", Sequelize.col("event_subscriptions.id")), "subscription_count"],
                 [Sequelize.fn("COUNT", Sequelize.col("submissions.id")), "submission_count"]
             ],
@@ -156,7 +158,12 @@ export const view: ControllerFunction = async (req, res) => {
         let participants = await Participation.findAll({
             where: { event_id: id },
             include: [Channel]
-        })
+        });
+
+        if(user_id){
+            let voteCheck: any = await Vote.findAll({ where: { user_id, event_id: id, stage_number: event.dataValues.current_stage }});
+            user_vote = !voteCheck.length ? true : false;
+        }
         
         return successResponse(res, 200, 'retrieved successfully', {
             ...event.dataValues,
@@ -165,7 +172,8 @@ export const view: ControllerFunction = async (req, res) => {
             stages,
             can_submit,
             performances,
-            participants
+            participants,
+            user_vote
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
@@ -244,14 +252,17 @@ export const withdraw: ControllerFunction = async (req, res) => {
 export const createVote: ControllerFunction = async (req, res) => {
     try{
         let { user_id, submission_id, stage_number, participation_id, event_id } = req.body;
-        if(!user_id || !submission_id || !stage_number || !participation_id || event_id) return errorResponse(res, 400, 'missing required fields');
+        if(!user_id || !submission_id || !stage_number || !participation_id || !event_id) return errorResponse(res, 400, 'missing required fields');
 
+        //check if already voted;
         let voteCheck: any = await Vote.findOne({ where: { user_id, submission_id, stage_number, participation_id, event_id }});
         if(voteCheck?.id || voteCheck?.dataValues?.id) return errorResponse(res, 400, 'already voted');
 
+        //check if votes are open
         let canVoteCheck: any = await Event.findOne({ where: { id: event_id }});
-        if(canVoteCheck.can_vote === false || canVoteCheck.can_vote === false) return errorResponse(res,400, 'votes not open')
+        if(canVoteCheck.can_vote === false || canVoteCheck.dataValues.can_vote === false) return errorResponse(res,400, 'voting not open');
 
+        //create vote
         await Vote.create({ user_id, submission_id, stage_number, participation_id, event_id });
         return successResponse(res, 200, 'voted successfully');
     }catch(err){

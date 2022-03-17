@@ -81,7 +81,7 @@ export const getTransactionHistory: ControllerFunction = async (req, res) => {
         let u = req.user;
         let results = await Transaction.findAll({ where: { user_id: u.id}});
         return successResponse(res, 200, 'retrieved successfully', results);
-    }catch(err: any){
+    }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }
 }
