@@ -20,5 +20,7 @@ router.post('/deactivate-voting', controller.deactivateVotes);
 router.post('/stage', controller.createStage);
 router.post('/stage-publish', controller.publishStage);
 router.post('/stage-unpublish', controller.unpublishStage);
+router.post('/move-to-next-stage', controller.moveToNextStage);
+router.post('/move-to-next-stage-summary', controller.moveToNextStageSummary);
 
 export default router;

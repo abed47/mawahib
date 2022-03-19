@@ -9,7 +9,16 @@ export const StageCreateDialogStyles = {
         top: 'calc(50% - 150px)',
         left: 'calc(50% - 150px)'
     }
+}
+export const moveToNextStageDialogStyles = {
+    overlay: { display: "flex", flexDirection: 'row', justifyContent: 'center', alignItems: 'center'},
+    content: {
+        width: '400px',
+        height: '500px',
+        top: 'calc(50% - 250px)',
+        left: 'calc(50% - 150px)'
     }
+}
 
 export const CardsWrapper = styled.div`
     width: 100%;

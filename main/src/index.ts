@@ -16,6 +16,8 @@ import PlaylistRoutes from './routes/v1/playlist.routes';
 import PurchasesRoutes from './routes/v1/purchases.routes';
 import EventRoutes from './routes/v1/event.routes';
 
+import * as fs from 'fs';
+import * as https from 'https';
 import * as path from 'path';
 import * as upload from 'express-fileupload';
 import initAdminPanel from './admin';
@@ -53,6 +55,17 @@ app.use('/admin', adminPanel);
 // app.use('/public', express.static)
 app.get('/', (req, res) => {res.send('OK')});
 
-app.listen(process.env.PORT, () => {
-    console.log('server started on: ' + process.env.PORT);
-});
+if(process.env.NODE_ENV === "production"){
+    const httpsServer = https.createServer({
+        key: fs.readFileSync('/etc/letsencrypt/live/mawahib.tv//privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/mawahib.tv//fullchain.pem'),
+    }, app);
+
+    httpsServer.listen(process.env.PORT || 4000, () => {
+        console.log('secure serve started')
+    });
+}else {
+    app.listen(process.env.PORT || 4000, () => {
+        console.log('server started on: ' + process.env.PORT);
+    });
+}

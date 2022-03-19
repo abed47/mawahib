@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import Submission from "../../database/models/submission";
 import Participation from "../../database/models/participation";
 import Vote from "../../database/models/vote";
+import {db} from "../../database";
 
 export const home: ControllerFunction = async (req, res) => {
     try{
@@ -65,6 +66,7 @@ export const view: ControllerFunction = async (req, res) => {
         let participated = false;
         let subscribed = false;
         let user_vote = false;
+        let submitted = null;
 
 
         if(channel_id){
@@ -75,6 +77,7 @@ export const view: ControllerFunction = async (req, res) => {
             });
 
             if(participationCheck) participated = true;
+
         }
 
         if(user_id){
@@ -164,6 +167,18 @@ export const view: ControllerFunction = async (req, res) => {
             let voteCheck: any = await Vote.findAll({ where: { user_id, event_id: id, stage_number: event.dataValues.current_stage }});
             user_vote = !voteCheck.length ? true : false;
         }
+
+        if(channel_id){
+            let submittedCheck: any = await Submission.findOne({ where: {
+                [Op.and]: [
+                    { stage_number: { [Op.eq]: event.dataValues.current_stage} },
+                    { channel_id: { [Op.eq]: channel_id} }
+                ]
+                }});
+
+            submitted = false;
+            if(submittedCheck?.id || submittedCheck?.dataValues?.id) submitted = true;
+        }
         
         return successResponse(res, 200, 'retrieved successfully', {
             ...event.dataValues,
@@ -173,7 +188,8 @@ export const view: ControllerFunction = async (req, res) => {
             can_submit,
             performances,
             participants,
-            user_vote
+            user_vote,
+            submitted
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
@@ -374,6 +390,106 @@ export const unpublishStage: ControllerFunction = async (req, res) => {
         await EventStage.update({ status: 1 }, { where: { id: stage_id } });
 
         return successResponse(res, 200, 'updated successfully')
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const moveToNextStage: ControllerFunction = async (req, res) => {
+    let { event_id, winner_count } = req.body;
+    try{
+        if(!event_id || !winner_count) return errorResponse(res, 400, 'missing required fields');
+        let ev: any = await Event.findOne({where: { id: event_id }});
+        if(!ev) return errorResponse(res, 404, 'event not found');
+
+        let currentStage = ev.current_stage;
+        let nextStage = currentStage + 1;
+        let winners = await db.query(`
+        SELECT 
+        p.id as participation_id, 
+        c.name as name,
+        p.channel_id as channel_id, 
+        s.id as submission_id,
+        v.id as video_id,
+        (SELECT COUNT(votes.id) FROM votes WHERE submission_id = s.id) as votes,
+        (SELECT COUNT(views.id) from views WHERE video_id = s.id) as views
+        from participations p
+        LEFT JOIN submissions s ON s.participation_id = p.id
+        LEFT JOIN videos v ON s.video_id = v.id
+        LEFT JOIN channels c ON c.id = p.channel_id
+        WHERE p.knocked_out_stage IS NULL AND p.event_id = ${event_id}
+        ORDER BY votes DESC, views DESC
+        LIMIT ${winner_count}
+    `);
+
+        let moved_id = winners[0].map((item: any, index) => {
+            console.log(item)
+            return item.participation_id
+        });
+
+        let eliminated_id: any = await Participation.findAll({ where: {
+                id: { [Op.notIn]: moved_id},
+            },
+            include: [ { model: Channel, required: true}]
+        });
+
+        await Participation.update({knocked_out_stage: currentStage}, { where: {
+                [Op.and]: [
+                    { id: { [Op.notIn]: moved_id} },
+                    { knocked_out_stage: { [Op.is]: null} },
+                ]
+            }})
+
+        await Event.update({ current_stage: nextStage }, { where: { id: event_id } });
+
+        return successResponse(res, 200, '', {currentStage, nextStage, winners: winners[0], moved_id, eliminated_id});
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const moveToNextStageSummary = async (req, res) => {
+    let { event_id, winner_count } = req.body;
+    try{
+        if(!event_id || !winner_count) return errorResponse(res, 400, 'missing required fields');
+        let ev: any = await Event.findOne({where: { id: event_id }});
+        if(!ev) return errorResponse(res, 404, 'event not found');
+
+        let currentStage = ev.current_stage;
+        let nextStage = currentStage + 1;
+        let winners = await db.query(`
+        SELECT 
+        p.id as participation_id, 
+        c.name as name,
+        p.channel_id as channel_id, 
+        s.id as submission_id,
+        v.id as video_id,
+        (SELECT COUNT(votes.id) FROM votes WHERE submission_id = s.id) as votes,
+        (SELECT COUNT(views.id) from views WHERE video_id = s.id) as views
+        from participations p
+        LEFT JOIN submissions s ON s.participation_id = p.id
+        LEFT JOIN videos v ON s.video_id = v.id
+        LEFT JOIN channels c ON c.id = p.channel_id
+        WHERE p.knocked_out_stage IS NULL AND p.event_id = ${event_id}
+        ORDER BY votes DESC, views DESC
+        LIMIT ${winner_count}
+    `);
+
+        let moved_id = winners[0].map((item: any, index) => {
+            console.log(item)
+            return item.participation_id
+        });
+
+        let eliminated_id: any = await Participation.findAll({ where: {
+                [Op.and]: [
+                    { id: { [Op.notIn]: moved_id} },
+                    { knocked_out_stage: { [Op.is]: null} },
+                ]
+            },
+            include: [ { model: Channel, required: true}]
+        });
+
+        return successResponse(res, 200, '', {currentStage, nextStage, winners: winners[0], moved_id, eliminated_id});
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
     }

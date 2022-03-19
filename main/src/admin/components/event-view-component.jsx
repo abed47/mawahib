@@ -2,9 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, Input } from '@adminjs/design-system';
 import moment from 'moment';
 import axios from 'axios';
-import { ActionsWrapper, CardsWrapper, CreateStageDialog, EventStageCard, StageCreateDialogStyles } from './styles-components';
-import Dailog from 'react-modal';
+import {
+    ActionsWrapper,
+    CardsWrapper,
+    CreateStageDialog,
+    EventStageCard,
+    moveToNextStageDialogStyles,
+    StageCreateDialogStyles
+} from './styles-components';
+import Dialog from 'react-modal';
 import Select from 'react-select';
+
+import MoveToNextStageDialog from "./move-to-next-stage-dialog";
 /**
  * @type {React.CSSProperties}
  */
@@ -34,7 +43,7 @@ const CardClass = {
     textAlign: 'center'
 }
 
-const hostUrl = 'http://192.168.222.45:4000/api/v1/';
+const hostUrl = 'http://localhost:4000/api/v1/';
 
 const ViewPage = (props) => {
 
@@ -47,6 +56,9 @@ const ViewPage = (props) => {
     const [submissionEnd, setSubmissionEnd] = useState(new Date);
     const [stageStatus, setStageStatus] = useState({label: 'Felitering', value: 1}) //1 = filtering, 2 = published 
     const [stageTitle, setStageTitle] = useState('');
+
+    //move to next stage dialog
+    const [nextStageDialogOpen, setNextStageDialogOpen] = useState(false);
     
     useEffect(() => {
         loadData();
@@ -55,7 +67,6 @@ const ViewPage = (props) => {
     const loadData = async () => {
         try{
             let { data: res } = await axios.post(hostUrl + 'event/admin-display', { event_id: props.record.params.id });
-            console.log(res)
 
             if(res && res?.status){
                 setEv(res.data);
@@ -193,6 +204,15 @@ const ViewPage = (props) => {
         }
     }
 
+    const closeMoveToNextDialog = () => {
+        setNextStageDialogOpen(false);
+    }
+
+    const handleMoveSuccess = () => {
+        setNextStageDialogOpen(false);
+        loadData();
+    }
+
     return (
         <Box style={{marginBottom: "25px"}}>
             <div style={HeaderClass}>
@@ -220,6 +240,14 @@ const ViewPage = (props) => {
                 <div style={CardClass}>
                     <h1>Participants Count</h1>
                     {ev?.participants_count}
+                </div>
+                <div style={CardClass}>
+                    <h1>Current Stage</h1>
+                    {ev?.current_stage}
+                </div>
+                <div style={CardClass}>
+                    <h1>Total Stages</h1>
+                    {ev?.stage_count}
                 </div>
             </div>
 
@@ -250,9 +278,18 @@ const ViewPage = (props) => {
                     <Button onClick={handleDeactivateVoting}>Deactivate Voting</Button> :
                     <Button onClick={handleActivateVoting}>Activate Voting</Button>
                 }
+
+                {
+                    ev?.current_stage < ev?.stage_count ?
+                    <Button style={{marginLeft: 10}} onClick={() => setNextStageDialogOpen(true)}>Move To Next Stage</Button> : null
+                }
+                {
+                    ev?.current_stage === ev?.stage_count ?
+                        <Button style={{marginLeft: 10}}>Finish Event</Button> : null
+                }
             </ActionsWrapper>
 
-            <Dailog style={StageCreateDialogStyles} isOpen={createStageDialogOpen}>
+            <Dialog style={StageCreateDialogStyles} isOpen={createStageDialogOpen}>
                 <CreateStageDialog>
                     <h1 className="header">Create Stage: {stageNumber}</h1>
                     <div className="form-control">
@@ -277,7 +314,11 @@ const ViewPage = (props) => {
                         <Button style={{marginLeft: 10}} onClick={hanldeCreateStage}>Save</Button>
                     </div>
                 </CreateStageDialog>
-            </Dailog>
+            </Dialog>
+
+            <Dialog ariaHideApp={false} isOpen={nextStageDialogOpen} style={moveToNextStageDialogStyles} onRequestClose={closeMoveToNextDialog}>
+                <MoveToNextStageDialog eventId={ev?.id} success={handleMoveSuccess} close={closeMoveToNextDialog}/>
+            </Dialog>
         </Box>
     );
 }
