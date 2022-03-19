@@ -266,7 +266,7 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
                     canRegister && !participated ? <Button className='btn' onClick={handleParticipate}>participate</Button> : null
                 }
                 {
-                    canSubmit && participated ? <Button className='btn' onClick={handleSubmit}>Submit</Button> : null
+                    canSubmit && participated && data.submitted === false ? <Button className='btn' onClick={handleSubmit}>Submit</Button> : null
                 }
                 {
                     participated ? <Button className='btn disabled' onClick={handleWithdraw}>Withdraw</Button> : null

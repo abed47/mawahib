@@ -48,6 +48,7 @@ export type EventViewResponseData = {
     participants: any[];
     can_vote: boolean;
     user_vote: boolean; //if the user can vote or not
+    submitted: boolean | null;
 }
 
 export type EventViewResponse = RequestResponse<EventViewResponseData>

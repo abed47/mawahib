@@ -9,7 +9,7 @@ import UserPlaceholder from '../../../assets/images/user-placeholder.png';
 import VideoPlaceholder from '../../../assets/images/video-placeholder.png';
 import Logo from '../../../assets/images/logo.png';
 
-const host = 'http://192.168.0.112:4000/api/';
+const host = 'http://localhost:4000/api/';
 
 export const AuthRequests = AuthApis(host);
 export const ChannelRequests = ChannelApis(host);
