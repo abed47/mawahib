@@ -24,6 +24,7 @@ const EventPage: React.FC = props => {
     const params = useParams<{id: string}>();
 
     useEffect(() => {
+        console.log('this should load last')
         loadData();
 
         return () => {

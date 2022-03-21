@@ -1,4 +1,5 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
+import StorageService from '../services/store';
 
 export interface MainContextInterface {
     currentUser: Object | any,
@@ -59,6 +60,21 @@ const MainContextProvider: React.FC = props => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [userChannel, setUserChannel] = useState(null);
     const [pinnedCategories, setPinnedCategories] = useState([]);
+
+    useEffect(() => {
+        initContext();
+    }, []);
+
+    const initContext = () => {
+        if(!currentUser || !token || !userChannel){
+            let u: any = StorageService.getItem('currentUser');
+            let c = u?.channel || StorageService.getItem('channel');
+            let t: any = StorageService.getItem('token');
+            setUserChannel(c);
+            setCurrentUser(u);
+            setToken(t);
+        }
+    }
 
     const showPreloader = () => {
         setPreloaderActive(true);
