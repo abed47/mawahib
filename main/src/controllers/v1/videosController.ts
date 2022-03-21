@@ -104,7 +104,6 @@ export const filter = async (req: Request, res: Response) => {
     let {fields, exact, pagination} = req.body;
     let videoCount: any = 0;
 
-    console.log(req.body)
     if(!fields || !Object.keys(fields)) return returnErrResponse(res, 'all fields are required', 400);
 
     let filters = [];
@@ -118,8 +117,6 @@ export const filter = async (req: Request, res: Response) => {
         if(fields.banner) filters.push({banner: fields.banner});
         if(fields.video_id) filters.push({id: fields.video_id});
         if(fields.category_id) filters.push({category_id: fields.category_id});
-
-        
 
         let filtersObj:any = {
             where:{

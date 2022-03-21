@@ -260,3 +260,51 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
         return errorResponse(res, 500, err?.message || 'server error');
     }
 }
+
+export const filter: ControllerFunction = async (req, res) => {
+    let {fields, exact, pagination} = req.body;
+    let videoCount: any = 0;
+
+    // if(!fields || !Object.keys(fields)) return returnErrResponse(res, 'all fields are required', 400);
+
+    let filters = [];
+
+    try{
+
+        // if(fields.channel_id) filters.push({channel_id: fields.channel_id});
+        // if(fields.title) filters.push({title: {[Op.like]: `%${fields.title}%`}});
+        // // if(fields.description) filters.push({description: {[Op.like]: `%${fields.description}%`}});
+        // if(fields.user_id) filters.push({user_id: fields.user_id});
+        // if(fields.banner) filters.push({banner: fields.banner});
+        // if(fields.video_id) filters.push({id: fields.video_id});
+        // if(fields.category_id) filters.push({category_id: fields.category_id});
+
+        let filtersObj:any = {
+            where:{
+                [exact ? Op.and : Op.or]: filters
+            },
+            order:[['createdAt', 'DESC']],
+        }
+
+        if(pagination){
+            videoCount = await Channel.count({...filtersObj, include: []});
+        }
+
+        if(pagination?.offset) filtersObj['offset'] = pagination.offset;
+        if(pagination?.limit) filtersObj['limit'] = pagination.limit;
+
+
+        let videos = await Channel.findAll(filtersObj);
+
+        return res.status(200).json({
+            status: true,
+            type: "success",
+            data: videos,
+            message: 'retrieved successfully',
+            pagination: {totalRows: videoCount}
+        });
+
+    }catch(err){
+        returnErrResponse(res, err.message || 'unknown error', 500);
+    }
+}

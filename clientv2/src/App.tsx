@@ -20,6 +20,7 @@ const EventsHome = React.lazy(() => import('./pages/events'));
 const WatchScreen = React.lazy(() => import('./pages/videos/watch'));
 const Layout = React.lazy(() => import('./components/layout'));
 const EventPage  = React.lazy(() => import('./pages/events/event'));
+const ChannelListing = React.lazy(() => import('./pages/channel/listing'));
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
               <Route path="/channel/:id" element={<ChannelViewPage />} />
               <Route path="/events" element={<EventsHome />} />
               <Route path="/event/:id" element={<EventPage />} />
+              <Route path="/channels" element={<ChannelListing />} />
             </Routes>
           </Layout>
         </MainContextProvider>

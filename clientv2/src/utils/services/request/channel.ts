@@ -55,6 +55,18 @@ const ChannelApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        search: async (body: any) => {
+            try{
+                let { data } = await axios.post(host + 'v1/channel/search', body, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }

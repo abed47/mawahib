@@ -80,7 +80,7 @@ const SideNav: React.FC = () => {
                     <div className={`link-list-item ${activePath.includes('/channel') ? 'active' : ''}`} ref={channelRef} onClick={handleClick}>
                         <BsViewList className='icon' />
 
-                        <p>Channel</p>
+                        <p>Channels</p>
                     </div>
 
                     <div className={`link-list-item ${activePath.includes('/continue-watching') ? 'active' : ''}`} ref={continueWatchingRef} onClick={handleClick}>
