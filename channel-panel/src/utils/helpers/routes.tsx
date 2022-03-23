@@ -6,6 +6,7 @@ import LoginPage from '../../pages/auth/login';
 import CategoriesPage from '../../pages/categories';
 import VideoListing from '../../pages/videos/listing';
 import VideoUpload from '../../pages/videos/upload';
+import FollowersPage from '../../pages/followers';
 
 const Routes: React.FC = props => {
 
@@ -24,7 +25,8 @@ const Routes: React.FC = props => {
             children: [
                 { path: 'categories', element: <CategoriesPage /> },
                 { path: '/videos', element: <VideoListing />},
-                { path: '/videos/upload', element: <VideoUpload />}
+                { path: '/videos/upload', element: <VideoUpload />},
+                { path: '/followers', element: <FollowersPage />}
             ]
         },
         {
