@@ -263,7 +263,7 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
 
 export const filter: ControllerFunction = async (req, res) => {
     let {fields, exact, pagination} = req.body;
-    let videoCount: any = 0;
+    let channelCount: any = 0;
 
     // if(!fields || !Object.keys(fields)) return returnErrResponse(res, 'all fields are required', 400);
 
@@ -281,13 +281,20 @@ export const filter: ControllerFunction = async (req, res) => {
 
         let filtersObj:any = {
             where:{
-                [exact ? Op.and : Op.or]: filters
+                // [exact ? Op.and : Op.or]: filters
             },
+            attributes: [
+                'id',
+                'name',
+                'photo',
+                [Sequelize.literal('(SELECT COUNT(*) FROM subscriptions WHERE subscriptions.channel_id = channel.id)'), 'subscription_count']
+            ],
             order:[['createdAt', 'DESC']],
+            group: ['channel.id']
         }
 
         if(pagination){
-            videoCount = await Channel.count({...filtersObj, include: []});
+            channelCount = await Channel.count();
         }
 
         if(pagination?.offset) filtersObj['offset'] = pagination.offset;
@@ -301,7 +308,7 @@ export const filter: ControllerFunction = async (req, res) => {
             type: "success",
             data: videos,
             message: 'retrieved successfully',
-            pagination: {totalRows: videoCount}
+            pagination: {totalRows: channelCount}
         });
 
     }catch(err){

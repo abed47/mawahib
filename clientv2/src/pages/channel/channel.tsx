@@ -154,7 +154,7 @@ const ChannelView: React.FC = props => {
                     </div>
                     <div className="r">
                         {
-                            ctx?.userChannel?.id ? 
+                            ctx?.userChannel?.id && ctx.userChannel.id == params.id ? 
                             <Button className="btn secondary edit-btn" onClick={() => navigateTo(getChannelPanelUrl(), true, true)}> <FiEdit3 className='icon' /> Edit Channel</Button> :
                             <div className="controls">
                                 {
@@ -177,7 +177,7 @@ const ChannelView: React.FC = props => {
                         <div ref={bottomLineRef} className="bottom-bar"></div>
                     </div>
 
-                    <div className="top-fans">
+                    {channel?.top_fans?.length ? <div className="top-fans">
                         <p className="title">Top fans</p>
                         <div className="top-fans-list">
                             {
@@ -191,7 +191,7 @@ const ChannelView: React.FC = props => {
                                 }) : null
                             }
                         </div>
-                    </div>
+                    </div> : null}
                 </div>
             </header>
             <main>
