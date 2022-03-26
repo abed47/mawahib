@@ -53,10 +53,12 @@ export const uploadPhoto = async (req: Request, res: Response) => {
 
 export const getHomeData: ControllerFunction = async (req, res) => {
     try{
-        let bannerItems = await Video.findAll({ where: { [Op.and]: [
-                    {type: { [Op.eq]: 1}},
-                    {banner: { [Op.eq]: true}}
-                ] }, order: [['createdAt', 'DESC']], limit: 6});
+        let bannerItems = await Video.findAll({ where: 
+            { [Op.and]: [
+                    { type: 1},
+                    { banner: true }
+                ] 
+            }, order: [['createdAt', 'DESC']], limit: 6});
 
         let topTalents = await db.query(`SELECT 
             c.id, 
@@ -68,8 +70,8 @@ export const getHomeData: ControllerFunction = async (req, res) => {
             LIMIT 15`);
 
         let recommended = await Video.findAll({ where: { [Op.and]: [
-                    {type: { [Op.eq]: 1}},
-                    {recommended_home: { [Op.eq]: true}}
+                    {type: 1},
+                    {recommended_home: true}
                 ] }, order: [['createdAt', 'DESC']], limit: 6});
 
         let categories = await Category.findAll({ where: { home: true }, limit: 7});

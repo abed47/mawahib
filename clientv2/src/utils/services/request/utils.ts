@@ -23,6 +23,14 @@ const UtilsApis = (host: string) => {
         getPhotoUrl: (url: string) => {
             if(url.includes('http')) return url;
             return host + 'v1/uploads/' + url;
+        },
+        getHome: async () => {
+            try{
+                let { data } = await axios.get(host + 'v1/utils/home');
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }
