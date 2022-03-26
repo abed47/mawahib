@@ -14,6 +14,7 @@ const Discover: React.FC = props => {
     const [topTalents, setTopTalents] = useState([]);
     const [recommendedList, setRecommendedList] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [otherVideos, setOtherVideos] = useState([]);
 
     const ctx = useCtx();
 
@@ -34,12 +35,16 @@ const Discover: React.FC = props => {
                 setBannerItems(d.bannerItems);
                 setTopTalents(d.topTalents[0]);
                 setRecommendedList(d.recommended);
+                setOtherVideos(d.otherVideos);
                 return;
             }
 
             if(res && res?.status === false){
-                
+                ctx.showSnackbar(res?.message || 'server error', 'error');
+                return;
             }
+
+            ctx.showSnackbar(res?.request?.data?.message || 'server error', 'error');
         }catch(err: any){
             ctx.hidePreloader();
             ctx.showSnackbar(err?.message || 'server error', 'error');
@@ -47,11 +52,11 @@ const Discover: React.FC = props => {
     }
     return (
         <div className="discover-page">
-            <HomeBanner items={videos} />
-            <TopTalents items={channels} />
-            <HomeRecommendedVideos items={videos} />
+            <HomeBanner items={bannerItems} />
+            <TopTalents items={topTalents} />
+            <HomeRecommendedVideos items={recommendedList} />
             <TopCategoriesComponent items={categories} />
-            <OtherVideoListComponent items={videos} />
+            <OtherVideoListComponent items={otherVideos} />
         </div>
     );
 }

@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
+import { handlePhotoUrl } from "../../../utils/services/request";
+
 const OtherVideos: React.FC<{items: any[]}> = props => {
+
+    const navigate = useNavigate();
+
+    const handleItemClick = (id: any) => navigate(`/watch/${id}`);
 
     return (
         <div className="other-videos">
@@ -8,8 +15,8 @@ const OtherVideos: React.FC<{items: any[]}> = props => {
                 {
                     props.items.map(((item, i) => {
                         return (
-                            <div className="list-item" key={`other-video-list-item-${i}`}>
-                                <img src={item.thumbnail} alt="" />
+                            <div onClick={() => handleItemClick(item.id)} className="list-item" key={`other-video-list-item-${i}`}>
+                                <img src={handlePhotoUrl(item.thumbnail)} alt="" />
 
                                 <div className="info">
                                     <p className="title">

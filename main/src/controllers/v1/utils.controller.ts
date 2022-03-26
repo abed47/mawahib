@@ -76,11 +76,14 @@ export const getHomeData: ControllerFunction = async (req, res) => {
 
         let categories = await Category.findAll({ where: { home: true }, limit: 7});
 
+        let otherVideos = await Video.findAll({ where: { type: 1 }, order: [['createdAt', 'DESC']], limit: 6})
+
         return successResponse(res, 200, 'retrieved successfully', {
             bannerItems,
             topTalents,
             recommended,
-            categories
+            categories,
+            otherVideos
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
