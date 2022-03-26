@@ -34,6 +34,11 @@ const Video = db.define('video', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    recommended_home: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
     banner: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
