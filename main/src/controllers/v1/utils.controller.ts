@@ -3,9 +3,10 @@ import seeders from "../../utils/seeders";
 import * as SecurePin from 'secure-pin';
 import {errorResponse, returnErrResponse, successResponse} from "../../utils";
 import {ControllerFunction} from "../../utils/types";
-import {Category, Video} from "../../database/models";
+import {Category, Like, Subscription, Transaction, User, Video} from "../../database/models";
 import {db} from "../../database";
 import {Op} from "sequelize";
+import * as moment from 'moment';
 
 export const seed = async (req: Request, res: Response) => {
     try{
@@ -84,6 +85,48 @@ export const getHomeData: ControllerFunction = async (req, res) => {
             recommended,
             categories,
             otherVideos
+        });
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const channelDashboard: ControllerFunction = async (req, res) => {
+    let { channel_id } = req.body;
+    if(!channel_id) return errorResponse(res, 400, 'missing required fields');
+    try{
+        let today = moment(new Date());
+        let recentFollowers: any = await Subscription.findAll({ 
+            where: {
+                channel_id,
+                createdAt: {
+                    [Op.between]: [today.startOf('day').toISOString(), today.endOf('day').toISOString()]
+                }
+            },
+            include: [ User ]
+        });
+
+        let likes = await Like.count({
+            include: [
+                { model: Video, required: true, where: { channel_id }}
+            ]
+        });
+
+        let earnings = await Transaction.sum('amount', { 
+            where: { 
+                [Op.and]: [
+                    {channel_id},
+                    { createdAt: {
+                        [Op.between]: [moment(new Date()).subtract(6, 'days').format('YYYY-MM-DDThh:mm:ssZ'), moment(new Date()).endOf('day').format('YYYY-MM-DDThh:mm:ssZ')]
+                    }}
+                ]
+             }
+        })
+
+        return successResponse(res, 200, 'success', {
+            recentFollowers,
+            likes,
+            earnings
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
