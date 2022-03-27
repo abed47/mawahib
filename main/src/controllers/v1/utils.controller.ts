@@ -7,7 +7,7 @@ import {Category, Like, Subscription, Transaction, User, Video} from "../../data
 import {db} from "../../database";
 import {Op} from "sequelize";
 import * as moment from 'moment';
-
+import axios from 'axios';
 export const seed = async (req: Request, res: Response) => {
     try{
         await seeders();
@@ -121,14 +121,49 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
                     }}
                 ]
              }
-        })
+        });
+
+        let watchTime = await getWatchTime(channel_id);
 
         return successResponse(res, 200, 'success', {
             recentFollowers,
             likes,
-            earnings
+            earnings,
+            watchTime
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+const getWatchTime = async (channel_id) => {
+    try{
+        let videos = await Video.findAll({where: {channel_id}});
+        let video_ids = [];
+        videos.forEach((el: any, index) => {
+            video_ids.push(el.url.replace(/https\:\/\/videodelivery\.net\//ig, '').replace(/\/manifest.*/ig, ''));
+        });
+
+        let data = {
+            "query":
+                "query {\n  viewer {\n    accounts(filter:{\n      accountTag:\"1e6757b7e23728bf86d2c06e4dda3046\"\n\n    }) {\n      streamMinutesViewedAdaptiveGroups(\n        filter: {\n          date_lt: \"2022-04-01\"\n          date_gt: \"2022-03-01\"\n        }\n        orderBy:[sum_minutesViewed_DESC]\n        limit: 10\n      ) {\n             sum {\n          minutesViewed\n        }\n        dimensions{\n          uid\n        }\n      }\n    }\n  }\n}\n\n"
+        }
+
+        let allWatchTimes: any = await axios.post('https://api.cloudflare.com/client/v4/graphql',
+            JSON.parse(JSON.stringify(data)),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer 1dKNSWW4oclx5q0QD3u2ccL_g7Bt-x8Abr10IVVb'
+                }
+            }
+            )
+
+        console.log(allWatchTimes.data)
+        return allWatchTimes.data
+        return video_ids;
+    }catch(err){
+        console.log(err?.response || 'server error')
+        throw err;
     }
 }

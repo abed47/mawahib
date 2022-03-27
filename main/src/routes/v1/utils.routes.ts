@@ -8,6 +8,6 @@ let route = Router();
 route.get('/seed', UtilsController.seed);
 route.post('/upload-image', verifyJwtToken, UtilsController.uploadPhoto).use(expressUpload({createParentPath: true}));
 route.get('/home', UtilsController.getHomeData);
-route.post('/channel-dashboard', verifyJwtToken, UtilsController.channelDashboard);
+route.post('/channel-dashboard', UtilsController.channelDashboard);
 
 export default route;
