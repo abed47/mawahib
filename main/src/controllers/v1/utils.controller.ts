@@ -3,7 +3,7 @@ import seeders from "../../utils/seeders";
 import * as SecurePin from 'secure-pin';
 import {errorResponse, returnErrResponse, successResponse} from "../../utils";
 import {ControllerFunction} from "../../utils/types";
-import {Category, Like, Subscription, Transaction, User, Video, View} from "../../database/models";
+import {Category, Channel, Comments, Like, Subscription, Transaction, User, Video, View} from "../../database/models";
 import {db} from "../../database";
 import {Op} from "sequelize";
 import * as moment from 'moment';
@@ -99,14 +99,26 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
         let startDate = moment(new Date()).subtract(6, 'days').format('YYYY-MM-DD');
         let endDate = moment(new Date()).format('YYYY-MM-DD');
 
-        let recentFollowers: any = await Subscription.findAll({ 
+        let recent_followers: any = await Subscription.findAll({ 
             where: {
                 channel_id,
                 createdAt: {
                     [Op.between]: [today.startOf('day').toISOString(), today.endOf('day').toISOString()]
                 }
             },
-            include: [ User ]
+            include: [ User ],
+            order: [['createdAt', 'DESC']],
+            limit: 3
+        });
+
+        let recent_followers_all = await Subscription.count({ 
+            where: {
+                channel_id,
+                createdAt: {
+                    [Op.between]: [today.startOf('day').toISOString(), today.endOf('day').toISOString()]
+                }
+            },
+            order: [['createdAt', 'DESC']],
         });
 
         let likes = await Like.count({
@@ -149,15 +161,28 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
         ORDER BY cat ASC
         `)
 
-        let watchTime = null //await getWatchTime(channel_id);
+        let watch_time = null //await getWatchTime(channel_id);
+
+        let latest_comments = await Comments.findAll({
+            include: [ 
+                {model: User},
+                {model: Video, required: true, include: [
+                    {model: Channel, where: { id: channel_id }, required: true}
+                ]},
+            ],
+            limit: 3,
+            order: [['createdAt', 'DESC']]
+        })
 
         return successResponse(res, 200, 'success', {
-            recentFollowers,
+            recentFollowers: recent_followers,
             likes,
             earnings,
-            watchTime,
+            watchTime: watch_time,
             views_stats: views_stats[0],
-            subscription_stats: subscription_stats[0]
+            subscription_stats: subscription_stats[0],
+            latest_comments,
+            recent_followers_all
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
