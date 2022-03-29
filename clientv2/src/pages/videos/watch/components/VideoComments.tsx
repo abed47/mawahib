@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TextField, CircularProgress } from '@mui/material';
-import { UtilsRequests, VideoRequests } from '../../../../utils/services/request';
+import { UtilsRequests, VideoRequests, handlePhotoUrl } from '../../../../utils/services/request';
 import { useCtx } from '../../../../utils/context';
 import UserPlaceHolder from '../../../../assets/images/user-placeholder.png';
 import ReactTimeAgo from 'react-time-ago';
@@ -105,7 +105,7 @@ const VideoComments: React.FC<{videoId: number}> = props => {
                         return (
                             <div className="comment" key={`comment-list-item-${index}`}>
                                 <div className="comment-header">
-                                    <img src={UtilsRequests.getPhotoUrl(item?.user?.photo)|| UserPlaceHolder} alt="user profile" />
+                                    <img src={handlePhotoUrl(item?.user?.photo, "user")|| UserPlaceHolder} alt="user profile" />
                                     <div className="info">
                                         <p className="name">{item?.user?.name}</p>
                                         <p className="time"> <ReactTimeAgo date={item?.createdAt}/> </p>

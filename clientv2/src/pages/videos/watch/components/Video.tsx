@@ -17,7 +17,7 @@ const VideoWrapper: React.FC<any> = props => {
     }
 
     const getStream = () => {
-        return <Stream responsive={true} className="video-player" controls src={formatVidId(props.url)}/>
+        return <Stream responsive={true}  className="video-player" controls src={formatVidId(props.url)}/>
     }
     
     return (
