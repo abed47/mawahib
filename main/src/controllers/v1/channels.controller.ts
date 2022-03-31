@@ -230,7 +230,8 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
 
         let videos: any = await Video.findAll({
             where: {
-                channel_id
+                channel_id,
+                type: 1
             },
             attributes: [
                 'id',
@@ -238,8 +239,8 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
                 'thumbnail',
                 'createdAt',
                 [Sequelize.literal('(SELECT COUNT(id) FROM comments WHERE video_id = "video"."id")'), 'comment_count'],
-                [Sequelize.literal('(SELECT COUNT(id) FROM likes WHERE video_id = "video"."id")'), 'like count'],
-                [Sequelize.fn('COUNT', Sequelize.col('views.id')), 'view_count'],
+                [Sequelize.literal('(SELECT COUNT(id) FROM likes WHERE video_id = "video"."id")'), 'like_count'],
+                [Sequelize.literal('(SELECT COUNT(id) FROM views WHERE video_id = "video"."id")'), 'view_count'],
             ],
             include: [
                 { model: View, required: false, attributes: []},
@@ -252,7 +253,7 @@ export const getChannelVideos: ControllerFunction = async (req, res) => {
             type: 'success',
             status: true,
             data: videos,
-            pagination: {totalRows: 50},
+            pagination: {totalRows: totalRows},
             message: 'retrieved successfully'
         })
 

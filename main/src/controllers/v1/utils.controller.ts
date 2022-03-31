@@ -8,6 +8,7 @@ import {db} from "../../database";
 import {Op} from "sequelize";
 import * as moment from 'moment';
 import axios from 'axios';
+import Participation from "../../database/models/participation";
 export const seed = async (req: Request, res: Response) => {
     try{
         await seeders();
@@ -96,8 +97,8 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
     if(!channel_id) return errorResponse(res, 400, 'missing required fields');
     try{
         let today = moment(new Date());
-        let startDate = moment(new Date()).subtract(6, 'days').format('YYYY-MM-DD');
-        let endDate = moment(new Date()).format('YYYY-MM-DD');
+        let startDate = moment(new Date()).subtract(6, 'days').startOf('D').format('YYYY-MM-DD');
+        let endDate = moment(new Date()).endOf('D').format('YYYY-MM-DDThh:mm:ssZ');
 
         let recent_followers: any = await Subscription.findAll({ 
             where: {
@@ -159,9 +160,18 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
         WHERE c.id = ${channel_id} AND s."createdAt" BETWEEN '${startDate}' AND '${endDate}'
         GROUP BY cat
         ORDER BY cat ASC
+        `);
+
+        let earnings_stats = await db.query(`
+        SELECT sum(t.amount),
+        DATE(t."createdAt") as cat
+        FROM transactions t
+        WHERE t.channel_id = ${channel_id} AND t."createdAt" BETWEEN '${startDate}' AND '${endDate}'
+        GROUP BY cat
+        ORDER BY cat ASC
         `)
 
-        let watch_time = null //await getWatchTime(channel_id);
+        let watch_time = await getWatchTime(channel_id);
 
         let latest_comments = await Comments.findAll({
             include: [ 
@@ -172,7 +182,10 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
             ],
             limit: 3,
             order: [['createdAt', 'DESC']]
-        })
+        });
+
+        let total_cheer = await Transaction.sum('amount', { where: { channel_id, createdAt: { [Op.between]: [startDate, endDate]} }});
+        let total_event_winnings = await Participation.sum('prize', { where: { channel_id, updatedAt: { [Op.between]: [startDate, endDate]}}});
 
         return successResponse(res, 200, 'success', {
             recentFollowers: recent_followers,
@@ -182,7 +195,12 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
             views_stats: views_stats[0],
             subscription_stats: subscription_stats[0],
             latest_comments,
-            recent_followers_all
+            recent_followers_all,
+            total_cheer,
+            total_event_winnings,
+            startDate,
+            endDate,
+            earnings_stats: earnings_stats[0]
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');
@@ -200,8 +218,8 @@ const getWatchTime = async (channel_id) => {
             video_ids.push(el.url.replace(/https\:\/\/videodelivery\.net\//ig, '').replace(/\/manifest.*/ig, ''));
         });
 
-        let endDate = moment(new Date()).format('YYYY-MM-DD');
-        let startDate = moment(new Date()).subtract(6, 'days').format('YYYY-MM-DD')
+        let endDate = moment(new Date()).add(3, 'days').endOf('D').format('YYYY-MM-DD');
+        let startDate = moment(new Date()).subtract(6, 'days').startOf('D').format('YYYY-MM-DD')
 
         let data = {
             "query":
@@ -215,7 +233,7 @@ const getWatchTime = async (channel_id) => {
                                 filter: {\n          
                                     date_lt: \"${endDate}\"\n          
                                     date_gt: \"${startDate}\"\n        
-                                }\n        orderBy:[sum_minutesViewed_DESC]\n        
+                                }\n        orderBy:[datetimeHour_ASC]\n        
                                 limit: 10000\n      ) 
                         {\n   
                             count\n   
@@ -233,14 +251,16 @@ const getWatchTime = async (channel_id) => {
             }
             )
 
-        // for(let i = 0; i < allWatchTimes.data.data.viewer.accounts[0].streamMinutesViewedAdaptiveGroups.length; i++){
-        //     video_ids.forEach((vid: any, index) => {
-        //         if(allWatchTimes.data.data.viewer.accounts[0].streamMinutesViewedAdaptiveGroups[i].dimensions.uid === vid) my_video_stats.push(allWatchTimes.data.data.viewer.accounts[0].streamMinutesViewedAdaptiveGroups[i])
-        //     })
-        // }
+        if(allWatchTimes?.data?.data?.viewer?.accounts?.[0]?.streamMinutesViewedAdaptiveGroups) for(let i = 0; i < allWatchTimes.data.data.viewer.accounts[0].streamMinutesViewedAdaptiveGroups.length; i++){
+            video_ids.forEach((vid: any, index) => {
+                if(allWatchTimes?.data?.data?.viewer?.accounts?.[0]?.streamMinutesViewedAdaptiveGroups?.[i]?.dimensions?.uid == vid) my_video_stats.push(allWatchTimes.data.data.viewer.accounts[0].streamMinutesViewedAdaptiveGroups[i])
+            })
+        }
 
-        // return my_video_stats;
-        return allWatchTimes.data
+        console.log(allWatchTimes.data)
+
+        return my_video_stats;
+        // return allWatchTimes?.data?.data
         return video_ids;
     }catch(err){
         console.log(err?.response || 'server error')

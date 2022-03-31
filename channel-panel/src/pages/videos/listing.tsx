@@ -20,7 +20,7 @@ const VideoListing: React.FC = props => {
     const ctx = useCtx();
     
     useEffect(() => {
-        // loadData();
+        loadData();
     }, []);
 
     const loadData = async () => {
