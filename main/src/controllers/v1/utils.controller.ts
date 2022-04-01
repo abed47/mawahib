@@ -104,7 +104,7 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
             where: {
                 channel_id,
                 createdAt: {
-                    [Op.between]: [today.startOf('day').toISOString(), today.endOf('day').toISOString()]
+                    [Op.between]: [today.startOf('day').toDate(), today.endOf('day').toDate()]
                 }
             },
             include: [ User ],
@@ -116,10 +116,10 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
             where: {
                 channel_id,
                 createdAt: {
-                    [Op.between]: [today.startOf('day').toISOString(), today.endOf('day').toISOString()]
+                    [Op.between]: [today.startOf('day').toDate(), today.endOf('day').toDate()]
                 }
             },
-            order: [['createdAt', 'DESC']],
+            
         });
 
         let likes = await Like.count({
@@ -133,7 +133,7 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
                 [Op.and]: [
                     {channel_id},
                     { createdAt: {
-                        [Op.between]: [moment(new Date()).subtract(6, 'days').format('YYYY-MM-DDThh:mm:ssZ'), moment(new Date()).endOf('day').format('YYYY-MM-DDThh:mm:ssZ')]
+                        [Op.between]: [moment(new Date()).subtract(6, 'days').toDate(), moment(new Date()).endOf('day').toDate()]
                     }}
                 ]
              }
@@ -184,8 +184,8 @@ export const channelDashboard: ControllerFunction = async (req, res) => {
             order: [['createdAt', 'DESC']]
         });
 
-        let total_cheer = await Transaction.sum('amount', { where: { channel_id, createdAt: { [Op.between]: [startDate, endDate]} }});
-        let total_event_winnings = await Participation.sum('prize', { where: { channel_id, updatedAt: { [Op.between]: [startDate, endDate]}}});
+        let total_cheer = await Transaction.sum('amount', { where: { channel_id, createdAt: { [Op.between]: [moment(startDate).toDate(), moment(endDate).toDate()]} }});
+        let total_event_winnings = await Participation.sum('prize', { where: { channel_id, updatedAt: { [Op.between]: [moment(startDate).toDate(), moment(endDate).toDate()]}}});
 
         return successResponse(res, 200, 'success', {
             recentFollowers: recent_followers,
