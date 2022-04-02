@@ -10,6 +10,9 @@ route.post('/', verifyJwtToken, channelController.create);
 route.put('/:id', verifyJwtToken, channelController.update);
 route.delete('/:id', verifyJwtToken, channelController.destroy);
 route.post('/view/:id', channelController.view);
-route.post('/get-videos', channelController.getChannelVideos);
 route.post('/search', channelController.filter);
+
+//create middleware to check users
+route.post('/get-videos', channelController.getChannelVideos);
+route.post('/channel-followers', channelController.getChannelFollowers);
 export default route;

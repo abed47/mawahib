@@ -93,7 +93,6 @@ const Dashboard: React.FC<any> = props => {
             ctx.hidePreloader();
             
             if(res && res?.status){
-                console.log(res);
                 let d = res.data;
                 //followers
                 setTopRecentFollowers(d.recentFollowers);

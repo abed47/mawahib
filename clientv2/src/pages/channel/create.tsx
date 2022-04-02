@@ -30,7 +30,6 @@ const CreateChannel: React.FC = props => {
     const loadData = async () => {
         try{
             let res = await UserRequests.getUserInfo();
-            console.log(res);
         }catch(err: any){
             ctx.showSnackbar(err?.message || 'server error', 'error');
         }

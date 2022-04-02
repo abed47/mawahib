@@ -24,7 +24,6 @@ const EventPage: React.FC = props => {
     const params = useParams<{id: string}>();
 
     useEffect(() => {
-        console.log('this should load last')
         loadData();
 
         return () => {
@@ -64,7 +63,6 @@ const EventPage: React.FC = props => {
     }
 
     const handleVideoSelected = (e: any) => {
-        console.log(e)
         setVideoUrl(e.video.url);
         setPlayingVideo(true);
         setPlayingVideoData(e);

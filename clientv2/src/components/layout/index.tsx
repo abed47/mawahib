@@ -13,7 +13,6 @@ const Layout: React.FC = (props) => {
 
     React.useEffect(() => {
         if(!ctx.loggedIn){
-            console.log('this should load second')
             let user: any = StorageService.getItem('currentUser');
             let token: any = StorageService.getItem('token');
             let pinnedCats: any = StorageService.getItem('pinnedCategories');

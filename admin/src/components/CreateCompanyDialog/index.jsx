@@ -83,7 +83,6 @@ const CreateCompanyDialog = (props) => {
             ctx.showSnack("Unknown Error", "error");
             props.close();
         }).catch(err => {
-            console.log(err.response);
             ctx.showSnack(err.response && err.response.message ? err.response.message : "Unknown Error", "error");
             props.close();
         })

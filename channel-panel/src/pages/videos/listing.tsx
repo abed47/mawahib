@@ -63,7 +63,6 @@ const VideoListing: React.FC = props => {
                 pagination:{limit: limit, offset}});
             ctx.hidePreloader();
 
-            console.log(res);
 
             if(res && res?.status){
                 setDataList(res.data);

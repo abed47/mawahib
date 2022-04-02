@@ -1,0 +1,87 @@
+.followers-home{
+
+    width: 100%;
+    @include init-flex(column, flex-start, flex-start);
+    // padding: 20px;
+    box-sizing: border-box;
+
+    header{
+        width: 100%;
+        @include init-flex(row, space-between);
+        padding: 0 20px;
+        padding-top: 30px;
+        box-sizing: border-box;
+
+        .l{
+            @include init-flex();
+            p{
+                margin: 0;
+                font-family: $font-bold;
+                font-size: 18px;
+                color: $text-color;
+
+                &:nth-child(1){
+                    color: $color-secondary;
+                    margin-right: 15px;
+                }
+            }
+        }
+
+        .r{
+            input{
+                background-color: $box-color;
+                border: none;
+                outline: none;
+                padding: 5px;
+                border-radius: 5px;
+                color: $text-color;
+            }
+        }
+    }
+
+    .tabs-wrapper{
+        width: 100%;
+
+        .tab-panel{
+
+            .follower-list{
+                @include init-flex(row, flex-start);
+                flex-wrap: wrap;
+                
+                .list-item{
+                    @include init-flex(column);
+                    margin: 10px;
+                    position: relative;
+
+                    .cheer-sender-indicator{
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+
+                    img{
+                        width: 80px;
+                        height: 80px;
+                        border: 1px solid $color-secondary;
+                        border-radius: 50%;
+                    }
+
+                    h1{
+                        margin: 0;
+                        margin-top: 5px;
+                        text-align: center;
+                        font-size: 14px;
+                        font-family: $font-base;
+                        color: $color-secondary;
+                        width: 80px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+            }
+        }
+    }
+}

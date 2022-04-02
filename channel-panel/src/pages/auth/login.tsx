@@ -178,7 +178,6 @@ const LoginPage: React.FC = props => {
                     ctx.hidePreloader();
                     
                     if(response?.status){
-                        console.log(response)
                         StorageService.setItem('currentUser', response.data);
                         StorageService.setItem('loggedIn', true);
                         StorageService.setItem('token', response.data.token);

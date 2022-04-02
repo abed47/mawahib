@@ -210,58 +210,6 @@ export const view: ControllerFunction = async (req, res) => {
     }
 }
 
-export const getChannelVideos: ControllerFunction = async (req, res) => {
-    let { pagination, channel_id } = req.body;
-    let filters = {
-        where: {
-            channel_id
-        },
-        order: [['createdAt', 'DESC']]
-    };
-
-    if(pagination && pagination?.limit && pagination?.offset >= 0){
-        filters['offset'] = pagination.offset;
-        filters['limit'] = pagination.limit;
-    }
-
-    try{
-
-        let totalRows = await Video.count({ where: { channel_id }});
-
-        let videos: any = await Video.findAll({
-            where: {
-                channel_id,
-                type: 1
-            },
-            attributes: [
-                'id',
-                'title',
-                'thumbnail',
-                'createdAt',
-                [Sequelize.literal('(SELECT COUNT(id) FROM comments WHERE video_id = "video"."id")'), 'comment_count'],
-                [Sequelize.literal('(SELECT COUNT(id) FROM likes WHERE video_id = "video"."id")'), 'like_count'],
-                [Sequelize.literal('(SELECT COUNT(id) FROM views WHERE video_id = "video"."id")'), 'view_count'],
-            ],
-            include: [
-                { model: View, required: false, attributes: []},
-            ],
-            group: ['video.id'],
-            order: [['createdAt', 'DESC']]
-        });
-
-        return res.status(200).json({
-            type: 'success',
-            status: true,
-            data: videos,
-            pagination: {totalRows: totalRows},
-            message: 'retrieved successfully'
-        })
-
-    }catch (err) {
-        return errorResponse(res, 500, err?.message || 'server error');
-    }
-}
-
 export const filter: ControllerFunction = async (req, res) => {
     let {fields, exact, pagination} = req.body;
     let channelCount: any = 0;
@@ -314,5 +262,76 @@ export const filter: ControllerFunction = async (req, res) => {
 
     }catch(err){
         returnErrResponse(res, err.message || 'unknown error', 500);
+    }
+}
+
+
+export const getChannelVideos: ControllerFunction = async (req, res) => {
+    let { pagination, channel_id } = req.body;
+    let filters = {
+        where: {
+            channel_id
+        },
+        order: [['createdAt', 'DESC']]
+    };
+
+    if(pagination && pagination?.limit && pagination?.offset >= 0){
+        filters['offset'] = pagination.offset;
+        filters['limit'] = pagination.limit;
+    }
+
+    try{
+
+        let totalRows = await Video.count({ where: { channel_id }});
+
+        let videos: any = await Video.findAll({
+            where: {
+                channel_id,
+                type: 1
+            },
+            attributes: [
+                'id',
+                'title',
+                'thumbnail',
+                'createdAt',
+                [Sequelize.literal('(SELECT COUNT(id) FROM comments WHERE video_id = "video"."id")'), 'comment_count'],
+                [Sequelize.literal('(SELECT COUNT(id) FROM likes WHERE video_id = "video"."id")'), 'like_count'],
+                [Sequelize.literal('(SELECT COUNT(id) FROM views WHERE video_id = "video"."id")'), 'view_count'],
+            ],
+            include: [
+                { model: View, required: false, attributes: []},
+            ],
+            group: ['video.id'],
+            order: [['createdAt', 'DESC']]
+        });
+
+        return res.status(200).json({
+            type: 'success',
+            status: true,
+            data: videos,
+            pagination: {totalRows: totalRows},
+            message: 'retrieved successfully'
+        })
+
+    }catch (err) {
+        return errorResponse(res, 500, err?.message || 'server error');
+    }
+}
+
+export const getChannelFollowers: ControllerFunction = async (req, res) => {
+    try{
+        let { channel_id } = req.body;
+        if(!channel_id) return errorResponse(res, 400,'missing required fields');
+        let followers = await Subscription.findAll({
+            where: { channel_id },
+            include: [
+                { model: User, required: false, include: [
+                        { model: Transaction, where: { channel_id }, required: false }
+                    ] },
+            ]
+        });
+        return successResponse(res, 200, 'retrieved successfully', followers);
+    }catch(err){
+        return errorResponse(res, 500, err?.message || 'server error');
     }
 }

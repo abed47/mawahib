@@ -42,6 +42,20 @@ const ChannelApis = (host: string) => {
             }catch(err){
                 return err;
             }
+        },
+        getFollowers: async (body: any) => {
+            try{
+                let { data } = await axios.post(host + 'v1/channel/channel-followers', body, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                return data;
+            }catch(err){
+                return err;
+            }
         }
     }
 }

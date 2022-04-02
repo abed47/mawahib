@@ -56,7 +56,6 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
         if(ctx.userChannel) setHasChannel(true);
         setSubscribed(data.subscribed);
         setCanVote(data.can_vote);
-        console.log(data);
     }
 
     const handleParticipate = () => {
@@ -203,7 +202,6 @@ const EventViewActionBox: React.FC<ComponentProps> = ({data, status, reload, vid
         
         let crypto = new simpleCrypto(getQe());
         let encrypted = crypto.encrypt(s);
-        console.log(encrypted)
         let token = ctx.token;
         let url = getChannelPanelUrl() + '/login?tok=' + token + '&act=' + encodeURI(encrypted);
         return window.open(url, '_blank');

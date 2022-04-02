@@ -247,7 +247,6 @@ const LoginPage: React.FC = props => {
 
     const handleTwitterSignup = () => {
         twitterLogin().then(async (res: any) => {
-            console.log(res);
             if(res?._tokenResponse){
                 ctx.showPreloader();
                 try{

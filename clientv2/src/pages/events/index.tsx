@@ -35,7 +35,6 @@ const EventsHome: React.FC = props => {
                 setMyEventList(res.data.my_events);
                 return;
             }
-            console.log(res);
         }catch(err: any){
             ctx.hidePreloader();
             ctx.showSnackbar(err?.message || 'server error', 'error');

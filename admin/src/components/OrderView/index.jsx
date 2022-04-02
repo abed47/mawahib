@@ -17,7 +17,6 @@ const OrderView = ({data, invoice, id, ref}) => {
         if(id != 0){
             dataProvider.getOne('orders',id).then(res => {
                 setLoading(false)
-                console.log(res.data.data)
                 setOrderData(res.data.data.order[0]);
                 setOrderItems(res.data.data.items);
                 setOrderClient(res.data.data.client);

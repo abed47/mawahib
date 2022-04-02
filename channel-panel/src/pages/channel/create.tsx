@@ -85,7 +85,6 @@ const CreateChannel: React.FC = props => {
             }
             
         }catch(err: any){
-            console.log(err.response)
             ctx.hidePreloader();
             ctx.showSnackbar(err?.message || err?.error || 'server error', 'error');
         }
