@@ -10,6 +10,10 @@
     box-sizing: border-box;
     padding: 0 20px;
 
+    .mobile-menu-toggle{
+        display: none;
+    }
+
     .logo{
         height: 100%;
 
@@ -232,4 +236,11 @@
 .top-nav-menu-wrapper ul {
     background-color: red;
     color: white;
+}
+
+@media only screen and (max-width: 700px) {
+    .mobile-menu-toggle{
+        display: block !important;
+        color: white !important;
+    }
 }

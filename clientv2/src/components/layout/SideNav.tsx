@@ -6,6 +6,7 @@ import { HiClipboardList } from 'react-icons/hi';
 import { FaPlay } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCtx } from '../../utils/context';
+
 const SideNav: React.FC = () => {
 
     const [bgTop, setBgTop] = useState<number>(0);
@@ -45,7 +46,7 @@ const SideNav: React.FC = () => {
     }
 
     return (
-        <div className="side-nav">
+        <div className={`side-nav ${ctx.sideNavOpen ? 'active' : ''}`}>
             
             <div className="link-list">
 

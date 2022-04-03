@@ -15,3 +15,25 @@
         
     }
 }
+
+@media only screen and (max-width: 700px) {
+    .app-wrapper{
+        background-color: $box-color3;
+        height: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
+    
+        .inner{
+            display: flex;
+            flex-direction: row;
+            height: calc(100% - 90px);
+            position: relative;
+            box-sizing: border-box;
+    
+            .page-wrapper{
+                width: calc(100%);
+            }
+            
+        }
+    }
+}

@@ -118,3 +118,18 @@
         }
     }
 }
+
+@media only screen and (max-width: 700px) {
+    .side-nav{
+        position: fixed;
+        left: -250px;
+        top: 0;
+        z-index: 333;
+        height: 100%;
+        transition: all 300ms ease-in-out;
+
+        &.active{
+            left: 0;
+        }
+    }
+}

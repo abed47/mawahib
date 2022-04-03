@@ -19,7 +19,9 @@ export interface MainContextInterface {
     userChannel: Object | any,
     setUserChannel: (c: any) => void,
     pinnedCategories: any[],
-    setPinnedCategories: (t: any[]) => void
+    setPinnedCategories: (t: any[]) => void,
+    sideNavOpen: boolean,
+    setSideNavOpen: (v: boolean) => void
 }
 
 export const mainContextDefaults: MainContextInterface = {
@@ -40,7 +42,9 @@ export const mainContextDefaults: MainContextInterface = {
     userChannel: null,
     setUserChannel: () => null,
     pinnedCategories: [],
-    setPinnedCategories: () => null
+    setPinnedCategories: () => null,
+    sideNavOpen: false,
+    setSideNavOpen: () => null
 }
 
 const MainContext:any = createContext(mainContextDefaults);
@@ -60,6 +64,7 @@ const MainContextProvider: React.FC = props => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [userChannel, setUserChannel] = useState(null);
     const [pinnedCategories, setPinnedCategories] = useState([]);
+    const [sideNavOpen, setSideNavOpen] = useState(false);
 
     useEffect(() => {
         initContext();
@@ -113,7 +118,9 @@ const MainContextProvider: React.FC = props => {
             userChannel,
             setUserChannel,
             pinnedCategories,
-            setPinnedCategories
+            setPinnedCategories,
+            sideNavOpen,
+            setSideNavOpen
             }}>
             {props.children}
         </MainContext.Provider>
