@@ -20,7 +20,15 @@ const SubscribedEventsList: React.FC<SubscribedEventsListProps> = props => {
                         spaceBetween={props?.dataList.length > 1 ? 50 : 0}
                         loop={props?.dataList?.length ? true : false}
                         autoplay={true}
-                        noSwiping={props.dataList.length > 1 ? true : false}                        
+                        noSwiping={props.dataList.length > 1 ? true : false}
+                        breakpoints={{
+                            100:{
+                                spaceBetween: 10
+                            },
+                            700:{
+                                spaceBetween: props?.dataList.length > 1 ? 50 : 0
+                            }
+                        }}                      
                     >
                         {
                             props.dataList.map((item, i) => {

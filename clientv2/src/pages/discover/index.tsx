@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import HomeBanner from './components/banner';
-import { videos, channels, categories } from '../../assets/data';
 import TopTalents from './components/top-talents';
 import HomeRecommendedVideos from './components/recommended';
 import TopCategoriesComponent from './components/top-categories';

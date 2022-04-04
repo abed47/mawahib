@@ -16,6 +16,9 @@ import PlaylistRoutes from './routes/v1/playlist.routes';
 import PurchasesRoutes from './routes/v1/purchases.routes';
 import EventRoutes from './routes/v1/event.routes';
 
+//metrics 
+import * as expressMetrics from 'express-status-monitor';
+
 import * as fs from 'fs';
 import * as https from 'https';
 import * as path from 'path';
@@ -28,6 +31,7 @@ dotenv.config();
 const app: express.Express = express();
 
 //add app middleware
+app.use(expressMetrics());
 app.use(bodyParser.json());
 app.use(cors());
 

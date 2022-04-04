@@ -20,14 +20,10 @@ const HomeBanner: React.FC<{items: any[]}> = (props) => {
     const swiperSettings: SwiperProps = {
         slidesPerView: 3,
         spaceBetween: 30,
-        // initialSlide: 0,
-        // centerInsufficientSlides: true,
-        // loop: true,
         centeredSlides: true,
         autoplay: true,
-        // onChange: handleSliderChange,
-        // speed: 500,
         onSlideChange: handleSliderChange,
+        
     }
 
     const moveNext = () => {

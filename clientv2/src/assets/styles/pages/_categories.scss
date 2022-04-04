@@ -302,3 +302,37 @@
         }
     }
 }
+
+@media only screen and (max-width: 700px){
+    .categories-page{
+
+        header{
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            .left-side{
+                flex-direction: column;
+                width: 100%;
+                h1{
+                    margin-bottom: 25px;
+                }
+            }
+
+            .tabs-selector{
+                margin-bottom: 25px;
+                margin-left: 0;
+                justify-content: space-between;
+                width: 100%;
+
+                .tab{
+                    font-size: 12px;
+                }
+            }
+        }
+
+        main{
+            margin-top: 0;
+        }
+    }
+}
