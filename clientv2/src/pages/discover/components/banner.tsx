@@ -23,7 +23,16 @@ const HomeBanner: React.FC<{items: any[]}> = (props) => {
         centeredSlides: true,
         autoplay: true,
         onSlideChange: handleSliderChange,
-        
+        breakpoints: {
+            700: {
+                slidesPerView: 3,
+                autoplay: true
+            },
+            100: {
+                slidesPerView: 1,
+                autoplay: true
+            }
+        }
     }
 
     const moveNext = () => {

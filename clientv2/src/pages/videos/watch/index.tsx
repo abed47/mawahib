@@ -5,6 +5,7 @@ import { VideoRequests } from '../../../utils/services/request';
 import ChannelBar from './components/ChannelBar';
 import ExtraInfoTabs from './components/ExtraInfoTabs';
 import VideoWrapper from './components/Video';
+import V2Wrapper from './components/V2PlayerWrapper';
 //@ts-ignore
 const WatchScreen: React.FC = props => {
 
@@ -28,6 +29,7 @@ const WatchScreen: React.FC = props => {
                 }
                 let res = await VideoRequests.viewVideo(body);
                 ctx.hidePreloader();
+                setVideoDetails(null);
                 setVideoDetails(res.data);
             }catch(err: any){
                 ctx.hidePreloader();
@@ -42,7 +44,8 @@ const WatchScreen: React.FC = props => {
 
     return(
         <div className="watch-video-page">
-            <VideoWrapper url={videoDetails?.url} />
+            {/* <VideoWrapper url={videoDetails?.url} /> */}
+            {videoDetails?.url ? <V2Wrapper url={videoDetails?.url} /> : null}
             <ChannelBar channel={ videoDetails?.channel } video={ videoDetails } />
             <ExtraInfoTabs data={videoDetails} />
         </div>
