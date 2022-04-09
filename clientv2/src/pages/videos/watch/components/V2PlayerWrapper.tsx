@@ -7,8 +7,11 @@ const PlayerWrapper: React.FC<any> = (props) => {
   const videoJsOptions: any = { // lookup the options in the docs for more options
     autoplay: true,
     controls: true,
-    responsive: true,
-    fluid: true,
+    // height: '100%',
+    // width: '100%',
+    class: 'videojs-el',
+    // responsive: true,
+    // fluid: true,
     sources: [{
       src: props.url,
       type: 'application/x-mpegURL',
@@ -44,11 +47,11 @@ const PlayerWrapper: React.FC<any> = (props) => {
   // };
 
   return (
-    <>
+    <div className="video-wrapper2">
 
       <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
 
-    </>
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import { CircularProgress } from '@mui/material';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DefaultVideoCard from '../../../components/DefaultVideoCard';
 import { useCtx } from '../../../utils/context';
@@ -25,7 +25,7 @@ const UploadsSection: React.FC<{id: any | string}> = props => {
 
     useEffect(() => {
         handleMount();
-    }, [])
+    }, [props.id])
 
     const handleMount = () => {
         if(bottomLineRef?.current?.style) bottomLineRef.current.style.left = firstElRef.current?.offsetLeft + 'px';
@@ -82,7 +82,7 @@ const UploadsSection: React.FC<{id: any | string}> = props => {
                 <div className="titles">
                     <h1>Uploads</h1>
                     <div className="tab-titles">
-                        <p className={`tab ${currentTab === 0 ? 'active' : ''}`} onClick={e => handleTabChange(e, 0)}>All uploads</p>
+                        <p ref={firstElRef} className={`tab ${currentTab === 0 ? 'active' : ''}`} onClick={e => handleTabChange(e, 0)}>All uploads</p>
                         <p className={`tab ${currentTab === 1 ? 'active' : ''}`} onClick={e => handleTabChange(e, 1)}>Playlists</p>
                         <p className={`tab ${currentTab === 2 ? 'active' : ''}`} onClick={e => handleTabChange(e, 2)}>Events</p>
                         <div className="tabs-bottom-line" ref={bottomLineRef}></div>

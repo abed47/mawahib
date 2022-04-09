@@ -52,7 +52,7 @@ const VideoPlayerV2: React.FC<any> = props => {
   }, [playerRef]);
 
   return (
-    <div data-vjs-player>
+    <div data-vjs-player className="videojs-el">
       <video ref={videoRef} className="video-js vjs-big-play-centered" />
     </div>
   );

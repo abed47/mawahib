@@ -163,7 +163,7 @@ const CategoriesPage: React.FC = props => {
 
                     <div className="tabs-selector">
                         <div className={`tab ${currentTab === 0 ? 'active' : ''}`} ref={tab1Ref} onClick={(e) => handleTabChange(e, 0)}>Top Viewed</div>
-                        <div className={`tab ${currentTab === 1 ? 'active' : ''}`} onClick={(e) => handleTabChange(e, 1)}>New Videos</div>
+                        {/* <div className={`tab ${currentTab === 1 ? 'active' : ''}`} onClick={(e) => handleTabChange(e, 1)}>New Videos</div> */}
                         <div className={`tab ${currentTab === 2 ? 'active' : ''}`} onClick={(e) => handleTabChange(e, 2)}>Most Popular</div>
                         <div ref={bottomLineRef} className="underLine"></div>
                     </div>

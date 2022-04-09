@@ -21,6 +21,32 @@
         }
     }
     
+    .video-wrapper2{
+        width: 100%;
+        height: 300px;
+        height: calc(100vw / 3);
+
+        .video-js{
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-js{
+            // display: none;
+        }
+
+        .video{
+            height: 100%;
+            width: 100%;
+
+            .video-player{
+                width: 100%;
+                height: 100%;
+                padding: 0 !important;
+            }
+        }
+    }
+    
     .channel-bar{
         width: 100%;
         display: flex;
@@ -447,8 +473,18 @@
 @media only screen and (max-width: 700px){
     .watch-video-page{
 
+
         .video-wrapper{
             height: 250px;
+        }
+
+        .video-wrapper2{
+            height: 250px;
+
+            .video-js{
+                width: 100%;
+                height: 100%;
+            }
         }
 
         .channel-bar{

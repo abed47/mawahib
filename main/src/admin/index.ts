@@ -72,7 +72,8 @@ const initAdminPanel = (database) => {
                                 const modifiedRes = await EventPhotoHooks.after(response, request, context);
                                 return EventCoverHooks.after(modifiedRes, request, context);
                             }
-                        }
+                        },
+                        
                     }
                 }
             },
@@ -92,6 +93,16 @@ const initAdminPanel = (database) => {
                         new: {
                             after: CategoryHooks.after,
                             before: CategoryHooks.before
+                        },
+                        edit: {
+                            before: async (request, context) => {
+                                const modifiedReq = await EventPhotoHooks.before(request, context);
+                                return EventCoverHooks.before(modifiedReq, context);
+                            },
+                            after: async (response, request, context) => {
+                                const modifiedRes = await EventPhotoHooks.after(response, request, context);
+                                return EventCoverHooks.after(modifiedRes, request, context);
+                            }
                         }
                     }
                 }
