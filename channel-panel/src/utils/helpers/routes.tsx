@@ -8,6 +8,7 @@ import VideoListing from '../../pages/videos/listing';
 import VideoUpload from '../../pages/videos/upload';
 import FollowersPage from '../../pages/followers';
 import Dashboard from '../../pages/dashboard';
+import LiveStream from '../../pages/videos/live';
 
 const Routes: React.FC = props => {
 
@@ -28,6 +29,7 @@ const Routes: React.FC = props => {
                 { path: '/videos', element: <VideoListing />},
                 { path: '/videos/upload', element: <VideoUpload />},
                 { path: '/followers', element: <FollowersPage />},
+                { path: '/live-stream', element: <LiveStream /> },
                 { path: '/', element: <Dashboard />}
             ]
         },

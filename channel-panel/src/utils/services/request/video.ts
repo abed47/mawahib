@@ -42,6 +42,20 @@ const VideoApis = (host: string) =>  {
             }catch(err){
                 return err;
             }
+        },
+        startLiveStream: async (body: any) => {
+            try{
+                let { data } = await axios.post('https://api.cloudflare.com/client/v4/accounts/1e6757b7e23728bf86d2c06e4dda3046/stream/live_inputs', body, {
+                headers: {
+                    'Authorization': 'Bearer iw7_KA-UuHLGzwgJyYvpjFSm7LfwBSwybbhbc2F1',
+                    // 'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                return data
+            }catch(err){
+                return err;
+            }
         }
     }
 }

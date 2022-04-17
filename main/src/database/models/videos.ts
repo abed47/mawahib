@@ -87,7 +87,7 @@ const Video = db.define('video', {
     type: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        defaultValue: 1 // 1 = normal, 2 = event video
+        defaultValue: 1 // 1 = normal, 2 = event video, 3 = live
     },
     event_id: {
         type: DataTypes.INTEGER,
@@ -96,7 +96,15 @@ const Video = db.define('video', {
     stage_number: {
         type: DataTypes.INTEGER,
         allowNull: true
-    }
+    },
+    video_uid: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    stream_key: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
 }, {
     paranoid: true,
     timestamps: true

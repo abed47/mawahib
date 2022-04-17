@@ -3,6 +3,7 @@ import { BsFillGrid1X2Fill } from 'react-icons/bs';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BsFillPlayCircleFill } from 'react-icons/bs';
 import { MdPersonAddAlt1 } from 'react-icons/md';
+import { BsBroadcast } from 'react-icons/bs';
 
 const SideNav: React.FC = () => {
 
@@ -19,6 +20,7 @@ const SideNav: React.FC = () => {
     const votedNowRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
     const followersRef = useRef<HTMLDivElement>(null);
+    const liveRef = useRef<HTMLDivElement>(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -38,6 +40,7 @@ const SideNav: React.FC = () => {
         if(activePath.includes('/continue-watching')) setBgTop(continueWatchingRef?.current?.offsetTop || 5);
         if(activePath.includes('/voted')) setBgTop(votedNowRef?.current?.offsetTop || 5);
         if(activePath.includes('/followers')) setBgTop(followersRef?.current?.offsetTop || 5);
+        if(activePath.includes('/live-stream')) setBgTop(liveRef?.current?.offsetTop || 5);
     }
 
     const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
@@ -70,6 +73,12 @@ const SideNav: React.FC = () => {
                         <MdPersonAddAlt1 className='icon' />
 
                         <p>Followers</p>
+                    </div>
+
+                    <div className={`link-list-item ${activePath.includes('/live-stream') ? 'active' : ''}`} ref={liveRef} onClick={handleClick}>
+                        <BsBroadcast className='icon' />
+
+                        <p>Live Stream</p>
                     </div>
                 </div>
 
