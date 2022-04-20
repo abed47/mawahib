@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, Button, Select, MenuItem } from '@mui/material';
+import { Alert, Button, Select, MenuItem, CircularProgress } from '@mui/material';
 import { useCtx } from '../../utils/context';
 import { extractError } from '../../utils/helpers';
-import { CategoryRequests, EventRequests, PlaylistRequests, UtilsRequests, VideoRequests } from '../../utils/services/request';
+import { CategoryRequests, EventRequests, handlePhotoUrl, PlaylistRequests, UtilsRequests, VideoRequests } from '../../utils/services/request';
 import SelectInputComponent from '../../components/SelectInputComponent';
 import DropZone from '../../components/DropZone';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -12,7 +12,7 @@ import TagInput from '../../components/TagInput';
 import LabeledSwitch from '../../components/LabeledSwitch';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import moment from 'moment';
-import socketIo from 'socket.io-client';
+import socketIo, { io } from 'socket.io-client';
 
 const LiveStream: React.FC<any> = props => {
     const [ title, setTitle ] = useState('');
@@ -38,15 +38,24 @@ const LiveStream: React.FC<any> = props => {
     const [streamType, setStreamType] = useState<'camera' | 'screen'>('camera');
     const [streamStarted, setStreamStarted] = useState(false);
     const [mRecorder, setMRecorder] = useState<null | MediaRecorder>(null);
+    const [streamStatus, setStreamStatus] = useState(0) //0 = null, 1 = pending, 2 = started, 3 = ended
+    const [comments, setComments] = useState<any[]>([]);
+    const [videoUid, setVideoUid] = useState('');
     
     const ctx = useCtx();
     const navigate = useNavigate();
     const [urlSearchParams] = useSearchParams();
     const videoRef = useRef<HTMLVideoElement>(null);
+    const commentBoxRef = useRef<HTMLDivElement>(null);
+    const secVideoRef = useRef<HTMLVideoElement>(null);
+    const endBtnRef = useRef<HTMLButtonElement>(null);
+    // const navigate = useNavigate();
 
     useEffect(() => {
         loadStreams();
         loadData();
+
+        
 
         return () => {
             if(mRecorder?.stop) mRecorder.stop();
@@ -95,6 +104,7 @@ const LiveStream: React.FC<any> = props => {
     }
 
     const loadData = async () => {
+
         try{
             ctx.showPreloader()
             let pListRes = await PlaylistRequests.list();
@@ -216,7 +226,7 @@ const LiveStream: React.FC<any> = props => {
         }
 
         try{
-            ctx.showPreloader();
+            setStreamStatus(1);
 
             //upload videoThumbnail to server
             if(thumbnail){
@@ -233,50 +243,80 @@ const LiveStream: React.FC<any> = props => {
                 
                 meta:{ name: title},
                 recording: { 
-                    mode: "automatic", 
-                    timeoutSeconds: 10,
-                    requireSignedURLs: false, 
-                    allowedOrigins: ["*"] }
+                    mode: "automatic"
+                }
             }
 
             let videoResponse = await VideoRequests.startLiveStream(liveStreamData);
 
-            console.log('reached here')
+            let newBody = {
+                ...body,
+                video_uid: videoResponse.result.uid,
+                stream_key: videoResponse.result.rtmps.streamKey,
+            }
+
+            let videoRecord = await VideoRequests.createVideo(newBody)
+
             console.log(videoResponse);
+            // return
 
             let rtmpsUrl = videoResponse.result.rtmps.url;
             let rtmpsKey = videoResponse.result.rtmps.streamKey;
 
             let socket = socketIo('http://localhost:4005');
-            let mediaRecorder = new MediaRecorder(streamMedia, {mimeType: 'video/webm'});
+        
+            let mediaRecorder = new MediaRecorder(streamMedia);
 
+            
+
+            // return
             socket.on('connect', () => {
+
+
+                socket.emit('join-room', { roomId: videoResponse.result.uid });
+                setVideoUid(videoResponse.result.uid);
                 
                 mediaRecorder.ondataavailable = (ev) => {
                     if(ev.data && ev.data.size > 0){
-                        socket.emit('data', { data: ev.data, rtmpsKey, rtmpsUrl })
+                        socket.emit('data', { data: ev.data, rtmpsKey, rtmpsUrl, roomId: videoResponse.result.uid });
                     }
                 }
-                mediaRecorder.start(1000);
+
+                mediaRecorder.start(0);
+
                 mediaRecorder.onerror = () => {
                     streamMedia.getTracks().forEach((t: any) => t.stop())
-                    
+                }
+
+                if(endBtnRef?.current){
+                    endBtnRef.current.onclick = ev => {
+                        socket.emit('end', {roomId: videoResponse.result.uid})
+                    }
                 }
             });
+
             socket.on('disconnect', () => {
                 streamMedia.getTracks().forEach((t: any) => t.stop())
+            });
+
+            socket.on('new-comment', e => {
+                setComments((comments: any) => [...comments, e])
+                if(commentBoxRef?.current) commentBoxRef.current.scrollTop = commentBoxRef.current.scrollHeight
             })
+
+            socket.on('begin', () => {
+                setStreamStatus(() => 2);
+                if(secVideoRef.current ) secVideoRef.current.srcObject = streamMedia;
+                console.log('stream started')
+            });
+
+            socket.on('end-stream', () => {
+                navigate('/')
+            })
+
+            socket.on('room-joined', e => console.log('room joined'))
+
             return;
-            
-            let res = await VideoRequests.createVideo(body);
-            ctx.hidePreloader();
-            
-            if(!res?.status){
-                ctx.showSnackbar(res?.message || 'server error', 'error');
-                return;    
-            }
-            
-            navigate('/videos')
 
         }catch(err: any){
             ctx.hidePreloader();
@@ -288,7 +328,7 @@ const LiveStream: React.FC<any> = props => {
         <div className="live-stream-page">
             <header>
                 <h1>Live Stream</h1>
-                <Button className="btn secondary" onClick={handleUpload}>Stream</Button>
+                <Button disabled={streamStatus > 0} className="btn secondary" onClick={handleUpload}>Stream</Button>
             </header>
 
             {
@@ -299,7 +339,44 @@ const LiveStream: React.FC<any> = props => {
             }
 
             <main>
-                <div className={`stream-overlay ${streamStarted ? 'active' : ''}`}></div>
+                <div className={`stream-overlay ${streamStatus > 0 ? 'active' : ''}`}>
+
+                    <div className={`loading-container ${streamStatus !== 1 ? 'hidden' : ''}`}><CircularProgress className='progress' /></div>
+
+                    <div className={`stream-options ${streamStatus !== 2 ? 'hidden' : ''}`}>
+                        <div className="bottom-line">
+                            <div className="video-url">
+                                <p>https://mawahib.tv/live/{videoUid}</p>
+                            </div>
+
+                            <Button className='end-btn' ref={endBtnRef}>End Stream</Button>
+                        </div>
+                        <div className="comment-list" ref={commentBoxRef}>
+                            {
+                                comments.map((item: any, i: number) => {
+                                    return (
+                                        <div className="comment-list-item" key={`comment-list-item-${i}`}>
+                                            <div className="left">
+                                                <img src={handlePhotoUrl(item.photo)} alt="user" />
+                                            </div>
+
+                                            <div className="right">
+                                                <h1>{item.name}</h1>
+                                                <p>{item.comment}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+
+                        <div className="video-view">
+                            <video autoPlay ref={secVideoRef}></video>
+                        </div>
+
+                        
+                    </div>
+                </div>
                 <div className="s1">
 
                 

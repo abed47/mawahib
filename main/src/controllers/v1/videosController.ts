@@ -72,7 +72,7 @@ export const view = async (req: Request, res: Response) => {
 }
 
 export const create = async (req: Request, res: Response) => {
-    let { title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail, event_id, type, stage_number, stage_id} = req.body;
+    let { title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail, event_id, type, stage_number, stage_id, video_uid, stream_key} = req.body;
 
     if(!title || !description || !channel_id || !user_id) return returnErrResponse(res, 'all fields are required', 400);
 
@@ -86,7 +86,7 @@ export const create = async (req: Request, res: Response) => {
             if(!participation) return errorResponse(res, 400, 'you are not participating in this event');
         }
 
-        let v:any = await Video.create({title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail, event_id, type, stage_number});
+        let v:any = await Video.create({title, description, channel_id, user_id, category_id, tags, kids, mysterious, has_promotion, visible, url, thumbnail, event_id, type, stage_number, video_uid, stream_key});
 
         if(stage_number && event_id && type === 2){
             await Submission.create({event_id, stage_number, channel_id, video_id: v.id, participation_id: participation.id, stage_id});

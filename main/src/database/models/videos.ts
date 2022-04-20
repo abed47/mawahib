@@ -79,6 +79,8 @@ const Video = db.define('video', {
          * 2 = succeeded
          * 3 = error
          * 4 = ban error
+         * 2001 = stream active
+         * 2002 = stream stopped
          */
         type: DataTypes.INTEGER,
         allowNull: true,
