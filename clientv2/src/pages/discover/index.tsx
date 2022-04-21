@@ -14,6 +14,7 @@ const Discover: React.FC = props => {
     const [recommendedList, setRecommendedList] = useState([]);
     const [categories, setCategories] = useState([]);
     const [otherVideos, setOtherVideos] = useState([]);
+    const [liveTalents, setLiveTalents] = useState([]);
 
     const ctx = useCtx();
 
@@ -35,6 +36,8 @@ const Discover: React.FC = props => {
                 setTopTalents(d.topTalents[0]);
                 setRecommendedList(d.recommended);
                 setOtherVideos(d.otherVideos);
+                setLiveTalents(d.liveTalents);
+                console.log(d)
                 return;
             }
 
@@ -52,7 +55,7 @@ const Discover: React.FC = props => {
     return (
         <div className="discover-page">
             <HomeBanner items={bannerItems} />
-            <TopTalents items={topTalents} />
+            <TopTalents items={topTalents} live={liveTalents || []} />
             <HomeRecommendedVideos items={recommendedList} />
             <TopCategoriesComponent items={categories} />
             <OtherVideoListComponent items={otherVideos} />

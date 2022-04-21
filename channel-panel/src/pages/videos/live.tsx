@@ -99,8 +99,6 @@ const LiveStream: React.FC<any> = props => {
 
     const loadStreams = () => {
         let permissions = navigator.permissions;
-
-        
     }
 
     const loadData = async () => {
@@ -311,6 +309,7 @@ const LiveStream: React.FC<any> = props => {
             });
 
             socket.on('end-stream', () => {
+                streamMedia.getTracks().forEach((t: any) => t.stop())
                 navigate('/')
             })
 

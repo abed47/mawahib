@@ -69,7 +69,14 @@ export const getHomeData: ControllerFunction = async (req, res) => {
             c.photo
             from channels c
             ORDER BY subscription_count DESC
-            LIMIT 15`);
+            LIMIT 10`);
+
+        let liveTalents = await Video.findAll({
+            where: {
+                status: 2001
+            },
+            include: Channel
+        })
 
         let recommended = await Video.findAll({ where: { [Op.and]: [
                     {type: 1},
@@ -85,7 +92,8 @@ export const getHomeData: ControllerFunction = async (req, res) => {
             topTalents,
             recommended,
             categories,
-            otherVideos
+            otherVideos,
+            liveTalents
         });
     }catch(err){
         return errorResponse(res, 500, err?.message || 'server error');

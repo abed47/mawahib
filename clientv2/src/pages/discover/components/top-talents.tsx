@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { handlePhotoUrl } from "../../../utils/services/request";
 
-const TopTalents: React.FC<{items: any[]}> = props => {
+const TopTalents: React.FC<{items: any[], live: any[]}> = props => {
 
     const navigate = useNavigate();
 
-    const handleClick = (id: any) => {
+    const handleClick = (id: any, ops = false) => {
+        if(ops) return navigate(`/live/${id}`)
         navigate(`/channel/${id}`);
     }
     return (
@@ -14,6 +15,21 @@ const TopTalents: React.FC<{items: any[]}> = props => {
 
             <div className="channel-list">
                 {
+                    props.live.map((item, i) => {
+                        return (
+                            <div onClick={() => handleClick(item.video_uid, true)} className="channel-list-item" key={`top-talent-under-banner-list-item-live-${i}`}>
+                                
+                                <div className="live"> Live </div>
+                                
+                                <img src={handlePhotoUrl(item.channel.photo)} alt="" />
+                                <p className="name">{item.channel.name}</p>
+                                <p className="category">{item.channel.category}</p>
+                            </div>
+                        );
+                    })
+                }
+                {
+                    
                     props.items.map((item, i) => {
                         return (
                             <div onClick={() => handleClick(item.id)} className="channel-list-item" key={`top-talent-under-banner-list-item-${i}`}>
