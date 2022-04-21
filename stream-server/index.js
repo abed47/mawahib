@@ -5,13 +5,23 @@ const { spawn, exec } = require("child_process");
 const process = require("process");
 const dotenv = require('dotenv');
 const { Client } = require('pg');
+const https = require('https');
 
 dotenv.config();
 
 const app = express();
 
 
-const server = http.createServer(app);
+const server = null;
+
+if(process.env.NODE_ENV === "production"){
+    server = https.createServer({
+        key: fs.readFileSync('/etc/letsencrypt/live/mawahib.tv//privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/mawahib.tv//fullchain.pem'),
+    }, app);
+}else{
+    server = http.createServer(app);
+}
 
 const client = new Client({
     user: process.env.DB_USER,
@@ -113,7 +123,6 @@ const handleSocket = (socket) => {
 }
 
 io.on('connection', handleSocket);
-
 
 server.listen(4005, () => {
     console.log('server started')
