@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 
-const server = null;
+let server = null;
 
 if(process.env.NODE_ENV === "production"){
     server = https.createServer({
@@ -88,16 +88,23 @@ const handleSocket = (socket) => {
 
     socket.on('data', (e) => {
         if(streams[e.roomId]){
+            console.log('recieved sdata')
             streams[e.roomId].stdin.write(e.data);
         }else{
             streams[e.roomId] = spawn("ffmpeg", [
-                '-f', 'lavfi', '-i', 'anullsrc',
-                '-i', '-',
-                '-vcodec', 'copy',
-                '-acodec', 'aac',
-                '-f', 'flv',
-                    e.rtmpsUrl + e.rtmpsKey
-            ]);
+                '-i','-',
+                '-c:v', 'libx264', '-preset', 'veryfast', '-tune', 'zerolatency',
+                '-c:a', 'aac', '-ar', '44100', '-b:a', '64k',
+                '-y', //force to overwrite
+                '-use_wallclock_as_timestamps', '1', // used for audio sync
+                '-async', '1', // used for audio sync
+                '-bufsize', '1000',
+                '-f',
+                'flv',
+                "../last-test2.flv"
+            ])
+            console.log('stream should start here')
+            
             videoLiveActive(e.roomId);
             io.to(e.roomId).emit('begin')
         }

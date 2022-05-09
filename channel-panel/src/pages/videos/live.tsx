@@ -65,7 +65,7 @@ const LiveStream: React.FC<any> = props => {
     }, []);
 
     useEffect(() => {
-        handleStream();
+        // handleStream();
     }, [streamType]);
 
     const handleStream = () => {
@@ -202,7 +202,31 @@ const LiveStream: React.FC<any> = props => {
 
     const handleUpload = async () => {
         
+        let mStream = new MediaStream();
+        // mStream.addTrack(streamMedia.getAudioTracks()[0]);
+        // mStream.addTrack(streamMedia.getVideoTracks()[0]);
+
+        // console.log(streamMedia.getTracks())
+
+        let m = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        let mCorder = new MediaRecorder(m);
+
+        let s = socketIo('http://localhost:4005');
+
+        s.on('connect', () => {
+            mCorder.ondataavailable = (ev) => {
+                if(ev.data && ev.data.size > 0){
+                    s.emit('data', { data: new Blob([ev.data], {type: 'video/webm'}), rtmpsKey: 'test1', rtmpsUrl: 'test1', roomId: "test" });
+                }
+            }
+
+            mCorder.start(250);
+        })
+        
+        return;
         if(!isValid()) return;
+
+        // console.log(streamMedia.getAudioTracks())
 
         let body = {
             description,
@@ -263,9 +287,12 @@ const LiveStream: React.FC<any> = props => {
 
             let socket = socketIo('http://localhost:4005');
         
-            let mediaRecorder = new MediaRecorder(streamMedia);
+            let mediaRecorder = new MediaRecorder(mStream, {  });
+            // let mStream = MediaStreamRecorder
+            // let mStream = new M
 
-            
+            // let mStream = new MediaStream();
+
 
             // return
             socket.on('connect', () => {
@@ -280,7 +307,7 @@ const LiveStream: React.FC<any> = props => {
                     }
                 }
 
-                mediaRecorder.start(0);
+                mediaRecorder.start(1000);
 
                 mediaRecorder.onerror = () => {
                     streamMedia.getTracks().forEach((t: any) => t.stop())
